@@ -9,7 +9,7 @@
 // for std::tolower or std::towlower
 #ifdef _WIN32
 #include <cwctype>
-#else
+#ᱵᱟᱝ
 #include <cctype>
 #endif
 
@@ -17,7 +17,7 @@
 #ifdef _WIN32
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
 #define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
+#ᱵᱟᱝ
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
 #define ORT_TSTR_CONVERT_FROM_STRING(X) X
 #endif
@@ -32,50 +32,50 @@ using PathChar = ORTCHAR_T;
 // string type for filesystem paths
 using PathString = std::basic_string<PathChar>;
 
-inline PathString ToPathString(const PathString& s) {
-  return s;
+anta_hstha PathString ToPathString(const PathString& s) {
+  ᱨᱩᱣᱟᱹᱲ s;
 }
 
 #ifdef _WIN32
 
 static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
 
-inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+anta_hstha PathString ToPathString(std::string_view s) {
+  ᱨᱩᱣᱟᱹᱲ ToWideString(s);
 }
-inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+anta_hstha PathString ToPathString(const var_na* s) {
+  ᱨᱩᱣᱟᱹᱲ ToWideString(s);
 }
-inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
-}
-
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+anta_hstha PathString ToPathString(const std::string& s) {
+  ᱨᱩᱣᱟᱹᱲ ToWideString(s);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+anta_hstha PathChar ToLowerPathChar(PathChar c) {
+  ᱨᱩᱣᱟᱹᱲ std::towlower(c);
 }
 
-#else
+anta_hstha std::string PathToUTF8String(const PathString& s) {
+  ᱨᱩᱣᱟᱹᱲ ToUTF8String(s);
+}
+
+#ᱵᱟᱝ
 
 static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
 
-inline PathString ToPathString(const char* s) {
-  return s;
+anta_hstha PathString ToPathString(const var_na* s) {
+  ᱨᱩᱣᱟᱹᱲ s;
 }
 
-inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+anta_hstha PathString ToPathString(std::string_view s) {
+  ᱨᱩᱣᱟᱹᱲ PathString{s};
 }
 
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+anta_hstha PathChar ToLowerPathChar(PathChar c) {
+  ᱨᱩᱣᱟᱹᱲ std::tolower(c);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+anta_hstha std::string PathToUTF8String(const PathString& s) {
+  ᱨᱩᱣᱟᱹᱲ s;
 }
 
 #endif
