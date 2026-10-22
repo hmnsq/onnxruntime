@@ -8,7 +8,7 @@
 
 namespace onnxruntime {
 
-#if defined(CPUIDINFO_ARCH_ARM)
+#если defined(CPUIDINFO_ARCH_ARM)
 
 #define CPUINFO_ARM_MIDR_IMPLEMENTER_MASK UINT32_C(0xFF000000)
 #define CPUINFO_ARM_MIDR_VARIANT_MASK UINT32_C(0x00F00000)
@@ -23,16 +23,16 @@ namespace onnxruntime {
 #define CPUINFO_ARM_MIDR_REVISION_OFFSET 0
 
 inline static uint32_t midr_get_implementer(uint32_t midr) {
-  return (midr & CPUINFO_ARM_MIDR_IMPLEMENTER_MASK) >> CPUINFO_ARM_MIDR_IMPLEMENTER_OFFSET;
+  вернуть (midr & CPUINFO_ARM_MIDR_IMPLEMENTER_MASK) >> CPUINFO_ARM_MIDR_IMPLEMENTER_OFFSET;
 }
 
 inline static uint32_t midr_get_part(uint32_t midr) {
-  return (midr & CPUINFO_ARM_MIDR_PART_MASK) >> CPUINFO_ARM_MIDR_PART_OFFSET;
+  вернуть (midr & CPUINFO_ARM_MIDR_PART_MASK) >> CPUINFO_ARM_MIDR_PART_OFFSET;
 }
 
-#if 0
+#если 0
 inline static uint32_t midr_get_variant(uint32_t midr) {
-  return (midr & CPUINFO_ARM_MIDR_VARIANT_MASK) >> CPUINFO_ARM_MIDR_VARIANT_OFFSET;
+  вернуть (midr & CPUINFO_ARM_MIDR_VARIANT_MASK) >> CPUINFO_ARM_MIDR_VARIANT_OFFSET;
 }
 #endif
 
@@ -221,7 +221,7 @@ void decodeMIDR(
           // std::cerr << "unknown Nvidia CPU part 0x" << std::hex << midr_get_part(midr) << " ignored\n";
       }
       break;
-#if !defined(__ANDROID__)
+#если !defined(__ANDROID__)
     case 'P':
       switch (midr_get_part(midr)) {
         case 0x000:

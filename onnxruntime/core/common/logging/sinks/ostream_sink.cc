@@ -33,11 +33,11 @@ void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger
   std::ostringstream msg;
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING) {
+  если (message.Severity() == Severity::kWARNING) {
     msg << Color::kWarn;
-  } else if (message.Severity() == Severity::kERROR) {
+  } иначе если (message.Severity() == Severity::kERROR) {
     msg << Color::kError;
-  } else if (message.Severity() == Severity::kFATAL) {
+  } иначе если (message.Severity() == Severity::kFATAL) {
     msg << Color::kFatal;
   }
 #endif
@@ -46,7 +46,7 @@ void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger
       << message.Location().ToString() << "] " << message.Message();
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING ||
+  если (message.Severity() == Severity::kWARNING ||
       message.Severity() == Severity::kERROR ||
       message.Severity() == Severity::kFATAL) {
     msg << Color::kEnd;
@@ -56,11 +56,11 @@ void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger
 
   (*stream_) << msg.str();
 
-  if (flush_) {
+  если (flush_) {
     stream_->flush();
   }
 }
-#else
+#иначе
 void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) {
   // Two options as there may be multiple calls attempting to write to the same sink at once:
   // 1) Use mutex to synchronize access to the stream.
@@ -72,11 +72,11 @@ void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logge
   std::wostringstream msg;
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING) {
+  если (message.Severity() == Severity::kWARNING) {
     msg << Color::kLWarn;
-  } else if (message.Severity() == Severity::kERROR) {
+  } иначе если (message.Severity() == Severity::kERROR) {
     msg << Color::kLError;
-  } else if (message.Severity() == Severity::kFATAL) {
+  } иначе если (message.Severity() == Severity::kFATAL) {
     msg << Color::kLFatal;
   }
 #endif
@@ -85,7 +85,7 @@ void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logge
       << ToWideString(message.Location().ToString()) << L"] " << ToWideString(message.Message());
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING ||
+  если (message.Severity() == Severity::kWARNING ||
       message.Severity() == Severity::kERROR ||
       message.Severity() == Severity::kFATAL) {
     msg << Color::kLEnd;
@@ -95,7 +95,7 @@ void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logge
 
   (*stream_) << msg.str();
 
-  if (flush_) {
+  если (flush_) {
     stream_->flush();
   }
 }

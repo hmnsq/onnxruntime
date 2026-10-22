@@ -27,17 +27,17 @@ inline InlinedVector<std::string_view> SplitString(std::string_view string_to_sp
   ORT_ENFORCE(!delimiter.empty(), "delimiter must not be empty");
   InlinedVector<std::string_view> result{};
   std::string_view::size_type segment_begin_pos = 0;
-  while (segment_begin_pos != std::string_view::npos) {
+  пока (segment_begin_pos != std::string_view::npos) {
     const std::string_view::size_type segment_end_pos = string_to_split.find(delimiter, segment_begin_pos);
     const bool is_segment_empty = segment_begin_pos == segment_end_pos || segment_begin_pos == string_to_split.size();
-    if (!is_segment_empty || keep_empty) {
+    если (!is_segment_empty || keep_empty) {
       result.push_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
     }
     segment_begin_pos = (segment_end_pos == std::string_view::npos)
                             ? segment_end_pos
                             : segment_end_pos + delimiter.size();
   }
-  return result;
+  вернуть result;
 }
 
 /**
@@ -45,7 +45,7 @@ inline InlinedVector<std::string_view> SplitString(std::string_view string_to_sp
  * @param s The string to trim.
  */
 inline void TrimStringFromLeft(std::string& s) {
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { вернуть !std::isspace(ch); }));
 }
 
 /**
@@ -53,7 +53,7 @@ inline void TrimStringFromLeft(std::string& s) {
  * @param s The string to trim.
  */
 inline void TrimStringFromRight(std::string& s) {
-  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { вернуть !std::isspace(ch); }).base(), s.end());
 }
 
 /**
@@ -65,14 +65,14 @@ inline std::string TrimString(std::string_view s) {
   std::string s_trimmed{s};
   TrimStringFromRight(s_trimmed);
   TrimStringFromLeft(s_trimmed);
-  return s_trimmed;
+  вернуть s_trimmed;
 }
 
 /**
  * @brief A consistent way to construct the full qualified op name.
  */
 inline std::string GetFullQualifiedOpName(const std::string& op_type, const std::string& domain) {
-  return MakeString(domain, "::", op_type);
+  вернуть MakeString(domain, "::", op_type);
 }
 
 /**
@@ -80,11 +80,11 @@ inline std::string GetFullQualifiedOpName(const std::string& op_type, const std:
  */
 inline uint32_t GetHashFromString(const std::string& str_value) {
   uint32_t hash = 0;
-  for (char const& c : str_value) {
+  для (char const& c : str_value) {
     hash = hash * 101 + c;
   }
 
-  return hash;
+  вернуть hash;
 }
 
 /**
@@ -98,9 +98,9 @@ inline std::string GetLowercaseString(std::string str) {
   // nor equal to EOF. To use tolower safely with a plain char (or signed char), the argument must be converted to
   // unsigned char.
   std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
-    return static_cast<char>(std::tolower(c));
+    вернуть static_cast<char>(std::tolower(c));
   });
-  return str;
+  вернуть str;
 }
 
 }  // namespace utils
