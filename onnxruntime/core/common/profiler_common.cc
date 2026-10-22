@@ -1,51 +1,51 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/profiler_common.h"
+#അന്തര്ഭാവ "core/common/profiler_common.h"
 
 #ifndef _MSC_VER
-#include <cxxabi.h>
+#അന്തര്ഭാവ <cxxabi.h>
 #endif
-#include <string.h>
-#include <string>
+#അന്തര്ഭാവ <string.h>
+#അന്തര്ഭാവ <string>
 
-namespace onnxruntime {
-namespace profiling {
+നാമാകാശ onnxruntime {
+നാമാകാശ profiling {
 
-static constexpr int kMaxSymbolSize = 1024;
+സ്ഥിതം constexpr പൂർണ്ണസംഖ്യ k_Max_ചിഹ്നം_Size = 1024;
 
-std::string demangle(const char* name) {
+std::string demangle(സ്ഥിരം അക്ഷരം* name) {
 #ifndef _MSC_VER
-  if (!name) {
-    return "";
+  എങ്കിൽ (!name) {
+    തിരികെ "";
   }
 
-  if (strlen(name) > kMaxSymbolSize) {
-    return name;
+  എങ്കിൽ (strlen(name) > k_Max_ചിഹ്നം_Size) {
+    തിരികെ name;
   }
 
-  int status;
+  പൂർണ്ണസംഖ്യ status;
   size_t len = 0;
-  char* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
-  if (status != 0) {
-    return name;
+  അക്ഷരം* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
+  എങ്കിൽ (status != 0) {
+    തിരികെ name;
   }
   std::string res(demangled);
   // The returned buffer must be freed!
-  free(demangled);
-  return res;
-#else
+  സ്വതന്ത്രം(demangled);
+  തിരികെ res;
+#അല്ലെങ്കിൽ
   // TODO(anyone): demangling on Windows
-  if (!name) {
-    return "";
-  } else {
-    return name;
+  എങ്കിൽ (!name) {
+    തിരികെ "";
+  } അല്ലെങ്കിൽ {
+    തിരികെ name;
   }
 #endif
 }
 
-std::string demangle(const std::string& name) {
-  return demangle(name.c_str());
+std::string demangle(സ്ഥിരം std::string& name) {
+  തിരികെ demangle(name.c_str());
 }
 
 }  // namespace profiling

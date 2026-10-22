@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <ostream>
-#include <sstream>
-#include <string>
+#അന്തര്ഭാവ <ostream>
+#അന്തര്ഭാവ <sstream>
+#അന്തര്ഭാവ <string>
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/isink.h"
+#അന്തര്ഭാവ "core/common/logging/capture.h"
+#അന്തര്ഭാവ "core/common/logging/isink.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -17,36 +17,36 @@ namespace logging {
 /// A std::ostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class OStreamSink : public ISink {
- protected:
+class OStreamSink : പൊതു ISink {
+ സംരക്ഷിത:
   OStreamSink(std::ostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ പൊതു:
+  ശൂന്യം SendImpl(സ്ഥിരം Timestamp& timestamp, സ്ഥിരം std::string& logger_id, സ്ഥിരം Capture& message) override;
 
- private:
+ സ്വകാര്യ:
   std::ostream* stream_;
-  const bool flush_;
+  സ്ഥിരം bool flush_;
 };
-#else
+#അല്ലെങ്കിൽ
 /// <summary>
 /// A std::wostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class WOStreamSink : public ISink {
- protected:
+class WOStreamSink : പൊതു ISink {
+ സംരക്ഷിത:
   WOStreamSink(std::wostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ പൊതു:
+  ശൂന്യം SendImpl(സ്ഥിരം Timestamp& timestamp, സ്ഥിരം std::string& logger_id, സ്ഥിരം Capture& message) override;
 
- private:
+ സ്വകാര്യ:
   std::wostream* stream_;
-  const bool flush_;
+  സ്ഥിരം bool flush_;
 };
 #endif
 }  // namespace logging
