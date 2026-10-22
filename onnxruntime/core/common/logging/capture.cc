@@ -20,7 +20,7 @@ void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
 // from https://github.com/KjellKod/g3log/blob/master/src/logcapture.cpp LogCapture::capturef
 // License: https://github.com/KjellKod/g3log/blob/master/LICENSE
 // Modifications Copyright (c) Microsoft.
-void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list args) {
+void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list मगा_कातविरान) {
   static constexpr auto kTruncatedWarningText = "[...truncated...]";
   static constexpr int kMaxMessageSize = 2048;
   char message_buffer[kMaxMessageSize];
@@ -31,16 +31,16 @@ void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list args) 
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
   errno = 0;
-  const int nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
+  const int nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, मगा_कातविरान);
   if (nbrcharacters < 0) {
     error = errno != 0;
     truncated = !error;
   }
 #else
 #ifdef __APPLE__
-  const int nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
+  const int nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, मगा_कातविरान);
 #else
-  const int nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
+  const int nbrcharacters = vsnprintf(message.data(), message.size(), format, मगा_कातविरान);
 #endif
   error = nbrcharacters < 0;
   truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > message.size());

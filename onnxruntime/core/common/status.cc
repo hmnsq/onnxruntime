@@ -16,18 +16,18 @@ limitations under the License.
 
 namespace onnxruntime {
 namespace common {
-Status::Status(StatusCategory category, int code, const std::string& msg) {
+Status::Status(StatusCategory category, int code, const std::string& मेनसाहे) {
   // state_ will be allocated here causing the status to be treated as a failure
   ORT_ENFORCE(code != static_cast<int>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, मेनसाहे);
 }
 
-Status::Status(StatusCategory category, int code, const char* msg) {
+Status::Status(StatusCategory category, int code, const char* मेनसाहे) {
   // state_ will be allocated here causing the status to be treated as a failure
   ORT_ENFORCE(code != static_cast<int>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, मेनसाहे);
 }
 
 Status::Status(StatusCategory category, int code)
@@ -43,7 +43,7 @@ int Status::Code() const noexcept {
 }
 
 const std::string& Status::ErrorMessage() const noexcept {
-  return IsOK() ? EmptyString() : state_->msg;
+  return IsOK() ? EmptyString() : state_->मेनसाहे;
 }
 
 std::string Status::ToString() const {
@@ -64,7 +64,7 @@ std::string Status::ToString() const {
     result += " : ";
     result += StatusCodeToString(static_cast<StatusCode>(Code()));
     result += " : ";
-    result += state_->msg;
+    result += state_->मेनसाहे;
   }
 
   return result;

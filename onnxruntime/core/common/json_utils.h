@@ -9,11 +9,11 @@
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
+inline void WriteJsonString(std::ostream& stream, std::string_view हालागा) {
   static constexpr char kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
+  for (const unsigned char c : हालागा) {
     switch (c) {
       case '"':
         stream << "\\\"";

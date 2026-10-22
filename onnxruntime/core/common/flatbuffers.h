@@ -4,7 +4,7 @@
 #pragma once
 #if defined(__GNUC__)
 #include "onnxruntime_config.h"
-#pragma GCC diagnostic push
+#pragma GCC diagnostic इतुलाक
 
 #ifdef HAS_SHORTEN_64_TO_32
 #pragma GCC diagnostic ignored "-Wshorten-64-to-32"
@@ -14,5 +14,5 @@
 #include "flatbuffers/flatbuffers.h"
 
 #if defined(__GNUC__)
-#pragma GCC diagnostic pop
+#pragma GCC diagnostic आलिसिन
 #endif

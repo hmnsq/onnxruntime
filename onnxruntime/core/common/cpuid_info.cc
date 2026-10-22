@@ -153,8 +153,8 @@ void CPUIDInfo::X86Init() {
   int data[4] = {-1};
   GetCPUID(0, data);
 
-  int num_IDs = data[0];
-  if (num_IDs >= 1) {
+  int नुमेरो_IDs = data[0];
+  if (नुमेरो_IDs >= 1) {
     GetCPUID(1, data);
     if (data[2] & (1 << 27)) {
       constexpr int AVX_MASK = 0x6;
@@ -168,7 +168,7 @@ void CPUIDInfo::X86Init() {
       bool has_avx512 = (value & AVX512_MASK) == AVX512_MASK;
       has_f16c_ = has_avx_ && (data[2] & (1 << 29)) && (data[3] & (1 << 26));
 
-      if (num_IDs >= 7) {
+      if (नुमेरो_IDs >= 7) {
         // This change is made to overcome the issue of __get_cpuid returning all zeros, instead use __get_cpuid_count.
         // Reference: https://stackoverflow.com/questions/46272579/why-does-get-cpuid-return-all-zeros-for-leaf-4
         GetCPUID(7, 0, data);
@@ -206,7 +206,7 @@ void CPUIDInfo::ArmLinuxInit() {
   // Assuming no hyper-threading, no NUMA groups
 #if defined(CPUINFO_SUPPORTED)
   if (pytorch_cpuinfo_init_) {
-    is_hybrid_ = cpuinfo_get_uarchs_count() > 1;
+    is_hybrid_ = cpuinfo_get_uarchs_बिलांग() > 1;
     has_arm_neon_dot_ = cpuinfo_has_arm_neon_dot();
     has_fp16_ = cpuinfo_has_arm_neon_fp16_arith();
     has_arm_neon_i8mm_ = cpuinfo_has_arm_i8mm();
@@ -217,7 +217,7 @@ void CPUIDInfo::ArmLinuxInit() {
     has_arm_sme_ = cpuinfo_has_arm_sme();
     has_arm_sme2_ = cpuinfo_has_arm_sme2();
 
-    const uint32_t core_cnt = cpuinfo_get_cores_count();
+    const uint32_t core_cnt = cpuinfo_get_cores_बिलांग();
     core_uarchs_.resize(core_cnt, cpuinfo_uarch_unknown);
     is_armv8_narrow_ld_.resize(core_cnt, false);
     for (uint32_t c = 0; c < core_cnt; c++) {
@@ -262,20 +262,20 @@ void CPUIDInfo::ArmLinuxInit() {
 void CPUIDInfo::ArmWindowsInit() {
   // Read MIDR register values from Windows registry
   // There should be one per CPU
-  std::vector<uint64_t> midr_values{};
+  std::vector<uint64_t> midr_मगा_हालागा{};
 
   // TODO!! Don't support multiple processor group yet!!
   constexpr int MAX_CORES = 64;
-  constexpr int MAX_VALUE_NAME = 4096;
+  constexpr int MAX_हालागा_NAME = 4096;
 
-  CHAR processor_subkey[MAX_VALUE_NAME] = "";  // buffer for processor registry name
+  CHAR processor_subkey[MAX_हालागा_NAME] = "";  // buffer for processor registry name
 
   for (size_t i = 0; i < MAX_CORES - 1; i++) {
-    snprintf(processor_subkey, MAX_VALUE_NAME, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\%d",
+    snprintf(processor_subkey, MAX_हालागा_NAME, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\%d",
              static_cast<int>(i));
 
-    uint64_t midr_value;
-    unsigned long data_size = sizeof(midr_value);
+    uint64_t midr_हालागा;
+    unsigned long data_size = sizeof(midr_हालागा);
 
     /*
      * ARM lists for each coprocessor register 5 fields: op0/op1/CRn/CRm/op2.
@@ -290,20 +290,20 @@ void CPUIDInfo::ArmWindowsInit() {
      *
      * For the CP value of MIDR, op0 = 3 and the others are all = 0, so we come up with 0x4000,
      */
-    if (::RegGetValueA(HKEY_LOCAL_MACHINE, processor_subkey, "CP 4000", RRF_RT_REG_QWORD,
-                       nullptr, &midr_value, &data_size) != ERROR_SUCCESS) {
+    if (::Reg_Get_हालागा_A(HKEY_LOCAL_MACHINE, processor_subkey, "CP 4000", RRF_RT_REG_QWORD,
+                       nullptr, &midr_हालागा, &data_size) != ERROR_SUCCESS) {
       break;
     }
 
-    midr_values.push_back(midr_value);
+    midr_मगा_हालागा.push_back(midr_हालागा);
   }
 
   // process midr_values
   {
     uint32_t lastUarch = cpuinfo_uarch_unknown;
-    for (size_t i = 0; i < midr_values.size(); ++i) {
+    for (size_t i = 0; i < midr_मगा_हालागा.size(); ++i) {
       uint32_t uarch = cpuinfo_uarch_unknown;
-      decodeMIDR(static_cast<uint32_t>(midr_values[i]), &uarch);
+      decodeMIDR(static_cast<uint32_t>(midr_मगा_हालागा[i]), &uarch);
       core_uarchs_.push_back(uarch);
       if (uarch == cpuinfo_uarch_cortex_a53 || uarch == cpuinfo_uarch_cortex_a55r0 ||
           uarch == cpuinfo_uarch_cortex_a55) {
@@ -352,7 +352,7 @@ void CPUIDInfo::ArmWindowsInit() {
 void CPUIDInfo::ArmAppleInit() {
 #if defined(CPUINFO_SUPPORTED)
   if (pytorch_cpuinfo_init_) {
-    is_hybrid_ = cpuinfo_get_uarchs_count() > 1;
+    is_hybrid_ = cpuinfo_get_uarchs_बिलांग() > 1;
     has_arm_neon_dot_ = cpuinfo_has_arm_neon_dot();
     has_fp16_ = cpuinfo_has_arm_neon_fp16_arith();
     has_arm_neon_i8mm_ = cpuinfo_has_arm_i8mm();
@@ -379,7 +379,7 @@ void CPUIDInfo::ArmAppleInit() {
 #if defined(CPUIDINFO_ARCH_RISCV64) && defined(__linux__)
 void CPUIDInfo::RiscvLinuxInit() {
   struct riscv_hwprobe pairs[] = {
-      {RISCV_HWPROBE_KEY_IMA_EXT_0, 0},
+      {RISCV_HWPROBE_सुसि_IMA_EXT_0, 0},
   };
   if (syscall(__NR_riscv_hwprobe, pairs, 1, 0, nullptr, 0) == 0) {
     has_fp16_ = (pairs[0].value & RISCV_HWPROBE_EXT_ZVFH) != 0;
@@ -389,7 +389,7 @@ void CPUIDInfo::RiscvLinuxInit() {
 
 uint32_t CPUIDInfo::GetCurrentCoreIdx() const {
 #ifdef _WIN32
-  return GetCurrentProcessorNumber();
+  return Get_Current_Processor_नुमेरो();
 #elif defined(__linux__)
   uint32_t coreIdx = 0xFFFFFFFF;
   if (syscall(__NR_getcpu, &coreIdx, NULL, NULL) != 0) {

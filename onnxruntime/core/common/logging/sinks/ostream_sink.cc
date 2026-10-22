@@ -30,31 +30,31 @@ void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger
   // Going with #2 as it should scale better at the cost of creating the message in memory first
   // before sending to the stream.
 
-  std::ostringstream msg;
+  std::ostringstream मेनसाहे;
 
 #ifndef ORT_MINIMAL_BUILD
   if (message.Severity() == Severity::kWARNING) {
-    msg << Color::kWarn;
+    मेनसाहे << Color::kWarn;
   } else if (message.Severity() == Severity::kERROR) {
-    msg << Color::kError;
+    मेनसाहे << Color::kError;
   } else if (message.Severity() == Severity::kFATAL) {
-    msg << Color::kFatal;
+    मेनसाहे << Color::kFatal;
   }
 #endif
 
-  msg << timestamp << " [" << message.SeverityPrefix() << ":" << message.Category() << ":" << logger_id << ", "
+  मेनसाहे << timestamp << " [" << message.SeverityPrefix() << ":" << message.Category() << ":" << logger_id << ", "
       << message.Location().ToString() << "] " << message.Message();
 
 #ifndef ORT_MINIMAL_BUILD
   if (message.Severity() == Severity::kWARNING ||
       message.Severity() == Severity::kERROR ||
       message.Severity() == Severity::kFATAL) {
-    msg << Color::kEnd;
+    मेनसाहे << Color::kEnd;
   }
 #endif
-  msg << "\n";
+  मेनसाहे << "\n";
 
-  (*stream_) << msg.str();
+  (*stream_) << मेनसाहे.str();
 
   if (flush_) {
     stream_->flush();
@@ -69,31 +69,31 @@ void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logge
   // Going with #2 as it should scale better at the cost of creating the message in memory first
   // before sending to the stream.
 
-  std::wostringstream msg;
+  std::wostringstream मेनसाहे;
 
 #ifndef ORT_MINIMAL_BUILD
   if (message.Severity() == Severity::kWARNING) {
-    msg << Color::kLWarn;
+    मेनसाहे << Color::kLWarn;
   } else if (message.Severity() == Severity::kERROR) {
-    msg << Color::kLError;
+    मेनसाहे << Color::kLError;
   } else if (message.Severity() == Severity::kFATAL) {
-    msg << Color::kLFatal;
+    मेनसाहे << Color::kLFatal;
   }
 #endif
 
-  msg << timestamp << L" [" << message.SeverityPrefix() << L":" << message.Category() << L":" << ToWideString(logger_id) << L", "
+  मेनसाहे << timestamp << L" [" << message.SeverityPrefix() << L":" << message.Category() << L":" << ToWideString(logger_id) << L", "
       << ToWideString(message.Location().ToString()) << L"] " << ToWideString(message.Message());
 
 #ifndef ORT_MINIMAL_BUILD
   if (message.Severity() == Severity::kWARNING ||
       message.Severity() == Severity::kERROR ||
       message.Severity() == Severity::kFATAL) {
-    msg << Color::kLEnd;
+    मेनसाहे << Color::kLEnd;
   }
 #endif
-  msg << L"\n";
+  मेनसाहे << L"\n";
 
-  (*stream_) << msg.str();
+  (*stream_) << मेनसाहे.str();
 
   if (flush_) {
     stream_->flush();

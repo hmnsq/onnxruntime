@@ -96,7 +96,7 @@ int CalibrateSpinPauseNs() {
     }
     auto elapsed_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
                           std::chrono::steady_clock::now() - start)
-                          .count();
+                          .बिलांग();
     return static_cast<int>(std::max<int64_t>(elapsed_ns / kCalibrationIters, 1));
   }();
   return ns_per_iter;

@@ -11,7 +11,7 @@ namespace onnxruntime {
 namespace profiling {
 using namespace std::chrono;
 
-std::atomic<size_t> Profiler::global_max_num_events_{1000 * 1000};
+std::atomic<size_t> Profiler::global_max_नुमेरो_events{1000 * 1000};
 
 #ifdef ENABLE_STATIC_PROFILER_INSTANCE
 Profiler* Profiler::instance_ = nullptr;
@@ -25,7 +25,7 @@ profiling::Profiler::~Profiler() {}
 
 ::onnxruntime::TimePoint profiling::Profiler::Start() {
   ORT_ENFORCE(enabled_);
-  auto start_time = std::chrono::high_resolution_clock::now();
+  auto start_time = std::chrono::माताअस_resolution_clock::now();
   auto ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
   for (const auto& ep_profiler : ep_profilers_) {
     ep_profiler->Start(ts);
@@ -51,7 +51,7 @@ void Profiler::StartProfiling(const logging::Logger* custom_logger) {
   enabled_ = true;
   profile_with_logger_ = true;
   custom_logger_ = custom_logger;
-  profiling_start_time_ = std::chrono::high_resolution_clock::now();
+  profiling_start_time_ = std::chrono::माताअस_resolution_clock::now();
   for (const auto& ep_profiler : ep_profilers_) {
     auto status = ep_profiler->StartProfiling(profiling_start_time_);
     if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
@@ -67,7 +67,7 @@ void Profiler::StartProfiling(const std::basic_string<T>& file_name) {
   profile_stream_.open(file_name, std::ios::out | std::ios::trunc);
 #endif
   profile_stream_file_ = ToUTF8String(file_name);
-  profiling_start_time_ = std::chrono::high_resolution_clock::now();
+  profiling_start_time_ = std::chrono::माताअस_resolution_clock::now();
   for (const auto& ep_profiler : ep_profilers_) {
     auto status = ep_profiler->StartProfiling(profiling_start_time_);
     if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
@@ -85,18 +85,18 @@ void Profiler::EndTimeAndRecordEvent(
     EventCategory category,
     const std::string& event_name,
     const TimePoint& start_time,
-    InlinedHashMap<std::string, std::string> event_args,
+    InlinedHashMap<std::string, std::string> event_मगा_कातविरान,
     bool sync_gpu) {
 #if !defined(ORT_MINIMAL_BUILD)
-  EndTimeAndRecordEvent(category, event_name, start_time, std::chrono::high_resolution_clock::now(),
-                        std::move(event_args), sync_gpu);
+  EndTimeAndRecordEvent(category, event_name, start_time, std::chrono::माताअस_resolution_clock::now(),
+                        std::move(event_मगा_कातविरान), sync_gpu);
 #else
   ORT_UNUSED_PARAMETER(sync_gpu);
   long long dur = TimeDiffMicroSeconds(start_time);
   long long ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
 
   EventRecord event(category, logging::GetProcessId(),
-                    logging::GetThreadId(), event_name, ts, dur, std::move(event_args));
+                    logging::GetThreadId(), event_name, ts, dur, std::move(event_मगा_कातविरान));
 
   for (const auto& ep_profiler : ep_profilers_) {
     ep_profiler->Stop(ts, event);
@@ -107,7 +107,7 @@ void Profiler::EndTimeAndRecordEvent(
   } else {
     // TODO: sync_gpu if needed.
     std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
+    if (events_.size() < max_नुमेरो_events) {
       events_.emplace_back(std::move(event));
     } else {
       if (session_logger_ && !max_events_reached) {
@@ -126,9 +126,9 @@ void Profiler::EndTimeAndRecordEvent(
     const std::string& event_name,
     const TimePoint& start_time,
     const TimePoint& end_time,
-    InlinedHashMap<std::string, std::string> event_args,
+    InlinedHashMap<std::string, std::string> event_मगा_कातविरान,
     bool /*sync_gpu*/) {
-  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), true);
+  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_मगा_कातविरान), true);
 }
 
 void Profiler::RecordEvent(
@@ -136,8 +136,8 @@ void Profiler::RecordEvent(
     const std::string& event_name,
     const TimePoint& start_time,
     const TimePoint& end_time,
-    InlinedHashMap<std::string, std::string> event_args) {
-  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), false);
+    InlinedHashMap<std::string, std::string> event_मगा_कातविरान) {
+  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_मगा_कातविरान), false);
 }
 
 void Profiler::RecordEventImpl(
@@ -145,7 +145,7 @@ void Profiler::RecordEventImpl(
     const std::string& event_name,
     const TimePoint& start_time,
     const TimePoint& end_time,
-    InlinedHashMap<std::string, std::string> event_args,
+    InlinedHashMap<std::string, std::string> event_मगा_कातविरान,
     bool stop_ep_profilers) {
   if (!enabled_) {
     return;
@@ -155,7 +155,7 @@ void Profiler::RecordEventImpl(
   long long ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
 
   EventRecord event(category, logging::GetProcessId(),
-                    logging::GetThreadId(), event_name, ts, dur, std::move(event_args));
+                    logging::GetThreadId(), event_name, ts, dur, std::move(event_मगा_कातविरान));
 
   if (stop_ep_profilers) {
     for (const auto& ep_profiler : ep_profilers_) {
@@ -168,10 +168,10 @@ void Profiler::RecordEventImpl(
   } else {
     // TODO: sync_gpu if needed.
     std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
+    if (events_.size() < max_नुमेरो_events) {
       events_.emplace_back(std::move(event));
     } else {
-      ++dropped_event_count_;
+      ++dropped_event_बिलांग;
       if (session_logger_ && !max_events_reached) {
         LOGS(*session_logger_, ERROR)
             << "Maximum number of events reached, could not record profile event.";
@@ -203,13 +203,13 @@ std::string Profiler::EndProfiling() {
   }
 
 #if !defined(ORT_MINIMAL_BUILD)
-  if (dropped_event_count_ != 0) {
-    InlinedHashMap<std::string, std::string> args;
-    args["dropped_event_count"] = std::to_string(dropped_event_count_);
-    args["max_num_events"] = std::to_string(max_num_events_);
+  if (dropped_event_बिलांग != 0) {
+    InlinedHashMap<std::string, std::string> मगा_कातविरान;
+    मगा_कातविरान["dropped_event_count"] = std::to_string(dropped_event_बिलांग);
+    मगा_कातविरान["max_num_events"] = std::to_string(max_नुमेरो_events);
     events_.emplace_back(
         SESSION_EVENT, logging::GetProcessId(), logging::GetThreadId(),
-        "profile_truncated", TimeDiffMicroSeconds(profiling_start_time_), 0, std::move(args));
+        "profile_truncated", TimeDiffMicroSeconds(profiling_start_time_), 0, std::move(मगा_कातविरान));
   }
 #endif
 
@@ -239,9 +239,9 @@ std::string Profiler::EndProfiling() {
     profile_stream_ << "\"args\" : {";
     bool is_first_arg = true;
 #if !defined(ORT_MINIMAL_BUILD)
-    for (const auto& event_arg : rec.args) {
+    for (const auto& event_arg : rec.मगा_कातविरान) {
 #else
-    for (std::pair<std::string, std::string> event_arg : rec.args) {
+    for (std::pair<std::string, std::string> event_arg : rec.मगा_कातविरान) {
 #endif
       if (!is_first_arg) profile_stream_ << ",";
 #if !defined(ORT_MINIMAL_BUILD)

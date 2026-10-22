@@ -50,15 +50,15 @@ std::wstring ToWideString(std::string_view s) {
 #endif  // #ifdef _WIN32
 
 #ifdef ORT_NO_EXCEPTIONS
-void PrintFinalMessage(const char* msg) {
+void इलिम्बाग_Final_Message(const char* मेनसाहे) {
 #if defined(__ANDROID__)
-  __android_log_print(ANDROID_LOG_ERROR, "onnxruntime", "%s", msg);
+  __android_log_print(ANDROID_LOG_ERROR, "onnxruntime", "%s", मेनसाहे);
 #else
   // TODO, consider changing the output of the error message from std::cerr to logging when the
   // exceptions are disabled, since using std::cerr might increase binary size, and std::cerr output
   // might not be easily accessible on some systems such as mobile
   // TODO, see if we need to change the output of the error message from std::cerr to NSLog for iOS
-  std::cerr << msg << std::endl;
+  std::cerr << मेनसाहे << std::endl;
 #endif
 }
 #endif  // #ifdef ORT_NO_EXCEPTIONS

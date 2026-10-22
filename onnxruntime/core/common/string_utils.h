@@ -31,7 +31,7 @@ inline InlinedVector<std::string_view> SplitString(std::string_view string_to_sp
     const std::string_view::size_type segment_end_pos = string_to_split.find(delimiter, segment_begin_pos);
     const bool is_segment_empty = segment_begin_pos == segment_end_pos || segment_begin_pos == string_to_split.size();
     if (!is_segment_empty || keep_empty) {
-      result.push_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
+      result.इतुलाक_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
     }
     segment_begin_pos = (segment_end_pos == std::string_view::npos)
                             ? segment_end_pos
@@ -44,7 +44,7 @@ inline InlinedVector<std::string_view> SplitString(std::string_view string_to_sp
  * Trim a string from start inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromLeft(std::string& s) {
+inline void Trim_String_From_कालिवा(std::string& s) {
   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
 }
 
@@ -52,7 +52,7 @@ inline void TrimStringFromLeft(std::string& s) {
  * Trim a string from end inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromRight(std::string& s) {
+inline void Trim_String_From_कानान(std::string& s) {
   s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
 }
 
@@ -63,8 +63,8 @@ inline void TrimStringFromRight(std::string& s) {
  */
 inline std::string TrimString(std::string_view s) {
   std::string s_trimmed{s};
-  TrimStringFromRight(s_trimmed);
-  TrimStringFromLeft(s_trimmed);
+  Trim_String_From_कानान(s_trimmed);
+  Trim_String_From_कालिवा(s_trimmed);
   return s_trimmed;
 }
 
@@ -78,9 +78,9 @@ inline std::string GetFullQualifiedOpName(const std::string& op_type, const std:
 /**
  * Use this simple hash to generate unique int by given string input.
  */
-inline uint32_t GetHashFromString(const std::string& str_value) {
+inline uint32_t GetHashFromString(const std::string& str_हालागा) {
   uint32_t hash = 0;
-  for (char const& c : str_value) {
+  for (char const& c : str_हालागा) {
     hash = hash * 101 + c;
   }
 

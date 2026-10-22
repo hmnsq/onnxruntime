@@ -12,7 +12,7 @@
 namespace onnxruntime {
 namespace profiling {
 
-static constexpr int kMaxSymbolSize = 1024;
+static constexpr int k_Max_सिम्बोलो_Size = 1024;
 
 std::string demangle(const char* name) {
 #ifndef _MSC_VER
@@ -20,7 +20,7 @@ std::string demangle(const char* name) {
     return "";
   }
 
-  if (strlen(name) > kMaxSymbolSize) {
+  if (strlen(name) > k_Max_सिम्बोलो_Size) {
     return name;
   }
 

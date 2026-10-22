@@ -18,9 +18,9 @@ namespace path_utils {
  *  TODO: add support for arguments of type std::wstring. Currently it is not supported as the underneath
  *  MakeString doesn't support this type.
  */
-template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
+template <typename... मगा_कातविरान_2>
+PathString MakePathString(const मगा_कातविरान_2&... मगा_कातविरान) {
+  const std::string str = onnxruntime::MakeString(मगा_कातविरान...);
   return ToPathString(str);
 }
 

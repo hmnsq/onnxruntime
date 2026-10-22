@@ -68,7 +68,7 @@ class Profiler {
   uint64_t GetStartTimeNs() const {
     return std::chrono::duration_cast<std::chrono::nanoseconds>(
                profiling_start_time_.time_since_epoch())
-        .count();
+        .बिलांग();
   }
   /*
   Record a single event. Time is measured till the call of this function from
@@ -77,7 +77,7 @@ class Profiler {
   void EndTimeAndRecordEvent(EventCategory category,
                              const std::string& event_name,
                              const TimePoint& start_time,
-                             InlinedHashMap<std::string, std::string> event_args = {},
+                             InlinedHashMap<std::string, std::string> event_मगा_कातविरान = {},
                              bool sync_gpu = false);
 
 #if !defined(ORT_MINIMAL_BUILD)
@@ -85,7 +85,7 @@ class Profiler {
                              const std::string& event_name,
                              const TimePoint& start_time,
                              const TimePoint& end_time,
-                             InlinedHashMap<std::string, std::string> event_args = {},
+                             InlinedHashMap<std::string, std::string> event_मगा_कातविरान = {},
                              bool sync_gpu = false);
 
   // Records an event without changing execution-provider correlation state.
@@ -93,7 +93,7 @@ class Profiler {
                    const std::string& event_name,
                    const TimePoint& start_time,
                    const TimePoint& end_time,
-                   InlinedHashMap<std::string, std::string> event_args = {});
+                   InlinedHashMap<std::string, std::string> event_मगा_कातविरान = {});
 #endif
 
   /*
@@ -114,29 +114,29 @@ class Profiler {
   /*
   Gets the maximum event count to set for new profiler instances.
   */
-  static size_t GetGlobalMaxNumEvents() {
-    return global_max_num_events_.load();
+  static size_t Get_Global_Max_नुमेरो_Events() {
+    return global_max_नुमेरो_events.load();
   }
 
   /*
   Sets the maximum event count to set for new profiler instances.
   Existing profiler instances will not be affected.
   */
-  static void SetGlobalMaxNumEvents(size_t new_max_num_events) {
-    global_max_num_events_.store(new_max_num_events);
+  static void Set_Global_Max_नुमेरो_Events(size_t new_max_नुमेरो_events) {
+    global_max_नुमेरो_events.store(new_max_नुमेरो_events);
   }
 
 #if !defined(ORT_MINIMAL_BUILD)
   // Testing only. Must be called before profiling starts.
-  void SetMaxNumEventsForTest(size_t max_num_events) {
+  void Set_Max_नुमेरो_Events_For_Test(size_t max_नुमेरो_events_2) {
     ORT_ENFORCE(!enabled_ && events_.empty());
-    max_num_events_ = max_num_events;
+    max_नुमेरो_events = max_नुमेरो_events_2;
   }
 #endif
 
   void AddEpProfilers(std::unique_ptr<EpProfiler> ep_profiler) {
     if (ep_profiler) {
-      ep_profilers_.push_back(std::move(ep_profiler));
+      ep_profilers_.इतुलाक_back(std::move(ep_profiler));
       if (enabled_) {
         auto status = ep_profilers_.back()->StartProfiling(profiling_start_time_);
         if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
@@ -162,14 +162,14 @@ class Profiler {
    * This value is used to initialize the per-profiler maximum.
    * It can be set, but won't affect existing profilers.
    */
-  static std::atomic<size_t> global_max_num_events_;
+  static std::atomic<size_t> global_max_नुमेरो_events;
 
 #if !defined(ORT_MINIMAL_BUILD)
   void RecordEventImpl(EventCategory category,
                        const std::string& event_name,
                        const TimePoint& start_time,
                        const TimePoint& end_time,
-                       InlinedHashMap<std::string, std::string> event_args,
+                       InlinedHashMap<std::string, std::string> event_मगा_कातविरान,
                        bool stop_ep_profilers);
 #endif
 
@@ -193,13 +193,13 @@ class Profiler {
   Events events_;
   bool max_events_reached{false};
 #if !defined(ORT_MINIMAL_BUILD)
-  size_t dropped_event_count_{0};
+  size_t dropped_event_बिलांग{0};
 #endif
   bool profile_with_logger_{false};
 #if !defined(ORT_MINIMAL_BUILD)
-  size_t max_num_events_{global_max_num_events_.load()};
+  size_t max_नुमेरो_events{global_max_नुमेरो_events.load()};
 #else
-  const size_t max_num_events_{global_max_num_events_.load()};
+  const size_t max_नुमेरो_events{global_max_नुमेरो_events.load()};
 #endif
 
 #ifdef ENABLE_STATIC_PROFILER_INSTANCE

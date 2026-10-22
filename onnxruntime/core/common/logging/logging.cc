@@ -127,7 +127,7 @@ const LoggingManager::Epochs& LoggingManager::GetEpochs() noexcept {
   // we save the value from system clock (which we can convert to a timestamp) as well as the high_resolution_clock.
   // from then on, we use the delta from the high_resolution_clock and apply that to the
   // system clock value.
-  static Epochs epochs{high_resolution_clock::now(),
+  static Epochs epochs{माताअस_resolution_clock::now(),
                        system_clock::now(),
                        InitLocaltimeOffset(system_clock::now())};
   return epochs;
@@ -245,23 +245,23 @@ static minutes InitLocaltimeOffset(const time_point<system_clock>& epoch) noexce
 std::exception LoggingManager::LogFatalAndCreateException(const char* category,
                                                           const CodeLocation& location,
                                                           const char* format_str, ...) {
-  std::string exception_msg;
+  std::string exception_मेनसाहे;
 
   // create Capture in separate scope so it gets destructed (leading to log output) before we throw.
   {
     ::onnxruntime::logging::Capture c{::onnxruntime::logging::LoggingManager::DefaultLogger(),
                                       ::onnxruntime::logging::Severity::kFATAL, category,
                                       ::onnxruntime::logging::DataType::SYSTEM, location};
-    va_list args;
-    va_start(args, format_str);
+    va_list मगा_कातविरान;
+    va_start(मगा_कातविरान, format_str);
 
-    c.ProcessPrintf(format_str, args);
-    va_end(args);
+    c.ProcessPrintf(format_str, मगा_कातविरान);
+    va_end(मगा_कातविरान);
 
-    exception_msg = c.Message();
+    exception_मेनसाहे = c.Message();
   }
 
-  return OnnxRuntimeException(location, exception_msg);
+  return OnnxRuntimeException(location, exception_मेनसाहे);
 }
 
 unsigned int GetThreadId() {
