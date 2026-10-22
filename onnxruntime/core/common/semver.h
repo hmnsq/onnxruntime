@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#आशय once
 
-#include <cstdint>
-#include <optional>
-#include <string_view>
+#समावेश <cstdint>
+#समावेश <optional>
+#समावेश <string_view>
 
-#include "core/common/status.h"
+#समावेश "core/common/status.h"
 
 namespace onnxruntime {
 
@@ -15,7 +15,7 @@ namespace onnxruntime {
 // See https://github.com/semver/semver/blob/v2.0.0/semver.md.
 
 // Semantic Versioning version components.
-struct SemVerVersion {
+काष्ठा SemVerVersion {
   uint32_t major{};
   uint32_t minor{};
   uint32_t patch{};

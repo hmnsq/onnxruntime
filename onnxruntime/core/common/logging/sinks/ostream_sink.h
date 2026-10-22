@@ -1,53 +1,53 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#आशय once
 
-#include <ostream>
-#include <sstream>
-#include <string>
+#समावेश <ostream>
+#समावेश <sstream>
+#समावेश <string>
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/isink.h"
+#समावेश "core/common/logging/capture.h"
+#समावेश "core/common/logging/isink.h"
 
 namespace onnxruntime {
 namespace logging {
-#ifndef _WIN32
+#अगर_अघोषित _WIN32
 /// <summary>
 /// A std::ostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class OStreamSink : public ISink {
- protected:
+class OStreamSink : खुला ISink {
+ रक्षित:
   OStreamSink(std::ostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ खुला:
+  व्योम SendImpl(स्थिर Timestamp& timestamp, स्थिर std::string& logger_id, स्थिर Capture& message) override;
 
- private:
+ निजी:
   std::ostream* stream_;
-  const bool flush_;
+  स्थिर bool flush_;
 };
-#else
+#अन्यथा
 /// <summary>
 /// A std::wostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class WOStreamSink : public ISink {
- protected:
+class WOStreamSink : खुला ISink {
+ रक्षित:
   WOStreamSink(std::wostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ खुला:
+  व्योम SendImpl(स्थिर Timestamp& timestamp, स्थिर std::string& logger_id, स्थिर Capture& message) override;
 
- private:
+ निजी:
   std::wostream* stream_;
-  const bool flush_;
+  स्थिर bool flush_;
 };
-#endif
+#पूर्ण_अगर
 }  // namespace logging
 }  // namespace onnxruntime

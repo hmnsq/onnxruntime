@@ -1,58 +1,58 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#आशय once
 
-#include "core/common/exceptions.h"
+#समावेश "core/common/exceptions.h"
 
 // Setup the infrastructure to throw ORT exceptions so they're caught by existing handlers.
 
-template <typename E>
+ढाँचा <typename E>
 class SafeIntExceptionHandler;
 
-template <>
+ढाँचा <>
 class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
- public:
-  [[noreturn]] static void SafeIntOnOverflow() {
+ खुला:
+  [[noreturn]] अटल व्योम SafeIntOnOverflow() {
     ORT_THROW("Integer overflow");
   }
 
-  [[noreturn]] static void SafeIntOnDivZero() {
+  [[noreturn]] अटल व्योम SafeIntOnDivZero() {
     ORT_THROW("Divide by zero");
   }
 };
 
-#define SAFEINT_EXCEPTION_HANDLER_CPP 1
-#define SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
+#घोषणा SAFEINT_EXCEPTION_HANDLER_CPP 1
+#घोषणा SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
 
-#if defined(__GNUC__)
-#include "onnxruntime_config.h"
-#pragma GCC diagnostic push
-#ifdef HAS_UNUSED_BUT_SET_PARAMETER
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-#endif
-#endif
-#include "SafeInt.hpp"
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+#अगर defined(__GNUC__)
+#समावेश "onnxruntime_config.h"
+#आशय GCC diagnostic धकेलो
+#अगर_घोषित HAS_UNUSED_BUT_SET_PARAMETER
+#आशय GCC diagnostic ignored "-Wunused-but-set-parameter"
+#पूर्ण_अगर
+#पूर्ण_अगर
+#समावेश "SafeInt.hpp"
+#अगर defined(__GNUC__)
+#आशय GCC diagnostic निकालो
+#पूर्ण_अगर
 
-#include <type_traits>
+#समावेश <type_traits>
 
 namespace onnxruntime {
 
-template <typename T>
+ढाँचा <typename T>
 using remove_cvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 
-template <typename T>
-inline constexpr bool is_supported_integer_v =
+ढाँचा <typename T>
+अंतरभूत constexpr bool is_supported_integer_v =
     std::is_integral_v<remove_cvref_t<T>> && !std::is_same_v<remove_cvref_t<T>, bool>;
 
 //------------------------------------------------------------------------------
 // Safe multiplication of two or more integer values into an explicit result type R.
 // Throws OnnxRuntimeException on overflow.
 //------------------------------------------------------------------------------
-template <typename R, typename T, typename U, typename... Rest>
+ढाँचा <typename R, typename T, typename U, typename... Rest>
 [[nodiscard]] R SafeMul(T a, U b, Rest... rest) {
   static_assert(is_supported_integer_v<R>,
                 "SafeMul requires an integral result type (excluding bool)");
@@ -64,19 +64,19 @@ template <typename R, typename T, typename U, typename... Rest>
   // SafeMultiply(T, U, T&) requires the first argument and result to share
   // the same type. Cast the first operand to R so the result is directly in R.
   R cast_a{};
-  if (!SafeCast(a, cast_a)) {
+  अगर (!SafeCast(a, cast_a)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
-  R result{};
-  if (!SafeMultiply(cast_a, b, result)) {
+  R परिणाम{};
+  अगर (!SafeMultiply(cast_a, b, परिणाम)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
-  if constexpr (sizeof...(rest) > 0) {
-    return SafeMul<R>(result, rest...);
-  } else {
-    return result;
+  अगर constexpr (माप...(rest) > 0) {
+    वापस SafeMul<R>(परिणाम, rest...);
+  } अन्यथा {
+    वापस परिणाम;
   }
 }
 

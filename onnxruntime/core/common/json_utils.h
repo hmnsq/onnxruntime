@@ -1,46 +1,46 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#आशय once
 
-#include <ostream>
-#include <string_view>
+#समावेश <ostream>
+#समावेश <string_view>
 
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+अंतरभूत व्योम WriteJsonString(std::ostream& stream, std::string_view मूल्य) {
+  अटल constexpr अक्षर kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
-    switch (c) {
-      case '"':
+  क्रम (स्थिर अचिन्हित अक्षर c : मूल्य) {
+    चयन (c) {
+      हाल '"':
         stream << "\\\"";
-        break;
-      case '\\':
+        अवरोध;
+      हाल '\\':
         stream << "\\\\";
-        break;
-      case '\b':
+        अवरोध;
+      हाल '\b':
         stream << "\\b";
-        break;
-      case '\f':
+        अवरोध;
+      हाल '\f':
         stream << "\\f";
-        break;
-      case '\n':
+        अवरोध;
+      हाल '\n':
         stream << "\\n";
-        break;
-      case '\r':
+        अवरोध;
+      हाल '\r':
         stream << "\\r";
-        break;
-      case '\t':
+        अवरोध;
+      हाल '\t':
         stream << "\\t";
-        break;
-      default:
-        if (c < 0x20) {
+        अवरोध;
+      शेष:
+        अगर (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+        } अन्यथा {
+          stream << static_cast<अक्षर>(c);
         }
     }
   }
