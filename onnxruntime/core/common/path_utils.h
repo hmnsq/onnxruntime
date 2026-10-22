@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <filesystem>
-#include <string>
-#include <string_view>
+#अन्तर्भाव <filesystem>
+#अन्तर्भाव <string>
+#अन्तर्भाव <string_view>
 
-#include "core/common/common.h"
-#include "core/common/path_string.h"
+#अन्तर्भाव "core/common/common.h"
+#अन्तर्भाव "core/common/path_string.h"
 
 namespace onnxruntime {
 
@@ -18,58 +18,58 @@ namespace path_utils {
  *  TODO: add support for arguments of type std::wstring. Currently it is not supported as the underneath
  *  MakeString doesn't support this type.
  */
-template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+ढाँचा <typename... Args>
+PathString MakePathString(ध्रुव Args&... args) {
+  ध्रुव std::string str = onnxruntime::MakeString(args...);
+  प्रत्यागम ToPathString(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+अन्तःस्थ std::filesystem::path GetDirOrParentPath(ध्रुव std::filesystem::path& path) {
+  यदि (path.empty() || std::filesystem::is_directory(path)) {
+    प्रत्यागम path;
   }
 
-  return path.parent_path();
+  प्रत्यागम path.parent_path();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
-                                         const std::string& source_file_path,
+अन्तःस्थ std::string GetPathWithStemSuffix(ध्रुव std::string& file_or_directory_path,
+                                         ध्रुव std::string& source_file_path,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  यदि (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
+    प्रत्यागम file_or_directory_path;
   }
 
-  const std::filesystem::path source_path = source_file_path;
-  const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
+  ध्रुव std::filesystem::path source_path = source_file_path;
+  ध्रुव std::string default_filename = source_path.stem().string() + std::string{suffix};
+  यदि (std::filesystem::is_directory(file_or_directory_path)) {
     std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+    प्रत्यागम directory.append(default_filename).string();
   }
 
-  return default_filename;
+  प्रत्यागम default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
+अन्तःस्थ bool IsAbsolutePath(ध्रुव std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
+  ध्रुव स्वतः path = std::filesystem::path{ToPathString(path_string)};
+  प्रत्यागम path.is_absolute();
+#अन्यथा
+  प्रत्यागम !path_string.empty() && path_string.front() == '/';
 #endif
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
+अन्तःस्थ bool IsRelativePathToParentPath(ध्रुव std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
+  ध्रुव स्वतः path = std::filesystem::path{ToPathString(path_string)};
+  ध्रुव स्वतः relative_path = path.lexically_normal().make_preferred().wstring();
+  प्रत्यागम relative_path.find(L"..") != std::wstring::npos;
+#अन्यथा
+  प्रत्यागम !path_string.empty() && path_string.find("..") != std::string::npos;
 #endif
 }
 
