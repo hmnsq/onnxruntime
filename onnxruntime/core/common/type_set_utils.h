@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "boost/mp11.hpp"
+#ضمن "boost/mp11.hpp"
 
 namespace onnxruntime {
 namespace utils {
@@ -11,11 +11,11 @@ namespace type_set {
 
 // Given type sets A and B, IsSubset<A, B>::value is true when each element in A is also in B.
 template <typename A, typename B>
-struct IsSubset {
+بنية IsSubset {
   static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
                 "A and B must be type sets.");
 
-  static constexpr bool value =
+  ساكن constexpr bool value =
       // each element of A is contained in B
       boost::mp11::mp_all_of_q<
           A,
@@ -24,11 +24,11 @@ struct IsSubset {
 
 // Given type sets A and B, IsEqual<A, B>::value is true when A contains the same elements as B.
 template <typename A, typename B>
-struct IsEqual {
+بنية IsEqual {
   static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
                 "A and B must be type sets.");
 
-  static constexpr bool value =
+  ساكن constexpr bool value =
       boost::mp11::mp_size<A>::value == boost::mp11::mp_size<B>::value &&
       IsSubset<A, B>::value;
 };
