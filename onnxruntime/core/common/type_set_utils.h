@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "boost/mp11.hpp"
+#அந்தர்பாவ "boost/mp11.hpp"
 
 namespace onnxruntime {
 namespace utils {
@@ -11,26 +11,26 @@ namespace type_set {
 
 // Given type sets A and B, IsSubset<A, B>::value is true when each element in A is also in B.
 template <typename A, typename B>
-struct IsSubset {
-  static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
+கட்டமைப்பு IsSubset {
+  static_assert(boost::mp11::mp_is_set<A>::மதிப்பு && boost::mp11::mp_is_set<B>::மதிப்பு,
                 "A and B must be type sets.");
 
-  static constexpr bool value =
+  நிலையான constexpr bool மதிப்பு =
       // each element of A is contained in B
       boost::mp11::mp_all_of_q<
           A,
-          boost::mp11::mp_bind_front<boost::mp11::mp_set_contains, B>>::value;
+          boost::mp11::mp_bind_front<boost::mp11::mp_set_contains, B>>::மதிப்பு;
 };
 
 // Given type sets A and B, IsEqual<A, B>::value is true when A contains the same elements as B.
 template <typename A, typename B>
-struct IsEqual {
-  static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
+கட்டமைப்பு IsEqual {
+  static_assert(boost::mp11::mp_is_set<A>::மதிப்பு && boost::mp11::mp_is_set<B>::மதிப்பு,
                 "A and B must be type sets.");
 
-  static constexpr bool value =
-      boost::mp11::mp_size<A>::value == boost::mp11::mp_size<B>::value &&
-      IsSubset<A, B>::value;
+  நிலையான constexpr bool மதிப்பு =
+      boost::mp11::mp_size<A>::மதிப்பு == boost::mp11::mp_size<B>::மதிப்பு &&
+      IsSubset<A, B>::மதிப்பு;
 };
 
 }  // namespace type_set

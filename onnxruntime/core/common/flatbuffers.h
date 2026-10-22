@@ -2,17 +2,17 @@
 // Licensed under the MIT License.
 
 #pragma once
-#if defined(__GNUC__)
-#include "onnxruntime_config.h"
-#pragma GCC diagnostic push
+#எனில் defined(__GNUC__)
+#அந்தர்பாவ "onnxruntime_config.h"
+#pragma GCC diagnostic தள்ளு
 
 #ifdef HAS_SHORTEN_64_TO_32
 #pragma GCC diagnostic ignored "-Wshorten-64-to-32"
 #endif
 #endif
 
-#include "flatbuffers/flatbuffers.h"
+#அந்தர்பாவ "flatbuffers/flatbuffers.h"
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
+#எனில் defined(__GNUC__)
+#pragma GCC diagnostic எடு
 #endif

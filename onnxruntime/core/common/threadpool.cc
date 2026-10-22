@@ -13,67 +13,67 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include <memory>
-#include <optional>
+#அந்தர்பாவ <memory>
+#அந்தர்பாவ <optional>
 
-#include "core/platform/threadpool.h"
-#include "core/common/common.h"
-#include "core/common/cpuid_info.h"
-#include "core/common/eigen_common_wrapper.h"
-#include "core/platform/EigenNonBlockingThreadPool.h"
-#include <mutex>
-#if !defined(ORT_MINIMAL_BUILD)
+#அந்தர்பாவ "core/platform/threadpool.h"
+#அந்தர்பாவ "core/common/common.h"
+#அந்தர்பாவ "core/common/cpuid_info.h"
+#அந்தர்பாவ "core/common/eigen_common_wrapper.h"
+#அந்தர்பாவ "core/platform/EigenNonBlockingThreadPool.h"
+#அந்தர்பாவ <mutex>
+#எனில் !defined(ORT_MINIMAL_BUILD)
 #ifdef _WIN32
-#include <Windows.h>
-#include "processthreadsapi.h"
-#include <codecvt>
-#include <locale>
-#elif defined(__APPLE__)
-#if defined(__x86_64__) || defined(__i386__)
-#include <cpuid.h>
+#அந்தர்பாவ <Windows.h>
+#அந்தர்பாவ "processthreadsapi.h"
+#அந்தர்பாவ <codecvt>
+#அந்தர்பாவ <locale>
+#அல்லதெனில் defined(__APPLE__)
+#எனில் defined(__x86_64__) || defined(__i386__)
+#அந்தர்பாவ <cpuid.h>
 #endif
-#elif defined(__wasm__)
-#include <emscripten/threading.h>
-#else
-#include <sched.h>
+#அல்லதெனில் defined(__wasm__)
+#அந்தர்பாவ <emscripten/threading.h>
+#இல்லையெனில்
+#அந்தர்பாவ <sched.h>
 #endif
 #endif
-#if defined(_MSC_VER) && !defined(__clang__)
+#எனில் defined(_MSC_VER) && !defined(__clang__)
 // Chance of arithmetic overflow could be reduced
 #pragma warning(disable : 26451)
 #endif
-namespace onnxruntime {
+நாமாகாஶ onnxruntime {
 
-namespace concurrency {
+நாமாகாஶ concurrency {
 
-#if !defined(ORT_MINIMAL_BUILD)
-ThreadPoolProfiler::ThreadPoolProfiler(int num_threads, const CHAR_TYPE* thread_pool_name) : num_threads_(num_threads) {
-  child_thread_stats_.assign(num_threads, {});
-  if (thread_pool_name) {
+#எனில் !defined(ORT_MINIMAL_BUILD)
+ThreadPoolProfiler::ThreadPoolProfiler(முழு இலக்கம்_threads, மாறிலி CHAR_TYPE* thread_pool_name) : இலக்கம்_threads_2(இலக்கம்_threads) {
+  child_thread_stats_.assign(இலக்கம்_threads, {});
+  எனில் (thread_pool_name) {
 #ifdef _WIN32
     thread_pool_name_ = ToUTF8String(thread_pool_name);
-#else
+#இல்லையெனில்
     thread_pool_name_ = thread_pool_name;
 #endif
-  } else {
+  } இல்லையெனில் {
     thread_pool_name_ = "unnamed_thread_pool";
   }
 }
 
 ThreadPoolProfiler::~ThreadPoolProfiler() {
-  enabled_ = false;
+  enabled_ = பொய்;
 }
 
-void ThreadPoolProfiler::Start() {
-  enabled_ = true;
+வெறுமை ThreadPoolProfiler::Start() {
+  enabled_ = உண்மை;
 }
 
 ThreadPoolProfiler::MainThreadStat& ThreadPoolProfiler::GetMainThreadStat() {
-  static thread_local std::unique_ptr<MainThreadStat> stat;
-  if (!stat) {
+  நிலையான thread_local std::unique_ptr<MainThreadStat> stat;
+  எனில் (!stat) {
     stat = std::make_unique<MainThreadStat>();
   }
-  return *stat;
+  திரும்பு *stat;
 }
 
 std::string ThreadPoolProfiler::Stop() {
@@ -86,11 +86,11 @@ std::string ThreadPoolProfiler::Stop() {
      << "}, \"sub_threads\": {"
      << DumpChildThreadStat()
      << "}}";
-  return ss.str();
+  திரும்பு ss.str();
 }
 
-void ThreadPoolProfiler::LogStartAndCoreAndBlock(std::ptrdiff_t block_size) {
-  if (enabled_) {
+வெறுமை ThreadPoolProfiler::LogStartAndCoreAndBlock(std::ptrdiff_t block_size) {
+  எனில் (enabled_) {
     MainThreadStat& stat = GetMainThreadStat();
     stat.LogCore();
     stat.LogBlockSize(block_size);
@@ -98,67 +98,67 @@ void ThreadPoolProfiler::LogStartAndCoreAndBlock(std::ptrdiff_t block_size) {
   }
 }
 
-void ThreadPoolProfiler::LogCoreAndBlock(std::ptrdiff_t block_size) {
-  if (enabled_) {
+வெறுமை ThreadPoolProfiler::LogCoreAndBlock(std::ptrdiff_t block_size) {
+  எனில் (enabled_) {
     MainThreadStat& stat = GetMainThreadStat();
     stat.LogCore();
     stat.LogBlockSize(block_size);
   }
 }
 
-void ThreadPoolProfiler::LogStart() {
-  if (enabled_) {
+வெறுமை ThreadPoolProfiler::LogStart() {
+  எனில் (enabled_) {
     GetMainThreadStat().LogStart();
   }
 }
 
-void ThreadPoolProfiler::LogEnd(ThreadPoolEvent evt) {
-  if (enabled_) {
+வெறுமை ThreadPoolProfiler::LogEnd(ThreadPoolEvent evt) {
+  எனில் (enabled_) {
     GetMainThreadStat().LogEnd(evt);
   }
 }
 
-void ThreadPoolProfiler::LogEndAndStart(ThreadPoolEvent evt) {
-  if (enabled_) {
+வெறுமை ThreadPoolProfiler::LogEndAndStart(ThreadPoolEvent evt) {
+  எனில் (enabled_) {
     GetMainThreadStat().LogEndAndStart(evt);
   }
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogCore() {
+வெறுமை ThreadPoolProfiler::MainThreadStat::LogCore() {
 #ifdef _WIN32
-  core_ = GetCurrentProcessorNumber();
-#elif defined(__APPLE__)
-#if defined(__x86_64__) || defined(__i386__)
+  core_ = Get_Current_Processor_எண்();
+#அல்லதெனில் defined(__APPLE__)
+#எனில் defined(__x86_64__) || defined(__i386__)
   uint32_t CPUInfo[4];
   __cpuid_count(1, 0, CPUInfo[0], CPUInfo[1], CPUInfo[2], CPUInfo[3]);
-  if ((CPUInfo[3] & (1 << 9)) != 0) {
+  எனில் ((CPUInfo[3] & (1 << 9)) != 0) {
     core_ = (unsigned)CPUInfo[1] >> 24;
   }
 #endif
-#elif defined(__wasm__)
-  core_ = emscripten_num_logical_cores();
-#elif defined(_AIX)
+#அல்லதெனில் defined(__wasm__)
+  core_ = emscripten_இலக்கம்_logical_cores();
+#அல்லதெனில் defined(_AIX)
   core_ = mycpu();
-#else
+#இல்லையெனில்
   core_ = sched_getcpu();
 #endif
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogBlockSize(std::ptrdiff_t block_size) {
+வெறுமை ThreadPoolProfiler::MainThreadStat::LogBlockSize(std::ptrdiff_t block_size) {
   blocks_.emplace_back(block_size);
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogStart() {
+வெறுமை ThreadPoolProfiler::MainThreadStat::LogStart() {
   points_.emplace_back(Clock::now());
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogEnd(ThreadPoolEvent evt) {
+வெறுமை ThreadPoolProfiler::MainThreadStat::LogEnd(ThreadPoolEvent evt) {
   ORT_ENFORCE(!points_.empty(), "LogStart must pair with LogEnd");
   events_[evt] += TimeDiffMicroSeconds(points_.back(), Clock::now());
   points_.pop_back();
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogEndAndStart(ThreadPoolEvent evt) {
+வெறுமை ThreadPoolProfiler::MainThreadStat::LogEndAndStart(ThreadPoolEvent evt) {
   ORT_ENFORCE(!points_.empty(), "LogStart must pair with LogEnd");
   events_[evt] += TimeDiffMicroSeconds(points_.back(), Clock::now());
   points_.back() = Clock::now();
@@ -168,62 +168,62 @@ std::string ThreadPoolProfiler::MainThreadStat::Reset() {
   ORT_ENFORCE(points_.empty(), "LogStart must pair with LogEnd");
   std::stringstream ss;
   ss << "\"thread_id\": \"" << std::this_thread::get_id() << "\", \"block_size\": [";
-  if (!blocks_.empty()) {
+  எனில் (!blocks_.empty()) {
     std::copy(blocks_.begin(), blocks_.end() - 1, std::ostream_iterator<std::ptrdiff_t>(ss, ", "));
     ss << blocks_.back();
     blocks_.clear();
   }
   ss << "], \"core\": " << core_ << ", ";
-  for (int i = 0; i < MAX_EVENT; ++i) {
+  க்கு (முழு i = 0; i < MAX_EVENT; ++i) {
     ss << "\"" << ThreadPoolProfiler::GetEventName(static_cast<ThreadPoolEvent>(i))
        << "\": " << events_[i] << ((i == MAX_EVENT - 1) ? std::string{} : ", ");
   }
-  memset(events_, 0, sizeof(uint64_t) * MAX_EVENT);
-  return ss.str();
+  memset(events_, 0, அளவு(uint64_t) * MAX_EVENT);
+  திரும்பு ss.str();
 }
 
-const char* ThreadPoolProfiler::GetEventName(ThreadPoolEvent event) {
-  switch (event) {
-    case DISTRIBUTION:
-      return "Distribution";
-    case DISTRIBUTION_ENQUEUE:
-      return "DistributionEnqueue";
-    case RUN:
-      return "Run";
-    case WAIT:
-      return "Wait";
-    case WAIT_REVOKE:
-      return "WaitRevoke";
-    default:
-      return "UnknownEvent";
+மாறிலி எழுத்து* ThreadPoolProfiler::GetEventName(ThreadPoolEvent event) {
+  தேர்வு (event) {
+    நிலை DISTRIBUTION:
+      திரும்பு "Distribution";
+    நிலை DISTRIBUTION_ENQUEUE:
+      திரும்பு "DistributionEnqueue";
+    நிலை RUN:
+      திரும்பு "Run";
+    நிலை WAIT:
+      திரும்பு "Wait";
+    நிலை WAIT_REVOKE:
+      திரும்பு "WaitRevoke";
+    இயல்பு:
+      திரும்பு "UnknownEvent";
   }
 }
 
-void ThreadPoolProfiler::LogThreadId(int thread_idx) {
+வெறுமை ThreadPoolProfiler::LogThreadId(முழு thread_idx) {
   child_thread_stats_[thread_idx].thread_id_ = std::this_thread::get_id();
 }
 
-void ThreadPoolProfiler::LogRun(int thread_idx) {
-  if (enabled_) {
-    child_thread_stats_[thread_idx].num_run_++;
+வெறுமை ThreadPoolProfiler::LogRun(முழு thread_idx) {
+  எனில் (enabled_) {
+    child_thread_stats_[thread_idx].இலக்கம்_run++;
     auto now = Clock::now();
-    if (child_thread_stats_[thread_idx].core_ < 0 ||
+    எனில் (child_thread_stats_[thread_idx].core_ < 0 ||
         TimeDiffMicroSeconds(child_thread_stats_[thread_idx].last_logged_point_, now) > 10000) {
 #ifdef _WIN32
-      child_thread_stats_[thread_idx].core_ = GetCurrentProcessorNumber();
-#elif defined(__APPLE__)
-#if defined(__x86_64__) || defined(__i386__)
+      child_thread_stats_[thread_idx].core_ = Get_Current_Processor_எண்();
+#அல்லதெனில் defined(__APPLE__)
+#எனில் defined(__x86_64__) || defined(__i386__)
       uint32_t CPUInfo[4];
       __cpuid_count(1, 0, CPUInfo[0], CPUInfo[1], CPUInfo[2], CPUInfo[3]);
-      if ((CPUInfo[3] & (1 << 9)) != 0) {
+      எனில் ((CPUInfo[3] & (1 << 9)) != 0) {
         child_thread_stats_[thread_idx].core_ = (unsigned)CPUInfo[1] >> 24;
       }
 #endif
-#elif defined(__wasm__)
-      child_thread_stats_[thread_idx].core_ = emscripten_num_logical_cores();
-#elif defined(_AIX)
+#அல்லதெனில் defined(__wasm__)
+      child_thread_stats_[thread_idx].core_ = emscripten_இலக்கம்_logical_cores();
+#அல்லதெனில் defined(_AIX)
       child_thread_stats_[thread_idx].core_ = mycpu();
-#else
+#இல்லையெனில்
       child_thread_stats_[thread_idx].core_ = sched_getcpu();
 #endif
       child_thread_stats_[thread_idx].last_logged_point_ = now;
@@ -233,13 +233,13 @@ void ThreadPoolProfiler::LogRun(int thread_idx) {
 
 std::string ThreadPoolProfiler::DumpChildThreadStat() {
   std::stringstream ss;
-  for (int i = 0; i < num_threads_; ++i) {
+  க்கு (முழு i = 0; i < இலக்கம்_threads_2; ++i) {
     ss << "\"" << child_thread_stats_[i].thread_id_ << "\": {"
-       << "\"num_run\": " << child_thread_stats_[i].num_run_ << ", "
+       << "\"num_run\": " << child_thread_stats_[i].இலக்கம்_run << ", "
        << "\"core\": " << child_thread_stats_[i].core_ << "}"
-       << (i == num_threads_ - 1 ? "" : ",");
+       << (i == இலக்கம்_threads_2 - 1 ? "" : ",");
   }
-  return ss.str();
+  திரும்பு ss.str();
 }
 #endif
 
@@ -256,41 +256,41 @@ std::string ThreadPoolProfiler::DumpChildThreadStat() {
 #pragma warning(disable : 4324) /* Padding added to LoopCounterShard, LoopCounter for alignment */
 #endif
 
-static constexpr int CACHE_LINE_BYTES = 64;
-static constexpr unsigned MAX_SHARDS = 8;
+நிலையான constexpr முழு CACHE_வரி_BYTES = 64;
+நிலையான constexpr unsigned MAX_SHARDS = 8;
 
-static constexpr int TaskGranularityFactor = 4;
+நிலையான constexpr முழு TaskGranularityFactor = 4;
 
-struct alignas(CACHE_LINE_BYTES) LoopCounterShard {
+கட்டமைப்பு alignas(CACHE_வரி_BYTES) LoopCounterShard {
   ::std::atomic<uint64_t> _next{0};
   uint64_t _end{0};
 };
 
-static_assert(sizeof(LoopCounterShard) == CACHE_LINE_BYTES, "Expected loop counter shards to match cache-line size");
+static_assert(அளவு(LoopCounterShard) == CACHE_வரி_BYTES, "Expected loop counter shards to match cache-line size");
 
-class alignas(CACHE_LINE_BYTES) LoopCounter {
- public:
-  LoopCounter(uint64_t num_iterations,
+வகுப்பு alignas(CACHE_வரி_BYTES) LoopCounter {
+ பொது:
+  LoopCounter(uint64_t இலக்கம்_iterations,
               uint64_t d_of_p,
-              uint64_t block_size = 1) : _num_shards(GetNumShards(num_iterations,
+              uint64_t block_size = 1) : இலக்கம்_shards(Get_இலக்கம்_Shards(இலக்கம்_iterations,
                                                                   d_of_p,
                                                                   block_size)) {
     // Divide the iteration space between the shards.  If the iteration
     // space does not divide evenly into shards of multiples of
     // block_size then the final shard is left uneven.
 
-    auto num_blocks = num_iterations / block_size;
-    auto blocks_per_shard = num_blocks / _num_shards;
+    auto இலக்கம்_blocks = இலக்கம்_iterations / block_size;
+    auto blocks_per_shard = இலக்கம்_blocks / இலக்கம்_shards;
     auto iterations_per_shard = blocks_per_shard * block_size;
 
-    for (uint64_t shard = 0; shard < _num_shards; shard++) {
+    க்கு (uint64_t shard = 0; shard < இலக்கம்_shards; shard++) {
       // Initialize with a relaxed store; synchronization with worker
       // threads is provided via the thread pool
       _shards[shard]._next.store(shard * iterations_per_shard,
                                  ::std::memory_order_relaxed);
 
-      bool is_last_shard = (shard == _num_shards - 1);
-      _shards[shard]._end = is_last_shard ? num_iterations : ((shard + 1) * iterations_per_shard);
+      தருக்க is_last_shard = (shard == இலக்கம்_shards - 1);
+      _shards[shard]._end = is_last_shard ? இலக்கம்_iterations : ((shard + 1) * iterations_per_shard);
     }
   }
 
@@ -303,36 +303,36 @@ class alignas(CACHE_LINE_BYTES) LoopCounter {
   // tend to run the same iterations in the next loop.  This helps
   // operators with a series of short loops, such as GRU.
 
-  unsigned GetHomeShard(unsigned idx) const {
-    return idx % _num_shards;
+  unsigned GetHomeShard(unsigned idx) மாறிலி {
+    திரும்பு idx % இலக்கம்_shards;
   }
 
   // Attempt to claim iterations from the sharded counter.  The function either
   // returns true, along with a block of exactly block_size iterations, or it returns false
   // if all of the iterations have been claimed.
-  bool ClaimIterations(unsigned my_home_shard,
+  தருக்க ClaimIterations(unsigned my_home_shard,
                        unsigned& my_shard,
                        uint64_t& my_start,
                        uint64_t& my_end,
                        uint64_t block_size) {
-    do {
-      if (_shards[my_shard]._next < _shards[my_shard]._end) {
+    செய் {
+      எனில் (_shards[my_shard]._next < _shards[my_shard]._end) {
         // Appears to be work in the current shard, try to claim with atomic fetch-and-add
         uint64_t temp_start = _shards[my_shard]._next.fetch_add(block_size);
-        if (temp_start < _shards[my_shard]._end) {
+        எனில் (temp_start < _shards[my_shard]._end) {
           my_start = temp_start;
           my_end = std::min(_shards[my_shard]._end, temp_start + block_size);
-          return true;
+          திரும்பு உண்மை;
         }
       }
       // Work in the current shard is exhausted, move to the next shard, until
       // we are back at the home shard.
-      my_shard = (my_shard + 1) % _num_shards;
-    } while (my_shard != my_home_shard);
-    return false;
+      my_shard = (my_shard + 1) % இலக்கம்_shards;
+    } போது (my_shard != my_home_shard);
+    திரும்பு பொய்;
   }
 
- private:
+ தனிப்பட்ட:
   // Derive the number of shards to use for a given loop.  We require
   // at least one block of work per shard, and subject to the
   // constraints:
@@ -344,26 +344,26 @@ class alignas(CACHE_LINE_BYTES) LoopCounter {
   // - The number of shards is <= the number of threads (d_of_p).
   //   Hence, at low thread counts, each of N threads will get its own
   //   shard representing 1/N of the work.
-  constexpr static unsigned GetNumShards(uint64_t num_iterations,
+  constexpr நிலையான unsigned Get_இலக்கம்_Shards(uint64_t இலக்கம்_iterations,
                                          uint64_t d_of_p,
                                          uint64_t block_size) {
-    unsigned num_shards = 0;
-    auto num_blocks = num_iterations / block_size;
-    if (num_blocks == 0) {
-      num_shards = 1;
-    } else if (num_blocks < MAX_SHARDS) {
-      num_shards = static_cast<unsigned>(num_blocks);
-    } else {
-      num_shards = MAX_SHARDS;
+    unsigned இலக்கம்_shards_2 = 0;
+    auto இலக்கம்_blocks = இலக்கம்_iterations / block_size;
+    எனில் (இலக்கம்_blocks == 0) {
+      இலக்கம்_shards_2 = 1;
+    } இல்லையெனில் எனில் (இலக்கம்_blocks < MAX_SHARDS) {
+      இலக்கம்_shards_2 = static_cast<unsigned>(இலக்கம்_blocks);
+    } இல்லையெனில் {
+      இலக்கம்_shards_2 = MAX_SHARDS;
     }
-    if (num_shards > d_of_p) {
-      num_shards = static_cast<unsigned>(d_of_p);
+    எனில் (இலக்கம்_shards_2 > d_of_p) {
+      இலக்கம்_shards_2 = static_cast<unsigned>(d_of_p);
     }
-    return num_shards;
+    திரும்பு இலக்கம்_shards_2;
   }
 
-  alignas(CACHE_LINE_BYTES) LoopCounterShard _shards[MAX_SHARDS];
-  const unsigned _num_shards;
+  alignas(CACHE_வரி_BYTES) LoopCounterShard _shards[MAX_SHARDS];
+  மாறிலி unsigned இலக்கம்_shards;
 };
 
 #ifdef _MSC_VER
@@ -371,29 +371,29 @@ class alignas(CACHE_LINE_BYTES) LoopCounter {
 #endif
 
 ThreadPool::ThreadPool(Env* env,
-                       const ThreadOptions& thread_options,
-                       const NAME_CHAR_TYPE* name,
-                       int degree_of_parallelism,
-                       int spin_duration_us,
-                       bool force_hybrid,
-                       unsigned int spin_backoff_max)
+                       மாறிலி ThreadOptions& thread_options,
+                       மாறிலி NAME_CHAR_TYPE* name,
+                       முழு degree_of_parallelism,
+                       முழு spin_duration_us,
+                       தருக்க force_hybrid,
+                       unsigned முழு spin_backoff_max)
     : thread_options_(thread_options), force_hybrid_(force_hybrid) {
   // In the current implementation, a thread pool with degree_of_parallelism==1 uses
   // the caller as one of the threads for executing work.  Hence we only create
   // additional thread(s) for degree_of_parallelism>=2.
-  assert(degree_of_parallelism >= 1);
-  if (degree_of_parallelism >= 2) {
-    int threads_to_create = degree_of_parallelism - 1;
+  ப்ரதிஜ்ஞா(degree_of_parallelism >= 1);
+  எனில் (degree_of_parallelism >= 2) {
+    முழு threads_to_create = degree_of_parallelism - 1;
 
-    if (!thread_options_.affinities.empty()) {
+    எனில் (!thread_options_.affinities.empty()) {
       // Remove first affinity element as designated for the caller thread
       thread_options_.affinities.erase(thread_options_.affinities.begin());
-      assert(thread_options_.affinities.size() >= size_t(threads_to_create));
+      ப்ரதிஜ்ஞா(thread_options_.affinities.size() >= size_t(threads_to_create));
     }
 
 #ifdef ORT_ENABLE_SESSION_THREADPOOL_CALLBACKS
     using PoolType = ThreadPoolTempl<Env, WorkWithCallbackPolicy>;
-#else
+#இல்லையெனில்
     using PoolType = ThreadPoolTempl<Env, WorkNoCallbackPolicy>;
 #endif
     extended_eigen_threadpool_ =
@@ -405,37 +405,37 @@ ThreadPool::ThreadPool(Env* env,
   }
 }
 
-ThreadPool::~ThreadPool() = default;
+ThreadPool::~ThreadPool() = இயல்பு;
 
 // Base case for parallel loops, running iterations 0..total, divided into blocks
 // of block_size iterations, and calling into a function that takes a start..end
 // range of indices to run.
-void ThreadPool::ParallelForFixedBlockSizeScheduling(const std::ptrdiff_t total,
-                                                     const std::ptrdiff_t block_size,
-                                                     const std::function<void(std::ptrdiff_t, std::ptrdiff_t)>& fn) {
-  if (total <= 0)
-    return;
+வெறுமை ThreadPool::ParallelForFixedBlockSizeScheduling(மாறிலி std::ptrdiff_t total,
+                                                     மாறிலி std::ptrdiff_t block_size,
+                                                     மாறிலி std::function<வெறுமை(std::ptrdiff_t, std::ptrdiff_t)>& fn) {
+  எனில் (total <= 0)
+    திரும்பு;
 
-  if (total <= block_size) {
+  எனில் (total <= block_size) {
     fn(0, total);
-    return;
+    திரும்பு;
   }
 
-  auto d_of_p = DegreeOfParallelism(this);
-  if (thread_options_.dynamic_block_base_ <= 0) {
+  auto d_of_p = DegreeOfParallelism(இது);
+  எனில் (thread_options_.dynamic_block_base_ <= 0) {
     // Split the work across threads in the pool.  Each work item will run a loop claiming iterations,
     // hence we need at most one for each thread, even if the number of blocks of iterations is larger.
-    auto num_blocks = total / block_size;
-    auto num_threads_inc_main = NumThreads() + 1;
-    int num_work_items = static_cast<int>(std::min(static_cast<std::ptrdiff_t>(num_threads_inc_main), num_blocks));
-    assert(num_work_items > 0);
+    auto இலக்கம்_blocks = total / block_size;
+    auto இலக்கம்_threads_inc_main = இலக்கம்_Threads() + 1;
+    முழு இலக்கம்_work_பொருட்கள் = static_cast<முழு>(std::min(static_cast<std::ptrdiff_t>(இலக்கம்_threads_inc_main), இலக்கம்_blocks));
+    ப்ரதிஜ்ஞா(இலக்கம்_work_பொருட்கள் > 0);
 
     LoopCounter lc(total, d_of_p, block_size);
-    std::function<void(unsigned)> run_work = [&](unsigned idx) {
+    std::function<வெறுமை(unsigned)> run_work = [&](unsigned idx) {
       unsigned my_home_shard = lc.GetHomeShard(idx);
       unsigned my_shard = my_home_shard;
       uint64_t my_iter_start, my_iter_end;
-      while (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, block_size)) {
+      போது (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, block_size)) {
         fn(static_cast<std::ptrdiff_t>(my_iter_start),
            static_cast<std::ptrdiff_t>(my_iter_end));
       }
@@ -443,63 +443,63 @@ void ThreadPool::ParallelForFixedBlockSizeScheduling(const std::ptrdiff_t total,
     // Run the work in the thread pool (and in the current thread).  Synchronization with helping
     // threads is handled within RunInParallel, hence we can deallocate lc and other state captured by
     // run_work.
-    RunInParallel(run_work, num_work_items, block_size);
-  } else {
-    int num_of_blocks = d_of_p * thread_options_.dynamic_block_base_;
-    std::ptrdiff_t base_block_size = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long double>(total) / num_of_blocks)));
-    alignas(CACHE_LINE_BYTES) std::atomic<std::ptrdiff_t> left{total};
+    RunInParallel(run_work, இலக்கம்_work_பொருட்கள், block_size);
+  } இல்லையெனில் {
+    முழு இலக்கம்_of_blocks = d_of_p * thread_options_.dynamic_block_base_;
+    std::ptrdiff_t base_block_size = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long இரட்டை>(total) / இலக்கம்_of_blocks)));
+    alignas(CACHE_வரி_BYTES) std::atomic<std::ptrdiff_t> left{total};
     LoopCounter lc(total, d_of_p, base_block_size);
-    std::function<void(unsigned)> run_work = [&](unsigned idx) {
+    std::function<வெறுமை(unsigned)> run_work = [&](unsigned idx) {
       std::ptrdiff_t b = base_block_size;
       unsigned my_home_shard = lc.GetHomeShard(idx);
       unsigned my_shard = my_home_shard;
       uint64_t my_iter_start, my_iter_end;
-      while (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, b)) {
+      போது (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, b)) {
         fn(static_cast<std::ptrdiff_t>(my_iter_start),
            static_cast<std::ptrdiff_t>(my_iter_end));
         auto todo = left.fetch_sub(static_cast<std::ptrdiff_t>(my_iter_end - my_iter_start), std::memory_order_relaxed);
-        if (b > 1) {
-          b = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long double>(todo) / num_of_blocks)));
+        எனில் (b > 1) {
+          b = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long இரட்டை>(todo) / இலக்கம்_of_blocks)));
         }
       }
     };
     // Distribute task among all threads in the pool, reduce number of work items if
     // num_of_blocks is smaller than number of threads.
-    RunInParallel(run_work, std::min(NumThreads() + 1, num_of_blocks), base_block_size);
+    RunInParallel(run_work, std::min(இலக்கம்_Threads() + 1, இலக்கம்_of_blocks), base_block_size);
   }
 }
 
-void ThreadPool::SimpleParallelFor(std::ptrdiff_t total, const std::function<void(std::ptrdiff_t)>& fn) {
+வெறுமை ThreadPool::SimpleParallelFor(std::ptrdiff_t total, மாறிலி std::function<வெறுமை(std::ptrdiff_t)>& fn) {
   ParallelForFixedBlockSizeScheduling(total, 1, [&](std::ptrdiff_t first, std::ptrdiff_t last) {
-    for (std::ptrdiff_t idx = first; idx < last; idx++) {
+    க்கு (std::ptrdiff_t idx = first; idx < last; idx++) {
       fn(idx);
     }
   });
 }
 
-void ThreadPool::Schedule(std::function<void()> fn) {
-  if (underlying_threadpool_) {
+வெறுமை ThreadPool::Schedule(std::function<வெறுமை()> fn) {
+  எனில் (underlying_threadpool_) {
     underlying_threadpool_->Schedule(std::move(fn));
-  } else {
+  } இல்லையெனில் {
     fn();
   }
 }
 
-void ThreadPool::StartProfiling() {
-  if (underlying_threadpool_) {
+வெறுமை ThreadPool::StartProfiling() {
+  எனில் (underlying_threadpool_) {
     underlying_threadpool_->StartProfiling();
   }
 }
 
 std::string ThreadPool::StopProfiling() {
-  if (underlying_threadpool_) {
-    return underlying_threadpool_->StopProfiling();
-  } else {
-    return {};
+  எனில் (underlying_threadpool_) {
+    திரும்பு underlying_threadpool_->StopProfiling();
+  } இல்லையெனில் {
+    திரும்பு {};
   }
 }
 
-namespace {
+நாமாகாஶ {
 thread_local std::optional<ThreadPoolParallelSection> current_parallel_section;
 }
 
@@ -507,7 +507,7 @@ ThreadPool::ParallelSection::ParallelSection(ThreadPool* tp) {
   ORT_ENFORCE(!current_parallel_section.has_value(), "Nested parallelism not supported");
   ORT_ENFORCE(!ps_);
   tp_ = tp;
-  if (tp && tp->underlying_threadpool_) {
+  எனில் (tp && tp->underlying_threadpool_) {
     current_parallel_section.emplace();
     ps_ = &*current_parallel_section;
     tp_->underlying_threadpool_->StartParallelSection(*ps_);
@@ -515,44 +515,44 @@ ThreadPool::ParallelSection::ParallelSection(ThreadPool* tp) {
 }
 
 ThreadPool::ParallelSection::~ParallelSection() {
-  if (current_parallel_section) {
+  எனில் (current_parallel_section) {
     tp_->underlying_threadpool_->EndParallelSection(*ps_);
     current_parallel_section.reset();
   }
 }
 
-void ThreadPool::RunInParallel(std::function<void(unsigned idx)> fn, unsigned n, std::ptrdiff_t block_size) {
-  if (underlying_threadpool_) {
-    if (current_parallel_section.has_value()) {
+வெறுமை ThreadPool::RunInParallel(std::function<வெறுமை(unsigned idx)> fn, unsigned n, std::ptrdiff_t block_size) {
+  எனில் (underlying_threadpool_) {
+    எனில் (current_parallel_section.has_value()) {
       underlying_threadpool_->RunInParallelSection(*current_parallel_section,
                                                    std::move(fn),
                                                    n, block_size);
-    } else {
+    } இல்லையெனில் {
       underlying_threadpool_->RunInParallel(std::move(fn),
                                             n, block_size);
     }
-  } else {
+  } இல்லையெனில் {
     fn(0);
   }
 }
 
-bool ThreadPool::ShouldParallelizeLoop(const std::ptrdiff_t num_iterations,
-                                       const std::ptrdiff_t block_size) const {
+தருக்க ThreadPool::ShouldParallelizeLoop(மாறிலி std::ptrdiff_t இலக்கம்_iterations,
+                                       மாறிலி std::ptrdiff_t block_size) மாறிலி {
   // Do not parallelize trivial loops, with only a single block of work
-  if (block_size <= 0 || num_iterations <= block_size) {
-    return false;
+  எனில் (block_size <= 0 || இலக்கம்_iterations <= block_size) {
+    திரும்பு பொய்;
   }
 
   // Do not parallelize loops with only a single thread available.  If the
   // caller is outside the current pool (ID == -1) then we parallelize
   // if the pool has any threads.  If the caller is inside the current pool
   // (ID != -1) then we require at least one additional thread in the pool.
-  if ((CurrentThreadId() == -1 && NumThreads() == 0) ||
-      (CurrentThreadId() != -1 && NumThreads() == 1)) {
-    return false;
+  எனில் ((CurrentThreadId() == -1 && இலக்கம்_Threads() == 0) ||
+      (CurrentThreadId() != -1 && இலக்கம்_Threads() == 1)) {
+    திரும்பு பொய்;
   }
 
-  return true;
+  திரும்பு உண்மை;
 }
 
 using CostModel = Eigen::TensorCostModel<Eigen::ThreadPoolDevice>;
@@ -562,149 +562,149 @@ using CostModel = Eigen::TensorCostModel<Eigen::ThreadPoolDevice>;
 // overheads; not too large to mitigate tail effect and potential load
 // imbalance and we also want number of blocks to be evenly dividable across
 // threads.
-static ptrdiff_t CalculateParallelForBlock(const ptrdiff_t n, const Eigen::TensorOpCost& cost,
-                                           std::function<ptrdiff_t(ptrdiff_t)> block_align, int num_threads) {
-  const double block_size_f = 1.0 / CostModel::taskSize(1, cost);
+நிலையான ptrdiff_t CalculateParallelForBlock(மாறிலி ptrdiff_t n, மாறிலி Eigen::TensorOpCost& cost,
+                                           std::function<ptrdiff_t(ptrdiff_t)> block_align, முழு இலக்கம்_threads) {
+  மாறிலி இரட்டை block_size_f = 1.0 / CostModel::taskSize(1, cost);
   constexpr ptrdiff_t max_oversharding_factor = 4;
   ptrdiff_t block_size = Eigen::numext::mini(
       n,
-      Eigen::numext::maxi<ptrdiff_t>(Eigen::numext::div_ceil<ptrdiff_t>(n, max_oversharding_factor * num_threads), static_cast<ptrdiff_t>(block_size_f)));
-  const ptrdiff_t max_block_size = Eigen::numext::mini(n, 2 * block_size);
+      Eigen::numext::maxi<ptrdiff_t>(Eigen::numext::div_ceil<ptrdiff_t>(n, max_oversharding_factor * இலக்கம்_threads), static_cast<ptrdiff_t>(block_size_f)));
+  மாறிலி ptrdiff_t max_block_size = Eigen::numext::mini(n, 2 * block_size);
 
-  if (block_align) {
+  எனில் (block_align) {
     ptrdiff_t new_block_size = block_align(block_size);
-    assert(new_block_size >= block_size);
+    ப்ரதிஜ்ஞா(new_block_size >= block_size);
     block_size = Eigen::numext::mini(n, new_block_size);
   }
 
-  ptrdiff_t block_count = Eigen::numext::div_ceil(n, block_size);
+  ptrdiff_t block_மொத்தம் = Eigen::numext::div_ceil(n, block_size);
 
   // Calculate parallel efficiency as fraction of total CPU time used for
   // computations:
-  double max_efficiency =
-      static_cast<double>(block_count) / (Eigen::numext::div_ceil<ptrdiff_t>(block_count, num_threads) * num_threads);
+  இரட்டை max_efficiency =
+      static_cast<இரட்டை>(block_மொத்தம்) / (Eigen::numext::div_ceil<ptrdiff_t>(block_மொத்தம், இலக்கம்_threads) * இலக்கம்_threads);
 
   // Now try to increase block size up to max_block_size as long as it
   // doesn't decrease parallel efficiency.
-  for (ptrdiff_t prev_block_count = block_count; max_efficiency < 1.0 && prev_block_count > 1;) {
+  க்கு (ptrdiff_t prev_block_மொத்தம் = block_மொத்தம்; max_efficiency < 1.0 && prev_block_மொத்தம் > 1;) {
     // This is the next block size that divides size into a smaller number
     // of blocks than the current block_size.
-    ptrdiff_t coarser_block_size = Eigen::numext::div_ceil(n, prev_block_count - 1);
-    if (block_align) {
+    ptrdiff_t coarser_block_size = Eigen::numext::div_ceil(n, prev_block_மொத்தம் - 1);
+    எனில் (block_align) {
       ptrdiff_t new_block_size = block_align(coarser_block_size);
-      assert(new_block_size >= coarser_block_size);
+      ப்ரதிஜ்ஞா(new_block_size >= coarser_block_size);
       coarser_block_size = Eigen::numext::mini(n, new_block_size);
     }
-    if (coarser_block_size > max_block_size) {
-      break;  // Reached max block size. Stop.
+    எனில் (coarser_block_size > max_block_size) {
+      நிறுத்து;  // Reached max block size. Stop.
     }
     // Recalculate parallel efficiency.
-    const ptrdiff_t coarser_block_count = Eigen::numext::div_ceil(n, coarser_block_size);
-    assert(coarser_block_count < prev_block_count);
-    prev_block_count = coarser_block_count;
-    const double coarser_efficiency =
-        static_cast<double>(coarser_block_count) / (Eigen::numext::div_ceil<ptrdiff_t>(coarser_block_count, num_threads) * num_threads);
-    if (coarser_efficiency + 0.01 >= max_efficiency) {
+    மாறிலி ptrdiff_t coarser_block_மொத்தம் = Eigen::numext::div_ceil(n, coarser_block_size);
+    ப்ரதிஜ்ஞா(coarser_block_மொத்தம் < prev_block_மொத்தம்);
+    prev_block_மொத்தம் = coarser_block_மொத்தம்;
+    மாறிலி இரட்டை coarser_efficiency =
+        static_cast<இரட்டை>(coarser_block_மொத்தம்) / (Eigen::numext::div_ceil<ptrdiff_t>(coarser_block_மொத்தம், இலக்கம்_threads) * இலக்கம்_threads);
+    எனில் (coarser_efficiency + 0.01 >= max_efficiency) {
       // Taking it.
       block_size = coarser_block_size;
-      if (max_efficiency < coarser_efficiency) {
+      எனில் (max_efficiency < coarser_efficiency) {
         max_efficiency = coarser_efficiency;
       }
     }
   }
 
-  return block_size;
+  திரும்பு block_size;
 }
 
-void ThreadPool::ParallelFor(std::ptrdiff_t n, const TensorOpCost& c,
-                             const std::function<void(std::ptrdiff_t first, std::ptrdiff_t)>& f) {
+வெறுமை ThreadPool::ParallelFor(std::ptrdiff_t n, மாறிலி TensorOpCost& c,
+                             மாறிலி std::function<வெறுமை(std::ptrdiff_t first, std::ptrdiff_t)>& f) {
   ORT_ENFORCE(n >= 0);
   Eigen::TensorOpCost cost{c.bytes_loaded, c.bytes_stored, c.compute_cycles};
-  auto d_of_p = DegreeOfParallelism(this);
+  auto d_of_p = DegreeOfParallelism(இது);
   // Compute small problems directly in the caller thread.
-  if ((!ShouldParallelizeLoop(n)) ||
-      CostModel::numThreads(static_cast<double>(n), cost, d_of_p) == 1) {
+  எனில் ((!ShouldParallelizeLoop(n)) ||
+      CostModel::இலக்கம்_Threads_2(static_cast<இரட்டை>(n), cost, d_of_p) == 1) {
     f(0, n);
-    return;
+    திரும்பு;
   }
 
   ptrdiff_t block = CalculateParallelForBlock(n, cost, nullptr, d_of_p);
   ParallelForFixedBlockSizeScheduling(n, block, f);
 }
 
-void ThreadPool::ParallelFor(std::ptrdiff_t total, double cost_per_unit,
-                             const std::function<void(std::ptrdiff_t first, std::ptrdiff_t)>& fn) {
-  ParallelFor(total, TensorOpCost{0, 0, static_cast<double>(cost_per_unit)}, fn);
+வெறுமை ThreadPool::ParallelFor(std::ptrdiff_t total, இரட்டை cost_per_unit,
+                             மாறிலி std::function<வெறுமை(std::ptrdiff_t first, std::ptrdiff_t)>& fn) {
+  ParallelFor(total, TensorOpCost{0, 0, static_cast<இரட்டை>(cost_per_unit)}, fn);
 }
 
-bool ThreadPool::ShouldParallelize(const concurrency::ThreadPool* tp) {
-  return (DegreeOfParallelism(tp) != 1);
+தருக்க ThreadPool::ShouldParallelize(மாறிலி concurrency::ThreadPool* tp) {
+  திரும்பு (DegreeOfParallelism(tp) != 1);
 }
 
-int ThreadPool::DegreeOfParallelism(const concurrency::ThreadPool* tp) {
+முழு ThreadPool::DegreeOfParallelism(மாறிலி concurrency::ThreadPool* tp) {
   // When not using OpenMP, we parallelize over the N threads created by the pool
   // tp, plus 1 for the thread entering a loop.
-  if (tp) {
-    if (tp->force_hybrid_ || CPUIDInfo::GetCPUIDInfo().IsHybrid()) {
-      return ((tp->NumThreads() + 1)) * TaskGranularityFactor;
-    } else {
-      return ((tp->NumThreads() + 1));
+  எனில் (tp) {
+    எனில் (tp->force_hybrid_ || CPUIDInfo::GetCPUIDInfo().IsHybrid()) {
+      திரும்பு ((tp->இலக்கம்_Threads() + 1)) * TaskGranularityFactor;
+    } இல்லையெனில் {
+      திரும்பு ((tp->இலக்கம்_Threads() + 1));
     }
-  } else {
-    return 1;
+  } இல்லையெனில் {
+    திரும்பு 1;
   }
 }
 
-void ThreadPool::StartProfiling(concurrency::ThreadPool* tp) {
-  if (tp) {
+வெறுமை ThreadPool::StartProfiling(concurrency::ThreadPool* tp) {
+  எனில் (tp) {
     tp->StartProfiling();
   }
 }
 
 std::string ThreadPool::StopProfiling(concurrency::ThreadPool* tp) {
-  if (tp) {
-    return tp->StopProfiling();
-  } else {
-    return {};
+  எனில் (tp) {
+    திரும்பு tp->StopProfiling();
+  } இல்லையெனில் {
+    திரும்பு {};
   }
 }
 
-void ThreadPool::EnableSpinning() {
-  if (extended_eigen_threadpool_) {
+வெறுமை ThreadPool::EnableSpinning() {
+  எனில் (extended_eigen_threadpool_) {
     extended_eigen_threadpool_->EnableSpinning();
   }
 }
 
-void ThreadPool::DisableSpinning() {
-  if (extended_eigen_threadpool_) {
+வெறுமை ThreadPool::DisableSpinning() {
+  எனில் (extended_eigen_threadpool_) {
     extended_eigen_threadpool_->DisableSpinning();
   }
 }
 
 // Return the number of threads created by the pool.
-int ThreadPool::NumThreads() const {
-  if (underlying_threadpool_) {
-    return underlying_threadpool_->NumThreads();
-  } else {
-    return 0;
+முழு ThreadPool::இலக்கம்_Threads() மாறிலி {
+  எனில் (underlying_threadpool_) {
+    திரும்பு underlying_threadpool_->இலக்கம்_Threads();
+  } இல்லையெனில் {
+    திரும்பு 0;
   }
 }
 
 // Return ID of the current thread within this pool.  Returns -1 for a thread outside the
 // current pool.
-int ThreadPool::CurrentThreadId() const {
-  if (underlying_threadpool_) {
-    return underlying_threadpool_->CurrentThreadId();
-  } else {
-    return -1;
+முழு ThreadPool::CurrentThreadId() மாறிலி {
+  எனில் (underlying_threadpool_) {
+    திரும்பு underlying_threadpool_->CurrentThreadId();
+  } இல்லையெனில் {
+    திரும்பு -1;
   }
 }
 
-void ThreadPool::TryParallelFor(concurrency::ThreadPool* tp, std::ptrdiff_t total, const TensorOpCost& cost_per_unit,
-                                const std::function<void(std::ptrdiff_t first, std::ptrdiff_t last)>& fn) {
-  if (tp == nullptr) {
+வெறுமை ThreadPool::TryParallelFor(concurrency::ThreadPool* tp, std::ptrdiff_t total, மாறிலி TensorOpCost& cost_per_unit,
+                                மாறிலி std::function<வெறுமை(std::ptrdiff_t first, std::ptrdiff_t last)>& fn) {
+  எனில் (tp == nullptr) {
     fn(0, total);
-    return;
+    திரும்பு;
   }
   tp->ParallelFor(total, cost_per_unit, fn);
 }

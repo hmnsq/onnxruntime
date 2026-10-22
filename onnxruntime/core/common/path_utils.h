@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <filesystem>
-#include <string>
-#include <string_view>
+#அந்தர்பாவ <filesystem>
+#அந்தர்பாவ <string>
+#அந்தர்பாவ <string_view>
 
-#include "core/common/common.h"
-#include "core/common/path_string.h"
+#அந்தர்பாவ "core/common/common.h"
+#அந்தர்பாவ "core/common/path_string.h"
 
 namespace onnxruntime {
 
@@ -19,57 +19,57 @@ namespace path_utils {
  *  MakeString doesn't support this type.
  */
 template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+PathString MakePathString(மாறிலி Args&... args) {
+  மாறிலி std::string str = onnxruntime::MakeString(args...);
+  திரும்பு ToPathString(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+உள்வரி std::filesystem::path GetDirOrParentPath(மாறிலி std::filesystem::path& path) {
+  எனில் (path.empty() || std::filesystem::is_directory(path)) {
+    திரும்பு path;
   }
 
-  return path.parent_path();
+  திரும்பு path.parent_path();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
-                                         const std::string& source_file_path,
+உள்வரி std::string GetPathWithStemSuffix(மாறிலி std::string& file_or_directory_path,
+                                         மாறிலி std::string& source_file_path,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  எனில் (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
+    திரும்பு file_or_directory_path;
   }
 
-  const std::filesystem::path source_path = source_file_path;
-  const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
+  மாறிலி std::filesystem::path source_path = source_file_path;
+  மாறிலி std::string default_filename = source_path.stem().string() + std::string{suffix};
+  எனில் (std::filesystem::is_directory(file_or_directory_path)) {
     std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+    திரும்பு directory.append(default_filename).string();
   }
 
-  return default_filename;
+  திரும்பு default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
+உள்வரி bool IsAbsolutePath(மாறிலி std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
+  மாறிலி auto path = std::filesystem::path{ToPathString(path_string)};
+  திரும்பு path.is_absolute();
+#இல்லையெனில்
+  திரும்பு !path_string.empty() && path_string.front() == '/';
 #endif
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
+உள்வரி bool IsRelativePathToParentPath(மாறிலி std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
+  மாறிலி auto path = std::filesystem::path{ToPathString(path_string)};
+  மாறிலி auto relative_path = path.lexically_normal().make_preferred().wstring();
+  திரும்பு relative_path.find(L"..") != std::wstring::npos;
+#இல்லையெனில்
+  திரும்பு !path_string.empty() && path_string.find("..") != std::string::npos;
 #endif
 }
 

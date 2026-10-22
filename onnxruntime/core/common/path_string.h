@@ -3,27 +3,27 @@
 
 #pragma once
 
-#include <string>
-#include <type_traits>
+#அந்தர்பாவ <string>
+#அந்தர்பாவ <type_traits>
 
 // for std::tolower or std::towlower
 #ifdef _WIN32
-#include <cwctype>
-#else
-#include <cctype>
+#அந்தர்பாவ <cwctype>
+#இல்லையெனில்
+#அந்தர்பாவ <cctype>
 #endif
 
 // for converting / printing ORT_TSTR path strings to std::string
 #ifdef _WIN32
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
 #define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
+#இல்லையெனில்
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
 #define ORT_TSTR_CONVERT_FROM_STRING(X) X
 #endif
 
-#include "core/common/common.h"
-#include "core/session/onnxruntime_c_api.h"
+#அந்தர்பாவ "core/common/common.h"
+#அந்தர்பாவ "core/session/onnxruntime_c_api.h"
 
 namespace onnxruntime {
 
@@ -32,50 +32,50 @@ using PathChar = ORTCHAR_T;
 // string type for filesystem paths
 using PathString = std::basic_string<PathChar>;
 
-inline PathString ToPathString(const PathString& s) {
-  return s;
+உள்வரி PathString ToPathString(மாறிலி PathString& s) {
+  திரும்பு s;
 }
 
 #ifdef _WIN32
 
-static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
+static_assert(std::is_same<PathString, std::wstring>::மதிப்பு, "PathString is not std::wstring!");
 
-inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+உள்வரி PathString ToPathString(std::string_view s) {
+  திரும்பு ToWideString(s);
 }
-inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+உள்வரி PathString ToPathString(மாறிலி எழுத்து* s) {
+  திரும்பு ToWideString(s);
 }
-inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
-}
-
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+உள்வரி PathString ToPathString(மாறிலி std::string& s) {
+  திரும்பு ToWideString(s);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+உள்வரி PathChar ToLowerPathChar(PathChar c) {
+  திரும்பு std::towlower(c);
 }
 
-#else
-
-static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
-
-inline PathString ToPathString(const char* s) {
-  return s;
+உள்வரி std::string PathToUTF8String(மாறிலி PathString& s) {
+  திரும்பு ToUTF8String(s);
 }
 
-inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+#இல்லையெனில்
+
+static_assert(std::is_same<PathString, std::string>::மதிப்பு, "PathString is not std::string!");
+
+உள்வரி PathString ToPathString(மாறிலி எழுத்து* s) {
+  திரும்பு s;
 }
 
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+உள்வரி PathString ToPathString(std::string_view s) {
+  திரும்பு PathString{s};
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+உள்வரி PathChar ToLowerPathChar(PathChar c) {
+  திரும்பு std::tolower(c);
+}
+
+உள்வரி std::string PathToUTF8String(மாறிலி PathString& s) {
+  திரும்பு s;
 }
 
 #endif

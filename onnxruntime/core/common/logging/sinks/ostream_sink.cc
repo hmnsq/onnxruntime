@@ -1,28 +1,28 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/logging/sinks/ostream_sink.h"
+#அந்தர்பாவ "core/common/logging/sinks/ostream_sink.h"
 
-namespace onnxruntime {
-namespace logging {
+நாமாகாஶ onnxruntime {
+நாமாகாஶ logging {
 
 #ifndef ORT_MINIMAL_BUILD
-struct Color {
-  constexpr static const char* kWarn = "\033[0;93m";      // yellow
-  constexpr static const char* kError = "\033[1;31m";     // bold red
-  constexpr static const char* kFatal = "\033[1;37;41m";  // bold white on red background
-  constexpr static const char* kEnd = "\033[m";
+கட்டமைப்பு Color {
+  constexpr நிலையான மாறிலி எழுத்து* kWarn = "\033[0;93m";      // yellow
+  constexpr நிலையான மாறிலி எழுத்து* kError = "\033[1;31m";     // bold red
+  constexpr நிலையான மாறிலி எழுத்து* kFatal = "\033[1;37;41m";  // bold white on red background
+  constexpr நிலையான மாறிலி எழுத்து* kEnd = "\033[m";
 #ifdef _WIN32
-  constexpr static const wchar_t* kLWarn = L"\033[0;93m";      // yellow
-  constexpr static const wchar_t* kLError = L"\033[1;31m";     // bold red
-  constexpr static const wchar_t* kLFatal = L"\033[1;37;41m";  // bold white on red background
-  constexpr static const wchar_t* kLEnd = L"\033[m";
+  constexpr நிலையான மாறிலி wchar_t* kLWarn = L"\033[0;93m";      // yellow
+  constexpr நிலையான மாறிலி wchar_t* kLError = L"\033[1;31m";     // bold red
+  constexpr நிலையான மாறிலி wchar_t* kLFatal = L"\033[1;37;41m";  // bold white on red background
+  constexpr நிலையான மாறிலி wchar_t* kLEnd = L"\033[m";
 #endif
 };
 #endif
 
 #ifndef _WIN32
-void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) {
+வெறுமை OStreamSink::SendImpl(மாறிலி Timestamp& timestamp, மாறிலி std::string& logger_id, மாறிலி Capture& message) {
   // Two options as there may be multiple calls attempting to write to the same sink at once:
   // 1) Use mutex to synchronize access to the stream.
   // 2) Create the message in an ostringstream and output in one call.
@@ -30,38 +30,38 @@ void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger
   // Going with #2 as it should scale better at the cost of creating the message in memory first
   // before sending to the stream.
 
-  std::ostringstream msg;
+  std::ostringstream செய்தி;
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING) {
-    msg << Color::kWarn;
-  } else if (message.Severity() == Severity::kERROR) {
-    msg << Color::kError;
-  } else if (message.Severity() == Severity::kFATAL) {
-    msg << Color::kFatal;
+  எனில் (message.Severity() == Severity::kWARNING) {
+    செய்தி << Color::kWarn;
+  } இல்லையெனில் எனில் (message.Severity() == Severity::kERROR) {
+    செய்தி << Color::kError;
+  } இல்லையெனில் எனில் (message.Severity() == Severity::kFATAL) {
+    செய்தி << Color::kFatal;
   }
 #endif
 
-  msg << timestamp << " [" << message.SeverityPrefix() << ":" << message.Category() << ":" << logger_id << ", "
+  செய்தி << timestamp << " [" << message.SeverityPrefix() << ":" << message.Category() << ":" << logger_id << ", "
       << message.Location().ToString() << "] " << message.Message();
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING ||
+  எனில் (message.Severity() == Severity::kWARNING ||
       message.Severity() == Severity::kERROR ||
       message.Severity() == Severity::kFATAL) {
-    msg << Color::kEnd;
+    செய்தி << Color::kEnd;
   }
 #endif
-  msg << "\n";
+  செய்தி << "\n";
 
-  (*stream_) << msg.str();
+  (*stream_) << செய்தி.str();
 
-  if (flush_) {
+  எனில் (flush_) {
     stream_->flush();
   }
 }
-#else
-void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) {
+#இல்லையெனில்
+வெறுமை WOStreamSink::SendImpl(மாறிலி Timestamp& timestamp, மாறிலி std::string& logger_id, மாறிலி Capture& message) {
   // Two options as there may be multiple calls attempting to write to the same sink at once:
   // 1) Use mutex to synchronize access to the stream.
   // 2) Create the message in an ostringstream and output in one call.
@@ -69,33 +69,33 @@ void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logge
   // Going with #2 as it should scale better at the cost of creating the message in memory first
   // before sending to the stream.
 
-  std::wostringstream msg;
+  std::wostringstream செய்தி;
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING) {
-    msg << Color::kLWarn;
-  } else if (message.Severity() == Severity::kERROR) {
-    msg << Color::kLError;
-  } else if (message.Severity() == Severity::kFATAL) {
-    msg << Color::kLFatal;
+  எனில் (message.Severity() == Severity::kWARNING) {
+    செய்தி << Color::kLWarn;
+  } இல்லையெனில் எனில் (message.Severity() == Severity::kERROR) {
+    செய்தி << Color::kLError;
+  } இல்லையெனில் எனில் (message.Severity() == Severity::kFATAL) {
+    செய்தி << Color::kLFatal;
   }
 #endif
 
-  msg << timestamp << L" [" << message.SeverityPrefix() << L":" << message.Category() << L":" << ToWideString(logger_id) << L", "
+  செய்தி << timestamp << L" [" << message.SeverityPrefix() << L":" << message.Category() << L":" << ToWideString(logger_id) << L", "
       << ToWideString(message.Location().ToString()) << L"] " << ToWideString(message.Message());
 
 #ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING ||
+  எனில் (message.Severity() == Severity::kWARNING ||
       message.Severity() == Severity::kERROR ||
       message.Severity() == Severity::kFATAL) {
-    msg << Color::kLEnd;
+    செய்தி << Color::kLEnd;
   }
 #endif
-  msg << L"\n";
+  செய்தி << L"\n";
 
-  (*stream_) << msg.str();
+  (*stream_) << செய்தி.str();
 
-  if (flush_) {
+  எனில் (flush_) {
     stream_->flush();
   }
 }

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/common/exceptions.h"
+#அந்தர்பாவ "core/common/exceptions.h"
 
 // Setup the infrastructure to throw ORT exceptions so they're caught by existing handlers.
 
@@ -12,12 +12,12 @@ class SafeIntExceptionHandler;
 
 template <>
 class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
- public:
-  [[noreturn]] static void SafeIntOnOverflow() {
+ பொது:
+  [[noreturn]] நிலையான வெறுமை SafeIntOnOverflow() {
     ORT_THROW("Integer overflow");
   }
 
-  [[noreturn]] static void SafeIntOnDivZero() {
+  [[noreturn]] நிலையான வெறுமை SafeIntOnDivZero() {
     ORT_THROW("Divide by zero");
   }
 };
@@ -25,19 +25,19 @@ class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
 #define SAFEINT_EXCEPTION_HANDLER_CPP 1
 #define SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
 
-#if defined(__GNUC__)
-#include "onnxruntime_config.h"
-#pragma GCC diagnostic push
+#எனில் defined(__GNUC__)
+#அந்தர்பாவ "onnxruntime_config.h"
+#pragma GCC diagnostic தள்ளு
 #ifdef HAS_UNUSED_BUT_SET_PARAMETER
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 #endif
 #endif
-#include "SafeInt.hpp"
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
+#அந்தர்பாவ "SafeInt.hpp"
+#எனில் defined(__GNUC__)
+#pragma GCC diagnostic எடு
 #endif
 
-#include <type_traits>
+#அந்தர்பாவ <type_traits>
 
 namespace onnxruntime {
 
@@ -45,7 +45,7 @@ template <typename T>
 using remove_cvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 
 template <typename T>
-inline constexpr bool is_supported_integer_v =
+உள்வரி constexpr bool is_supported_integer_v =
     std::is_integral_v<remove_cvref_t<T>> && !std::is_same_v<remove_cvref_t<T>, bool>;
 
 //------------------------------------------------------------------------------
@@ -64,19 +64,19 @@ template <typename R, typename T, typename U, typename... Rest>
   // SafeMultiply(T, U, T&) requires the first argument and result to share
   // the same type. Cast the first operand to R so the result is directly in R.
   R cast_a{};
-  if (!SafeCast(a, cast_a)) {
+  எனில் (!SafeCast(a, cast_a)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
   R result{};
-  if (!SafeMultiply(cast_a, b, result)) {
+  எனில் (!SafeMultiply(cast_a, b, result)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
-  if constexpr (sizeof...(rest) > 0) {
-    return SafeMul<R>(result, rest...);
-  } else {
-    return result;
+  எனில் constexpr (அளவு...(rest) > 0) {
+    திரும்பு SafeMul<R>(result, rest...);
+  } இல்லையெனில் {
+    திரும்பு result;
   }
 }
 

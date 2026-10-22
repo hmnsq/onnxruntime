@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <iostream>
-#include "core/common/logging/sinks/ostream_sink.h"
+#அந்தர்பாவ <iostream>
+#அந்தர்பாவ "core/common/logging/sinks/ostream_sink.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -13,14 +13,14 @@ namespace logging {
 /// </summary>
 /// <seealso cref="ISink" />
 #ifdef _WIN32
-class CLogSink : public WOStreamSink {
- public:
+class CLogSink : பொது WOStreamSink {
+ பொது:
   CLogSink() : WOStreamSink(std::wclog, /*flush*/ true) {
   }
 };
-#else
-class CLogSink : public OStreamSink {
- public:
+#இல்லையெனில்
+class CLogSink : பொது OStreamSink {
+ பொது:
   CLogSink() : OStreamSink(std::clog, /*flush*/ true) {
   }
 };

@@ -3,44 +3,44 @@
 
 #pragma once
 
-#include <ostream>
-#include <string_view>
+#அந்தர்பாவ <ostream>
+#அந்தர்பாவ <string_view>
 
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+உள்வரி வெறுமை WriteJsonString(std::ostream& stream, std::string_view மதிப்பு) {
+  நிலையான constexpr எழுத்து kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
-    switch (c) {
-      case '"':
+  க்கு (மாறிலி unsigned எழுத்து c : மதிப்பு) {
+    தேர்வு (c) {
+      நிலை '"':
         stream << "\\\"";
-        break;
-      case '\\':
+        நிறுத்து;
+      நிலை '\\':
         stream << "\\\\";
-        break;
-      case '\b':
+        நிறுத்து;
+      நிலை '\b':
         stream << "\\b";
-        break;
-      case '\f':
+        நிறுத்து;
+      நிலை '\f':
         stream << "\\f";
-        break;
-      case '\n':
+        நிறுத்து;
+      நிலை '\n':
         stream << "\\n";
-        break;
-      case '\r':
+        நிறுத்து;
+      நிலை '\r':
         stream << "\\r";
-        break;
-      case '\t':
+        நிறுத்து;
+      நிலை '\t':
         stream << "\\t";
-        break;
-      default:
-        if (c < 0x20) {
+        நிறுத்து;
+      இயல்பு:
+        எனில் (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+        } இல்லையெனில் {
+          stream << static_cast<எழுத்து>(c);
         }
     }
   }
