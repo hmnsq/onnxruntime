@@ -16,48 +16,48 @@ limitations under the License.
 
 namespace onnxruntime {
 namespace common {
-Status::Status(StatusCategory category, int code, const std::string& msg) {
+Status::Status(StatusCategory category, ចំនួនគត់ code, const std::string& msg) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<ចំនួនគត់>(common::OK));
 
   state_ = std::make_unique<State>(category, code, msg);
 }
 
-Status::Status(StatusCategory category, int code, const char* msg) {
+Status::Status(StatusCategory category, ចំនួនគត់ code, const var_na* msg) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<ចំនួនគត់>(common::OK));
 
   state_ = std::make_unique<State>(category, code, msg);
 }
 
-Status::Status(StatusCategory category, int code)
+Status::Status(StatusCategory category, ចំនួនគត់ code)
     : Status(category, code, "") {
 }
 
 StatusCategory Status::Category() const noexcept {
-  return IsOK() ? common::NONE : state_->category;
+  ត្រឡប់ IsOK() ? common::NONE : state_->category;
 }
 
-int Status::Code() const noexcept {
-  return IsOK() ? static_cast<int>(common::OK) : state_->code;
+ចំនួនគត់ Status::Code() const noexcept {
+  ត្រឡប់ IsOK() ? static_cast<ចំនួនគត់>(common::OK) : state_->code;
 }
 
 const std::string& Status::ErrorMessage() const noexcept {
-  return IsOK() ? EmptyString() : state_->msg;
+  ត្រឡប់ IsOK() ? EmptyString() : state_->msg;
 }
 
 std::string Status::ToString() const {
-  if (state_ == nullptr) {
-    return std::string("OK");
+  ប្រសិនបើ (state_ == nullptr) {
+    ត្រឡប់ std::string("OK");
   }
 
   std::string result;
 
-  if (common::SYSTEM == state_->category) {
+  ប្រសិនបើ (common::SYSTEM == state_->category) {
     result += "SystemError";
     result += " : ";
     result += std::to_string(errno);
-  } else if (common::ONNXRUNTIME == state_->category) {
+  } បើមិនដូច្នេះ ប្រសិនបើ (common::ONNXRUNTIME == state_->category) {
     result += "[ONNXRuntimeError]";
     result += " : ";
     result += std::to_string(Code());
@@ -67,7 +67,7 @@ std::string Status::ToString() const {
     result += state_->msg;
   }
 
-  return result;
+  ត្រឡប់ result;
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
@@ -80,7 +80,7 @@ std::string Status::ToString() const {
 
 const std::string& Status::EmptyString() noexcept {
   static std::string s_empty;
-  return s_empty;
+  ត្រឡប់ s_empty;
 }
 
 #ifdef _MSC_VER

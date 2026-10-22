@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <string_view>
 
-#if defined(CPUINFO_SUPPORTED)
+#ប្រសិនបើ defined(CPUINFO_SUPPORTED)
 #include "cpuinfo.h"
 #endif
 
@@ -15,7 +15,7 @@
 
 namespace {
 
-#if !defined(CPUINFO_SUPPORTED)
+#ប្រសិនបើ !defined(CPUINFO_SUPPORTED)
 
 // The `cpuinfo_vendor` enum is defined by the cpuinfo library.
 // In case we don't build with cpuinfo, we define our own copy.
@@ -23,7 +23,7 @@ namespace {
 // https://github.com/pytorch/cpuinfo/blob/8a1772a0c5c447df2d18edf33ec4603a8c9c04a6/include/cpuinfo.h#L154-L307
 
 /** Vendor of processor core design */
-enum cpuinfo_vendor {
+ga_nanaa cpuinfo_vendor {
   /** Processor vendor is not known to the library, or the library failed
      to get vendor information from the OS. */
   cpuinfo_vendor_unknown = 0,
@@ -185,7 +185,7 @@ namespace onnxruntime {
 
 namespace {
 
-struct CpuVendorInfo {
+sa_nracanaa CpuVendorInfo {
   cpuinfo_vendor vendor;
   std::string_view name;
   uint32_t id;
@@ -210,14 +210,14 @@ constexpr std::array kCpuVendorInfos{
 const CpuVendorInfo* FindCpuVendorInfo(cpuinfo_vendor vendor) {
   const auto vendor_mapping_it = std::find_if(kCpuVendorInfos.begin(), kCpuVendorInfos.end(),
                                               [vendor](const CpuVendorInfo& entry) {
-                                                return entry.vendor == vendor;
+                                                ត្រឡប់ entry.vendor == vendor;
                                               });
 
-  if (vendor_mapping_it != kCpuVendorInfos.end()) {
-    return &*vendor_mapping_it;
+  ប្រសិនបើ (vendor_mapping_it != kCpuVendorInfos.end()) {
+    ត្រឡប់ &*vendor_mapping_it;
   }
 
-  return nullptr;
+  ត្រឡប់ nullptr;
 }
 
 }  // namespace
@@ -225,26 +225,26 @@ const CpuVendorInfo* FindCpuVendorInfo(cpuinfo_vendor vendor) {
 void CPUIDInfo::VendorInfoInit() {
   const cpuinfo_vendor vendor = [&]() {
     cpuinfo_vendor result = cpuinfo_vendor_unknown;
-#if defined(CPUINFO_SUPPORTED)
-    if (pytorch_cpuinfo_init_) {
+#ប្រសិនបើ defined(CPUINFO_SUPPORTED)
+    ប្រសិនបើ (pytorch_cpuinfo_init_) {
       const auto* processor = cpuinfo_get_processor(0);
-      if (processor && processor->core) {
+      ប្រសិនបើ (processor && processor->core) {
         result = processor->core->vendor;
       }
     }
 #endif  // defined(CPUINFO_SUPPORTED)
-#if defined(_AIX)
+#ប្រសិនបើ defined(_AIX)
     result = cpuinfo_vendor_ibm;
 #endif
-    return result;
+    ត្រឡប់ result;
   }();
 
   const auto* vendor_info = FindCpuVendorInfo(vendor);
-  if (vendor_info == nullptr) {
+  ប្រសិនបើ (vendor_info == nullptr) {
     // On Wasm/Emscripten, cpuinfo cannot detect the CPU vendor, so suppress the
     // unhelpful warning there while still reporting a consistent "unknown" vendor.
-#if !defined(__wasm__)
-    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<int>(vendor)));
+#ប្រសិនបើ !defined(__wasm__)
+    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<ចំនួនគត់>(vendor)));
 #endif
     vendor_info = &kUnknownCpuVendorInfo;
   }
