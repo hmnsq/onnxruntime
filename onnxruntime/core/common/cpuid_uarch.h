@@ -181,7 +181,7 @@ enum CPUIDINFOuarch {
   cpuinfo_uarch_taishan_v110 = 0x00C00100,
 };
 
-#if defined(CPUIDINFO_ARCH_ARM)
+#якщо defined(CPUIDINFO_ARCH_ARM)
 
 void decodeMIDR(uint32_t midr, uint32_t uarch[1]);
 

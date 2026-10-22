@@ -40,7 +40,7 @@ class FileSink : public OStreamSink {
 
  private:
   void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    if (!filter_user_data_ || message.DataType() != DataType::USER) {
+    якщо (!filter_user_data_ || message.DataType() != DataType::USER) {
       OStreamSink::SendImpl(timestamp, logger_id, message);
     }
   }
@@ -49,7 +49,7 @@ class FileSink : public OStreamSink {
   bool filter_user_data_;
 };
 
-#else
+#інакше
 /// <summary>
 /// ISink that writes to a file.
 /// </summary>
@@ -81,7 +81,7 @@ class FileSink : public WOStreamSink {
 
  private:
   void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    if (!filter_user_data_ || message.DataType() != DataType::USER) {
+    якщо (!filter_user_data_ || message.DataType() != DataType::USER) {
       WOStreamSink::SendImpl(timestamp, logger_id, message);
     }
   }
