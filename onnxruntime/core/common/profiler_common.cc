@@ -12,40 +12,40 @@
 namespace onnxruntime {
 namespace profiling {
 
-static constexpr int kMaxSymbolSize = 1024;
+static constexpr จำนวนเต็ม kMaxSymbolSize = 1024;
 
-std::string demangle(const char* name) {
+std::string demangle(const var_na* name) {
 #ifndef _MSC_VER
-  if (!name) {
-    return "";
+  ถ้า (!name) {
+    คืน "";
   }
 
-  if (strlen(name) > kMaxSymbolSize) {
-    return name;
+  ถ้า (strlen(name) > kMaxSymbolSize) {
+    คืน name;
   }
 
-  int status;
+  จำนวนเต็ม status;
   size_t len = 0;
-  char* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
-  if (status != 0) {
-    return name;
+  var_na* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
+  ถ้า (status != 0) {
+    คืน name;
   }
   std::string res(demangled);
   // The returned buffer must be freed!
   free(demangled);
-  return res;
-#else
+  คืน res;
+#มิฉะนั้น
   // TODO(anyone): demangling on Windows
-  if (!name) {
-    return "";
-  } else {
-    return name;
+  ถ้า (!name) {
+    คืน "";
+  } มิฉะนั้น {
+    คืน name;
   }
 #endif
 }
 
 std::string demangle(const std::string& name) {
-  return demangle(name.c_str());
+  คืน demangle(name.c_str());
 }
 
 }  // namespace profiling

@@ -29,9 +29,9 @@ class CompositeSink : public ISink {
   /// Check if the composite sink contains a sink of the specified type.
   /// </summary>
   bool HasType(SinkType sink_type) const {
-    return std::any_of(sinks_with_severity_.begin(), sinks_with_severity_.end(),
+    คืน std::any_of(sinks_with_severity_.begin(), sinks_with_severity_.end(),
                        [&](const auto& sink_pair) {
-                         return sink_pair.first->GetType() == sink_type;
+                         คืน sink_pair.first->GetType() == sink_type;
                        });
   }
 
@@ -43,7 +43,7 @@ class CompositeSink : public ISink {
   /// <returns>This instance to allow chaining.</returns>
   CompositeSink& AddSink(std::unique_ptr<ISink> sink, logging::Severity severity) {
     sinks_with_severity_.emplace_back(std::move(sink), severity);
-    return *this;
+    คืน *this;
   }
 
   /// <summary>
@@ -57,17 +57,17 @@ class CompositeSink : public ISink {
     // find entries to remove and the minimum severity of the remaining sinks
     auto entries_to_remove = std::remove_if(sinks_with_severity_.begin(), sinks_with_severity_.end(),
                                             [&](const auto& entry) {
-                                              if (entry.first->GetType() == sink_type) {
-                                                return true;
-                                              } else {
+                                              ถ้า (entry.first->GetType() == sink_type) {
+                                                คืน true;
+                                              } มิฉะนั้น {
                                                 severity = std::min(severity, entry.second);
-                                                return false;
+                                                คืน false;
                                               }
                                             });
 
     sinks_with_severity_.erase(entries_to_remove, sinks_with_severity_.end());
 
-    return severity;
+    คืน severity;
   }
 
   /// <summary>
@@ -75,7 +75,7 @@ class CompositeSink : public ISink {
   /// </summary>
   /// <returns> True if only 1 sink remaining </returns>
   bool HasOnlyOneSink() const {
-    return sinks_with_severity_.size() == 1;
+    คืน sinks_with_severity_.size() == 1;
   }
 
   /// <summary>
@@ -83,18 +83,18 @@ class CompositeSink : public ISink {
   /// </summary>
   /// <returns> If one sink remains then returns the sink, otherwise nullptr </returns>
   std::unique_ptr<ISink> GetRemoveSingleSink() {
-    if (HasOnlyOneSink()) {
+    ถ้า (HasOnlyOneSink()) {
       auto single_sink = std::move(sinks_with_severity_.begin()->first);
       sinks_with_severity_.clear();
-      return single_sink;
+      คืน single_sink;
     }
-    return nullptr;
+    คืน nullptr;
   }
 
  private:
   void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    for (auto& sink_pair : sinks_with_severity_) {
-      if (message.Severity() >= sink_pair.second) {
+    สำหรับ (auto& sink_pair : sinks_with_severity_) {
+      ถ้า (message.Severity() >= sink_pair.second) {
         sink_pair.first->Send(timestamp, logger_id, message);
       }
     }

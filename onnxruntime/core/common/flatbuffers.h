@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 #pragma once
-#if defined(__GNUC__)
+#ถ้า defined(__GNUC__)
 #include "onnxruntime_config.h"
 #pragma GCC diagnostic push
 
@@ -13,6 +13,6 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-#if defined(__GNUC__)
+#ถ้า defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
