@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#هدايت once
 
-#include "core/common/common.h"
+#ضمن "core/common/common.h"
 
-#include <string>
+#ضمن <string>
 
 namespace onnxruntime {
 namespace utf8_util {
@@ -18,140 +18,140 @@ namespace utf8_util {
 /// <param name="ch">lead byte candidate</param>
 /// <param name="len">decoded byte length</param>
 /// <returns>false if the byte does not match any 1-4 byte UTF-8 lead-byte prefix</returns>
-inline bool utf8_bytes(unsigned char ch, size_t& len) {
-  if ((ch & 0x80) == 0) {
+مضمن bool utf8_بائيٽون(بنانشان حرف ch, سائيز_t& len) {
+  إذا ((ch & 0x80) == 0) {
     len = 1;
-    return true;
+    أرجع true;
   }
-  if ((ch & 0xE0) == 0xC0) {
+  إذا ((ch & 0xE0) == 0xC0) {
     len = 2;
-    return true;
+    أرجع true;
   }
-  if ((ch & 0xF0) == 0xE0) {
+  إذا ((ch & 0xF0) == 0xE0) {
     len = 3;
-    return true;
+    أرجع true;
   }
-  if ((ch & 0xF8) == 0xF0) {
+  إذا ((ch & 0xF8) == 0xF0) {
     len = 4;
-    return true;
+    أرجع true;
   }
-  return false;
+  أرجع false;
 }
 
 // Computes length of the utf8 string in characters
-inline bool utf8_len(const unsigned char* s, size_t bytes, size_t& len) {
-  size_t result = 0;
-  while (bytes > 0) {
-    size_t char_bytes = 0;
-    bool valid = utf8_bytes(*s, char_bytes);
-    if (!valid || bytes < char_bytes) {
-      return false;
+مضمن bool utf8_len(ثابت بنانشان حرف* s, سائيز_t بائيٽون, سائيز_t& len) {
+  سائيز_t نتيجو = 0;
+  طالما (بائيٽون > 0) {
+    سائيز_t char_بائيٽون = 0;
+    bool valid = utf8_بائيٽون(*s, char_بائيٽون);
+    إذا (!valid || بائيٽون < char_بائيٽون) {
+      أرجع false;
     }
-    bytes -= char_bytes;
-    s += char_bytes;
-    ++result;
+    بائيٽون -= char_بائيٽون;
+    s += char_بائيٽون;
+    ++نتيجو;
   }
-  len = result;
-  return true;
+  len = نتيجو;
+  أرجع true;
 }
 
-inline bool utf8_validate(const unsigned char* s, size_t len, size_t& utf8_chars) {
-  size_t utf8_len = 0;
-  size_t idx = 0;
-  while (idx < len) {
-    size_t bytes = 0;
-    auto ch = s[idx];
-    if (utf8_bytes(ch, bytes)) {
-      switch (bytes) {
-        case 1:
-          break;
-        case 2: {
+مضمن bool utf8_validate(ثابت بنانشان حرف* s, سائيز_t len, سائيز_t& utf8_chars) {
+  سائيز_t utf8_len = 0;
+  سائيز_t idx = 0;
+  طالما (idx < len) {
+    سائيز_t بائيٽون = 0;
+    خودڪار ch = s[idx];
+    إذا (utf8_بائيٽون(ch, بائيٽون)) {
+      بدل (بائيٽون) {
+        حالة 1:
+          اكسر;
+        حالة 2: {
           // Reject overlong 2-byte sequences. Valid Unicode 2-byte encodings
           // start at U+0080, so lead bytes 0xC0 and 0xC1 are invalid.
-          if (ch < 0xC2u) {
-            return false;
+          إذا (ch < 0xC2u) {
+            أرجع false;
           }
-          if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-            return false;
+          إذا (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+            أرجع false;
           }
-        } break;  // 2
-        case 3: {
-          auto ch1 = s[idx];
-          switch (ch1) {
-            case 0xE0u:
-              if (++idx >= len || s[idx] < 0xA0u || s[idx] > 0xBFu) {
-                return false;
+        } اكسر;  // 2
+        حالة 3: {
+          خودڪار ch1 = s[idx];
+          بدل (ch1) {
+            حالة 0xE0u:
+              إذا (++idx >= len || s[idx] < 0xA0u || s[idx] > 0xBFu) {
+                أرجع false;
               }
-              break;
-            case 0xEDu:
-              if (++idx >= len || s[idx] < 0x80u || s[idx] > 0x9Fu) {
-                return false;
+              اكسر;
+            حالة 0xEDu:
+              إذا (++idx >= len || s[idx] < 0x80u || s[idx] > 0x9Fu) {
+                أرجع false;
               }
-              break;
-            default: {
-              if ((ch1 >= 0xE1u && ch1 <= 0xECu) ||
+              اكسر;
+            افتراضي: {
+              إذا ((ch1 >= 0xE1u && ch1 <= 0xECu) ||
                   (ch1 >= 0xEEu && ch1 <= 0xEFu)) {
-                if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-                  return false;
+                إذا (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+                  أرجع false;
                 }
-              } else {
-                return false;
+              } وإلا {
+                أرجع false;
               }
-            } break;
+            } اكسر;
           }
           // validate byte 3
-          if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-            return false;
+          إذا (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+            أرجع false;
           }
-        } break;  // 3
-        case 4: {
-          auto ch1 = s[idx];
-          switch (ch1) {
-            case 0xF0u: {
-              if (++idx >= len || s[idx] < 0x90u || s[idx] > 0xBFu) {
-                return false;
+        } اكسر;  // 3
+        حالة 4: {
+          خودڪار ch1 = s[idx];
+          بدل (ch1) {
+            حالة 0xF0u: {
+              إذا (++idx >= len || s[idx] < 0x90u || s[idx] > 0xBFu) {
+                أرجع false;
               }
-            } break;
-            case 0xF4u: {
-              if (++idx >= len || s[idx] < 0x80u || s[idx] > 0x8Fu) {
-                return false;
+            } اكسر;
+            حالة 0xF4u: {
+              إذا (++idx >= len || s[idx] < 0x80u || s[idx] > 0x8Fu) {
+                أرجع false;
               }
-            } break;
-            default: {
-              if (ch1 >= 0xF1u && ch1 <= 0xF3u) {
-                if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-                  return false;
+            } اكسر;
+            افتراضي: {
+              إذا (ch1 >= 0xF1u && ch1 <= 0xF3u) {
+                إذا (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+                  أرجع false;
                 }
-              } else {
-                return false;
+              } وإلا {
+                أرجع false;
               }
-            } break;
+            } اكسر;
           }
           // validate bytes 3 and 4
-          size_t stop = idx + 2;
-          while (idx < stop) {
-            if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-              return false;
+          سائيز_t stop = idx + 2;
+          طالما (idx < stop) {
+            إذا (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+              أرجع false;
             }
           }
-        } break;  // 4
-        default:
+        } اكسر;  // 4
+        افتراضي:
           // no chars longer than 4
-          return false;
+          أرجع false;
       }  // switch bytes
       ++idx;
       ++utf8_len;
-    } else {
-      return false;
+    } وإلا {
+      أرجع false;
     }
   }
   // End index must match
   // the end of the last byte sequence.
-  if (idx != len) {
-    return false;
+  إذا (idx != len) {
+    أرجع false;
   }
   utf8_chars = utf8_len;
-  return true;
+  أرجع true;
 }
 
 // UTF-8 <-> wchar_t conversion utilities for non-Windows builds.
@@ -163,190 +163,190 @@ inline bool utf8_validate(const unsigned char* s, size_t len, size_t& utf8_chars
 // with 16-bit wchar_t cannot represent supplementary-plane characters correctly
 // via these helpers.
 // On Windows, use the Win32 MultiByteToWideChar/WideCharToMultiByte APIs instead.
-#ifndef _WIN32
+#جيڪڏهن_وصف_نه_ٿيل _WIN32
 
-static_assert(sizeof(wchar_t) >= 4,
+static_assert(حجم(wchar_t) >= 4,
               "Non-Windows UTF-8/wchar_t conversion helpers require wchar_t to be at least 32 bits.");
 
 /// Compute the number of UTF-8 bytes required to encode a wide string.
-inline size_t WideToUtf8RequiredSize(const std::wstring& wstr) {
-  size_t result = 0;
-  for (wchar_t wc : wstr) {
+مضمن سائيز_t Wide_منزل_Utf8_Required_سائيز(ثابت std::wstring& wstr) {
+  سائيز_t نتيجو = 0;
+  لكل (wchar_t wc : wstr) {
     char32_t cp = static_cast<char32_t>(wc);
-    if (cp >= 0xD800 && cp <= 0xDFFF) {
+    إذا (cp >= 0xD800 && cp <= 0xDFFF) {
       ORT_THROW("Invalid Unicode surrogate codepoint U+", std::hex, static_cast<uint32_t>(cp));
     }
-    if (cp <= 0x7F) {
-      result += 1;
-    } else if (cp <= 0x7FF) {
-      result += 2;
-    } else if (cp <= 0xFFFF) {
-      result += 3;
-    } else if (cp <= 0x10FFFF) {
-      result += 4;
-    } else {
+    إذا (cp <= 0x7F) {
+      نتيجو += 1;
+    } وإلا إذا (cp <= 0x7FF) {
+      نتيجو += 2;
+    } وإلا إذا (cp <= 0xFFFF) {
+      نتيجو += 3;
+    } وإلا إذا (cp <= 0x10FFFF) {
+      نتيجو += 4;
+    } وإلا {
       ORT_THROW("Invalid Unicode codepoint U+", std::hex, static_cast<uint32_t>(cp));
     }
   }
-  return result;
+  أرجع نتيجو;
 }
 
 /// Convert a wide string to UTF-8, writing into a pre-allocated std::string.
 /// The string is resized to the actual number of bytes written.
-inline Status WideToUtf8(const std::wstring& wstr, std::string& str) {
-  if (wstr.empty()) {
+مضمن حالت_2 Wide_منزل_Utf8(ثابت std::wstring& wstr, std::string& str) {
+  إذا (wstr.خالي_جايون()) {
     str.clear();
-    return Status::OK();
+    أرجع حالت_2::OK();
   }
 
-  char* dest = str.data();
-  char* dest_end = dest + str.size();
+  حرف* dest = str.معلومات();
+  حرف* dest_پڇاڙي = dest + str.سائيز();
 
-  for (wchar_t wc : wstr) {
+  لكل (wchar_t wc : wstr) {
     char32_t cp = static_cast<char32_t>(wc);
-    if (cp >= 0xD800 && cp <= 0xDFFF) {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL,
+    إذا (cp >= 0xD800 && cp <= 0xDFFF) {
+      أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL,
                              "Invalid Unicode surrogate codepoint during UTF-8 conversion");
     }
-    if (cp <= 0x7F) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 1) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+    إذا (cp <= 0x7F) {
+      ثابت سائيز_t بچيل = static_cast<سائيز_t>(dest_پڇاڙي - dest);
+      إذا (بچيل < 1) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(cp);
-    } else if (cp <= 0x7FF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 2) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<حرف>(cp);
+    } وإلا إذا (cp <= 0x7FF) {
+      ثابت سائيز_t بچيل = static_cast<سائيز_t>(dest_پڇاڙي - dest);
+      إذا (بچيل < 2) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xC0 | (cp >> 6));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else if (cp <= 0xFFFF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 3) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<حرف>(0xC0 | (cp >> 6));
+      *dest++ = static_cast<حرف>(0x80 | (cp & 0x3F));
+    } وإلا إذا (cp <= 0xFFFF) {
+      ثابت سائيز_t بچيل = static_cast<سائيز_t>(dest_پڇاڙي - dest);
+      إذا (بچيل < 3) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xE0 | (cp >> 12));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else if (cp <= 0x10FFFF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 4) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<حرف>(0xE0 | (cp >> 12));
+      *dest++ = static_cast<حرف>(0x80 | ((cp >> 6) & 0x3F));
+      *dest++ = static_cast<حرف>(0x80 | (cp & 0x3F));
+    } وإلا إذا (cp <= 0x10FFFF) {
+      ثابت سائيز_t بچيل = static_cast<سائيز_t>(dest_پڇاڙي - dest);
+      إذا (بچيل < 4) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xF0 | (cp >> 18));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 12) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL,
+      *dest++ = static_cast<حرف>(0xF0 | (cp >> 18));
+      *dest++ = static_cast<حرف>(0x80 | ((cp >> 12) & 0x3F));
+      *dest++ = static_cast<حرف>(0x80 | ((cp >> 6) & 0x3F));
+      *dest++ = static_cast<حرف>(0x80 | (cp & 0x3F));
+    } وإلا {
+      أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL,
                              "Invalid Unicode codepoint during UTF-8 conversion");
     }
   }
 
-  str.resize(static_cast<size_t>(dest - str.data()));
-  return Status::OK();
+  str.resize(static_cast<سائيز_t>(dest - str.معلومات()));
+  أرجع حالت_2::OK();
 }
 
 /// Convert a UTF-8 string to a wide string, writing into a pre-allocated std::wstring.
 /// The wstring is resized to the actual number of characters written.
 /// Validates continuation bytes and rejects overlong encodings and surrogates.
-inline Status Utf8ToWide(const std::string& str, std::wstring& wstr) {
-  if (str.empty()) {
+مضمن حالت_2 Utf8_منزل_Wide(ثابت std::string& str, std::wstring& wstr) {
+  إذا (str.خالي_جايون()) {
     wstr.clear();
-    return Status::OK();
+    أرجع حالت_2::OK();
   }
 
-  if (wstr.size() < str.size()) {
-    wstr.resize(str.size());
+  إذا (wstr.سائيز() < str.سائيز()) {
+    wstr.resize(str.سائيز());
   }
 
-  const auto* src = reinterpret_cast<const unsigned char*>(str.data());
-  const auto* src_end = src + str.size();
-  wchar_t* dest = wstr.data();
+  ثابت خودڪار* src = reinterpret_cast<ثابت بنانشان حرف*>(str.معلومات());
+  ثابت خودڪار* src_پڇاڙي = src + str.سائيز();
+  wchar_t* dest = wstr.معلومات();
 
-  while (src < src_end) {
+  طالما (src < src_پڇاڙي) {
     char32_t cp = 0;
-    size_t byte_len = 0;
+    سائيز_t byte_len = 0;
 
-    if ((*src & 0x80) == 0) {
+    إذا ((*src & 0x80) == 0) {
       cp = *src;
       byte_len = 1;
-    } else if ((*src & 0xE0) == 0xC0) {
+    } وإلا إذا ((*src & 0xE0) == 0xC0) {
       byte_len = 2;
-      if (static_cast<size_t>(src_end - src) < 2) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      إذا (static_cast<سائيز_t>(src_پڇاڙي - src) < 2) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      إذا ((src[1] & 0xC0) != 0x80) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x1F) << 6) |
            static_cast<char32_t>(src[1] & 0x3F);
       // Reject overlong encoding (must be >= 0x80 for 2-byte)
-      if (cp < 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      إذا (cp < 0x80) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
-    } else if ((*src & 0xF0) == 0xE0) {
+    } وإلا إذا ((*src & 0xF0) == 0xE0) {
       byte_len = 3;
-      if (static_cast<size_t>(src_end - src) < 3) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      إذا (static_cast<سائيز_t>(src_پڇاڙي - src) < 3) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      إذا ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x0F) << 12) |
            (static_cast<char32_t>(src[1] & 0x3F) << 6) |
            static_cast<char32_t>(src[2] & 0x3F);
       // Reject overlong encoding (must be >= 0x800 for 3-byte)
-      if (cp < 0x800) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      إذا (cp < 0x800) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
       // Reject UTF-16 surrogates (U+D800..U+DFFF)
-      if (cp >= 0xD800 && cp <= 0xDFFF) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8: surrogate codepoint");
+      إذا (cp >= 0xD800 && cp <= 0xDFFF) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Invalid UTF-8: surrogate codepoint");
       }
-    } else if ((*src & 0xF8) == 0xF0) {
+    } وإلا إذا ((*src & 0xF8) == 0xF0) {
       byte_len = 4;
-      if (static_cast<size_t>(src_end - src) < 4) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      إذا (static_cast<سائيز_t>(src_پڇاڙي - src) < 4) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80 || (src[3] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      إذا ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80 || (src[3] & 0xC0) != 0x80) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x07) << 18) |
            (static_cast<char32_t>(src[1] & 0x3F) << 12) |
            (static_cast<char32_t>(src[2] & 0x3F) << 6) |
            static_cast<char32_t>(src[3] & 0x3F);
       // Reject overlong encoding (must be >= 0x10000 for 4-byte)
-      if (cp < 0x10000) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      إذا (cp < 0x10000) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
       // Reject codepoints beyond Unicode range
-      if (cp > 0x10FFFF) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8: codepoint beyond U+10FFFF");
+      إذا (cp > 0x10FFFF) {
+        أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Invalid UTF-8: codepoint beyond U+10FFFF");
       }
-    } else {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 lead byte");
+    } وإلا {
+      أرجع ORT_MAKE_حالت(ONNXRUNTIME, FAIL, "Invalid UTF-8 lead byte");
     }
 
     *dest++ = static_cast<wchar_t>(cp);
     src += byte_len;
   }
 
-  wstr.resize(static_cast<size_t>(dest - wstr.data()));
-  return Status::OK();
+  wstr.resize(static_cast<سائيز_t>(dest - wstr.معلومات()));
+  أرجع حالت_2::OK();
 }
 
 /// Convenience: convert UTF-8 string to wstring (throws on error).
-inline std::wstring Utf8ToWideString(const std::string& s) {
+مضمن std::wstring Utf8_منزل_Wide_String(ثابت std::string& s) {
   // UTF-8 byte count is an upper bound on wchar_t count
-  std::wstring result;
-  result.resize(s.size());
-  ORT_THROW_IF_ERROR(Utf8ToWide(s, result));
-  return result;
+  std::wstring نتيجو;
+  نتيجو.resize(s.سائيز());
+  ORT_THROW_IF_ERROR(Utf8_منزل_Wide(s, نتيجو));
+  أرجع نتيجو;
 }
 
-#endif  // !_WIN32
+#جيڪڏهن_پورو  // !_WIN32
 
 }  // namespace utf8_util
 }  // namespace onnxruntime

@@ -1,59 +1,59 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#هدايت once
 
-#include "core/common/exceptions.h"
+#ضمن "core/common/exceptions.h"
 
 // Setup the infrastructure to throw ORT exceptions so they're caught by existing handlers.
 
-template <typename E>
-class SafeIntExceptionHandler;
+سانچو <typename E>
+class محفوظ_Int_Exception_Handler;
 
-template <>
-class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
- public:
-  [[noreturn]] static void SafeIntOnOverflow() {
+سانچو <>
+class محفوظ_Int_Exception_Handler<onnxruntime::OnnxRuntimeException> {
+ عام:
+  [[noreturn]] ساكن فراغ محفوظ_Int_On_حد_کان_مٿي() {
     ORT_THROW("Integer overflow");
   }
 
-  [[noreturn]] static void SafeIntOnDivZero() {
+  [[noreturn]] ساكن فراغ محفوظ_Int_On_Div_Zero() {
     ORT_THROW("Divide by zero");
   }
 };
 
-#define SAFEINT_EXCEPTION_HANDLER_CPP 1
-#define SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
+#وصف_ڪريو SAFEINT_EXCEPTION_HANDLER_CPP 1
+#وصف_ڪريو محفوظ_Int_Default_Exception_Handler محفوظ_Int_Exception_Handler<onnxruntime::OnnxRuntimeException>
 
-#if defined(__GNUC__)
-#include "onnxruntime_config.h"
-#pragma GCC diagnostic push
-#ifdef HAS_UNUSED_BUT_SET_PARAMETER
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-#endif
-#endif
-#include "SafeInt.hpp"
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+#إذا defined(__GNUC__)
+#ضمن "onnxruntime_config.h"
+#هدايت GCC diagnostic ڌڪو
+#جيڪڏهن_وصف_ٿيل HAS_اڻ_استعمال_ٿيل_BUT_سيٽ_PARAMETER
+#هدايت GCC diagnostic ignored "-Wunused-but-set-parameter"
+#جيڪڏهن_پورو
+#جيڪڏهن_پورو
+#ضمن "SafeInt.hpp"
+#إذا defined(__GNUC__)
+#هدايت GCC diagnostic ڪڍو
+#جيڪڏهن_پورو
 
-#include <type_traits>
+#ضمن <type_traits>
 
 namespace onnxruntime {
 
-template <typename T>
+سانچو <typename T>
 using remove_cvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 
-template <typename T>
-inline constexpr bool is_supported_integer_v =
+سانچو <typename T>
+مضمن constexpr bool is_supported_integer_v =
     std::is_integral_v<remove_cvref_t<T>> && !std::is_same_v<remove_cvref_t<T>, bool>;
 
 //------------------------------------------------------------------------------
 // Safe multiplication of two or more integer values into an explicit result type R.
 // Throws OnnxRuntimeException on overflow.
 //------------------------------------------------------------------------------
-template <typename R, typename T, typename U, typename... Rest>
-[[nodiscard]] R SafeMul(T a, U b, Rest... rest) {
+سانچو <typename R, typename T, typename U, typename... Rest>
+[[nodiscard]] R محفوظ_Mul(T a, U b, Rest... rest) {
   static_assert(is_supported_integer_v<R>,
                 "SafeMul requires an integral result type (excluding bool)");
   static_assert(is_supported_integer_v<T> && is_supported_integer_v<U>,
@@ -64,19 +64,19 @@ template <typename R, typename T, typename U, typename... Rest>
   // SafeMultiply(T, U, T&) requires the first argument and result to share
   // the same type. Cast the first operand to R so the result is directly in R.
   R cast_a{};
-  if (!SafeCast(a, cast_a)) {
-    SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
+  إذا (!محفوظ_Cast(a, cast_a)) {
+    محفوظ_Int_Default_Exception_Handler::محفوظ_Int_On_حد_کان_مٿي();
   }
 
-  R result{};
-  if (!SafeMultiply(cast_a, b, result)) {
-    SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
+  R نتيجو{};
+  إذا (!محفوظ_Multiply(cast_a, b, نتيجو)) {
+    محفوظ_Int_Default_Exception_Handler::محفوظ_Int_On_حد_کان_مٿي();
   }
 
-  if constexpr (sizeof...(rest) > 0) {
-    return SafeMul<R>(result, rest...);
-  } else {
-    return result;
+  إذا constexpr (حجم...(rest) > 0) {
+    أرجع محفوظ_Mul<R>(نتيجو, rest...);
+  } وإلا {
+    أرجع نتيجو;
   }
 }
 

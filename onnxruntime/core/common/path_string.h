@@ -1,83 +1,83 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#هدايت once
 
-#include <string>
-#include <type_traits>
+#ضمن <string>
+#ضمن <type_traits>
 
 // for std::tolower or std::towlower
-#ifdef _WIN32
-#include <cwctype>
-#else
-#include <cctype>
-#endif
+#جيڪڏهن_وصف_ٿيل _WIN32
+#ضمن <cwctype>
+#وإلا
+#ضمن <cctype>
+#جيڪڏهن_پورو
 
 // for converting / printing ORT_TSTR path strings to std::string
-#ifdef _WIN32
-#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
-#define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
-#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
-#define ORT_TSTR_CONVERT_FROM_STRING(X) X
-#endif
+#جيڪڏهن_وصف_ٿيل _WIN32
+#وصف_ڪريو ORT_TSTR_CONVERT_منزل_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().منزل_بائيٽون(X)
+#وصف_ڪريو ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_بائيٽون(X);
+#وإلا
+#وصف_ڪريو ORT_TSTR_CONVERT_منزل_PRINTABLE_STRING(X) X
+#وصف_ڪريو ORT_TSTR_CONVERT_FROM_STRING(X) X
+#جيڪڏهن_پورو
 
-#include "core/common/common.h"
-#include "core/session/onnxruntime_c_api.h"
+#ضمن "core/common/common.h"
+#ضمن "core/session/onnxruntime_c_api.h"
 
 namespace onnxruntime {
 
 // char type for filesystem paths
-using PathChar = ORTCHAR_T;
+using رستو_Char = ORTCHAR_T;
 // string type for filesystem paths
-using PathString = std::basic_string<PathChar>;
+using رستو_String = std::basic_string<رستو_Char>;
 
-inline PathString ToPathString(const PathString& s) {
-  return s;
+مضمن رستو_String منزل_رستو_String(ثابت رستو_String& s) {
+  أرجع s;
 }
 
-#ifdef _WIN32
+#جيڪڏهن_وصف_ٿيل _WIN32
 
-static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
+static_assert(std::is_same<رستو_String, std::wstring>::قدر, "PathString is not std::wstring!");
 
-inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+مضمن رستو_String منزل_رستو_String(std::string_view s) {
+  أرجع منزل_Wide_String(s);
 }
-inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+مضمن رستو_String منزل_رستو_String(ثابت حرف* s) {
+  أرجع منزل_Wide_String(s);
 }
-inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
-}
-
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+مضمن رستو_String منزل_رستو_String(ثابت std::string& s) {
+  أرجع منزل_Wide_String(s);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+مضمن رستو_Char منزل_هيٺاهون_رستو_Char(رستو_Char c) {
+  أرجع std::towlower(c);
 }
 
-#else
-
-static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
-
-inline PathString ToPathString(const char* s) {
-  return s;
+مضمن std::string رستو_منزل_UTF8_String(ثابت رستو_String& s) {
+  أرجع منزل_UTF8_String(s);
 }
 
-inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+#وإلا
+
+static_assert(std::is_same<رستو_String, std::string>::قدر, "PathString is not std::string!");
+
+مضمن رستو_String منزل_رستو_String(ثابت حرف* s) {
+  أرجع s;
 }
 
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+مضمن رستو_String منزل_رستو_String(std::string_view s) {
+  أرجع رستو_String{s};
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+مضمن رستو_Char منزل_هيٺاهون_رستو_Char(رستو_Char c) {
+  أرجع std::tolower(c);
 }
 
-#endif
+مضمن std::string رستو_منزل_UTF8_String(ثابت رستو_String& s) {
+  أرجع s;
+}
+
+#جيڪڏهن_پورو
 
 }  // namespace onnxruntime
