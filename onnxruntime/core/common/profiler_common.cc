@@ -1,51 +1,51 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/profiler_common.h"
+#अन्तर्भाव "core/common/profiler_common.h"
 
 #ifndef _MSC_VER
-#include <cxxabi.h>
+#अन्तर्भाव <cxxabi.h>
 #endif
-#include <string.h>
-#include <string>
+#अन्तर्भाव <string.h>
+#अन्तर्भाव <string>
 
-namespace onnxruntime {
-namespace profiling {
+नामाकाश onnxruntime {
+नामाकाश profiling {
 
-static constexpr int kMaxSymbolSize = 1024;
+स्थिर constexpr पूर्णाङ्क k_Max_चिह्नम्_Size = 1024;
 
-std::string demangle(const char* name) {
+std::string demangle(ध्रुव वर्ण* name) {
 #ifndef _MSC_VER
-  if (!name) {
-    return "";
+  सचे (!name) {
+    पटिनिवत्त "";
   }
 
-  if (strlen(name) > kMaxSymbolSize) {
-    return name;
+  सचे (strlen(name) > k_Max_चिह्नम्_Size) {
+    पटिनिवत्त name;
   }
 
-  int status;
+  पूर्णाङ्क status;
   size_t len = 0;
-  char* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
-  if (status != 0) {
-    return name;
+  वर्ण* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
+  सचे (status != 0) {
+    पटिनिवत्त name;
   }
   std::string res(demangled);
   // The returned buffer must be freed!
-  free(demangled);
-  return res;
-#else
+  मुक्त(demangled);
+  पटिनिवत्त res;
+#अञ्ञथा
   // TODO(anyone): demangling on Windows
-  if (!name) {
-    return "";
-  } else {
-    return name;
+  सचे (!name) {
+    पटिनिवत्त "";
+  } अञ्ञथा {
+    पटिनिवत्त name;
   }
 #endif
 }
 
-std::string demangle(const std::string& name) {
-  return demangle(name.c_str());
+std::string demangle(ध्रुव std::string& name) {
+  पटिनिवत्त demangle(name.c_str());
 }
 
 }  // namespace profiling
