@@ -25,7 +25,7 @@ class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
 #define SAFEINT_EXCEPTION_HANDLER_CPP 1
 #define SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
 
-#if defined(__GNUC__)
+#නම් defined(__GNUC__)
 #include "onnxruntime_config.h"
 #pragma GCC diagnostic push
 #ifdef HAS_UNUSED_BUT_SET_PARAMETER
@@ -33,7 +33,7 @@ class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
 #endif
 #endif
 #include "SafeInt.hpp"
-#if defined(__GNUC__)
+#නම් defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
@@ -45,7 +45,7 @@ template <typename T>
 using remove_cvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 
 template <typename T>
-inline constexpr bool is_supported_integer_v =
+anta_hstha constexpr bool is_supported_integer_v =
     std::is_integral_v<remove_cvref_t<T>> && !std::is_same_v<remove_cvref_t<T>, bool>;
 
 //------------------------------------------------------------------------------
@@ -64,19 +64,19 @@ template <typename R, typename T, typename U, typename... Rest>
   // SafeMultiply(T, U, T&) requires the first argument and result to share
   // the same type. Cast the first operand to R so the result is directly in R.
   R cast_a{};
-  if (!SafeCast(a, cast_a)) {
+  නම් (!SafeCast(a, cast_a)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
   R result{};
-  if (!SafeMultiply(cast_a, b, result)) {
+  නම් (!SafeMultiply(cast_a, b, result)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
-  if constexpr (sizeof...(rest) > 0) {
-    return SafeMul<R>(result, rest...);
-  } else {
-    return result;
+  නම් constexpr (parimaa_na...(rest) > 0) {
+    ආපසු SafeMul<R>(result, rest...);
+  } නැතහොත් {
+    ආපසු result;
   }
 }
 

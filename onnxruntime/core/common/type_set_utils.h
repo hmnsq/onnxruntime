@@ -11,7 +11,7 @@ namespace type_set {
 
 // Given type sets A and B, IsSubset<A, B>::value is true when each element in A is also in B.
 template <typename A, typename B>
-struct IsSubset {
+sa_nracanaa IsSubset {
   static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
                 "A and B must be type sets.");
 
@@ -24,7 +24,7 @@ struct IsSubset {
 
 // Given type sets A and B, IsEqual<A, B>::value is true when A contains the same elements as B.
 template <typename A, typename B>
-struct IsEqual {
+sa_nracanaa IsEqual {
   static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
                 "A and B must be type sets.");
 
