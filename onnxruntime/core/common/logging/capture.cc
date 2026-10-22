@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/logging.h"
-#include <gsl/gsl>
+#অন্তর্ভাৱ "core/common/logging/capture.h"
+#অন্তর্ভাৱ "core/common/logging/logging.h"
+#অন্তর্ভাৱ <gsl/gsl>
 
-namespace onnxruntime {
-namespace logging {
+নামাকাশ onnxruntime {
+নামাকাশ logging {
 
-void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
+শূন্য Capture::CapturePrintf(msvc_printf_check ধ্রুৱ ৱর্ণ* format, ...) {
   va_list arglist;
   va_start(arglist, format);
 
@@ -20,45 +20,45 @@ void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
 // from https://github.com/KjellKod/g3log/blob/master/src/logcapture.cpp LogCapture::capturef
 // License: https://github.com/KjellKod/g3log/blob/master/LICENSE
 // Modifications Copyright (c) Microsoft.
-void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list args) {
-  static constexpr auto kTruncatedWarningText = "[...truncated...]";
-  static constexpr int kMaxMessageSize = 2048;
-  char message_buffer[kMaxMessageSize];
-  const auto message = gsl::make_span(message_buffer);
+শূন্য Capture::ProcessPrintf(msvc_printf_check ধ্রুৱ ৱর্ণ* format, va_list args) {
+  স্থির constexpr auto kTruncatedWarningText = "[...truncated...]";
+  স্থির constexpr পূর্ণাঙ্ক kMaxMessageSize = 2048;
+  ৱর্ণ message_buffer[kMaxMessageSize];
+  ধ্রুৱ auto message = gsl::make_span(message_buffer);
 
-  bool error = false;
-  bool truncated = false;
+  তার্কিক error = মিছা;
+  তার্কিক truncated = মিছা;
 
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
+#যদি (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
   errno = 0;
-  const int nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
-  if (nbrcharacters < 0) {
+  ধ্রুৱ পূর্ণাঙ্ক nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
+  যদি (nbrcharacters < 0) {
     error = errno != 0;
     truncated = !error;
   }
-#else
+#অন্যথা
 #ifdef __APPLE__
-  const int nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
-#else
-  const int nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
+  ধ্রুৱ পূর্ণাঙ্ক nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
+#অন্যথা
+  ধ্রুৱ পূর্ণাঙ্ক nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
 #endif
   error = nbrcharacters < 0;
   truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > message.size());
 #endif
 
-  if (error) {
+  যদি (error) {
     stream_ << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
     stream_ << '"' << format << '"' << std::endl;
-  } else if (truncated) {
+  } অন্যথা যদি (truncated) {
     stream_ << message.data() << kTruncatedWarningText;
-  } else {
+  } অন্যথা {
     stream_ << message.data();
   }
 }
 
 Capture::~Capture() {
-  if (logger_ != nullptr) {
-    logger_->Log(*this);
+  যদি (logger_ != nullptr) {
+    logger_->Log(*এতত্);
   }
 }
 }  // namespace logging

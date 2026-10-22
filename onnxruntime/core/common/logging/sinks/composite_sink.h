@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-#include <utility>
-#include <memory>
+#অন্তর্ভাৱ <string>
+#অন্তর্ভাৱ <vector>
+#অন্তর্ভাৱ <utility>
+#অন্তর্ভাৱ <memory>
 
-#include "core/common/logging/isink.h"
-#include "core/common/logging/logging.h"
+#অন্তর্ভাৱ "core/common/logging/isink.h"
+#অন্তর্ভাৱ "core/common/logging/logging.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -17,8 +17,8 @@ namespace logging {
 /// Class that abstracts multiple ISink instances being written to.
 /// </summary>
 /// <seealso cref="ISink" />
-class CompositeSink : public ISink {
- public:
+class CompositeSink : সার্ৱজনিক ISink {
+ সার্ৱজনিক:
   /// <summary>
   /// Initializes a new instance of the <see cref="CompositeSink"/> class.
   /// Use AddSink to add sinks.
@@ -28,10 +28,10 @@ class CompositeSink : public ISink {
   /// <summary>
   /// Check if the composite sink contains a sink of the specified type.
   /// </summary>
-  bool HasType(SinkType sink_type) const {
-    return std::any_of(sinks_with_severity_.begin(), sinks_with_severity_.end(),
-                       [&](const auto& sink_pair) {
-                         return sink_pair.first->GetType() == sink_type;
+  bool HasType(SinkType sink_type) ধ্রুৱ {
+    ঘূৰাই std::any_of(sinks_with_severity_.begin(), sinks_with_severity_.end(),
+                       [&](ধ্রুৱ auto& sink_pair) {
+                         ঘূৰাই sink_pair.first->GetType() == sink_type;
                        });
   }
 
@@ -43,7 +43,7 @@ class CompositeSink : public ISink {
   /// <returns>This instance to allow chaining.</returns>
   CompositeSink& AddSink(std::unique_ptr<ISink> sink, logging::Severity severity) {
     sinks_with_severity_.emplace_back(std::move(sink), severity);
-    return *this;
+    ঘূৰাই *this;
   }
 
   /// <summary>
@@ -56,26 +56,26 @@ class CompositeSink : public ISink {
 
     // find entries to remove and the minimum severity of the remaining sinks
     auto entries_to_remove = std::remove_if(sinks_with_severity_.begin(), sinks_with_severity_.end(),
-                                            [&](const auto& entry) {
-                                              if (entry.first->GetType() == sink_type) {
-                                                return true;
-                                              } else {
+                                            [&](ধ্রুৱ auto& entry) {
+                                              যদি (entry.first->GetType() == sink_type) {
+                                                ঘূৰাই true;
+                                              } অন্যথা {
                                                 severity = std::min(severity, entry.second);
-                                                return false;
+                                                ঘূৰাই false;
                                               }
                                             });
 
     sinks_with_severity_.erase(entries_to_remove, sinks_with_severity_.end());
 
-    return severity;
+    ঘূৰাই severity;
   }
 
   /// <summary>
   /// Check if there's only one sink left
   /// </summary>
   /// <returns> True if only 1 sink remaining </returns>
-  bool HasOnlyOneSink() const {
-    return sinks_with_severity_.size() == 1;
+  bool HasOnlyOneSink() ধ্রুৱ {
+    ঘূৰাই sinks_with_severity_.size() == 1;
   }
 
   /// <summary>
@@ -83,18 +83,18 @@ class CompositeSink : public ISink {
   /// </summary>
   /// <returns> If one sink remains then returns the sink, otherwise nullptr </returns>
   std::unique_ptr<ISink> GetRemoveSingleSink() {
-    if (HasOnlyOneSink()) {
+    যদি (HasOnlyOneSink()) {
       auto single_sink = std::move(sinks_with_severity_.begin()->first);
       sinks_with_severity_.clear();
-      return single_sink;
+      ঘূৰাই single_sink;
     }
-    return nullptr;
+    ঘূৰাই nullptr;
   }
 
- private:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    for (auto& sink_pair : sinks_with_severity_) {
-      if (message.Severity() >= sink_pair.second) {
+ গুপ্ত:
+  শূন্য SendImpl(ধ্রুৱ Timestamp& timestamp, ধ্রুৱ std::string& logger_id, ধ্রুৱ Capture& message) override {
+    বাবে (auto& sink_pair : sinks_with_severity_) {
+      যদি (message.Severity() >= sink_pair.second) {
         sink_pair.first->Send(timestamp, logger_id, message);
       }
     }
