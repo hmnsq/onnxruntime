@@ -21,16 +21,16 @@ namespace path_utils {
 template <typename... Args>
 PathString MakePathString(const Args&... args) {
   const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+  trả_về ToPathString(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
 inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+  nếu (path.empty() || std::filesystem::is_directory(path)) {
+    trả_về path;
   }
 
-  return path.parent_path();
+  trả_về path.parent_path();
 }
 
 /**
@@ -40,26 +40,26 @@ inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& pat
 inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
                                          const std::string& source_file_path,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  nếu (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
+    trả_về file_or_directory_path;
   }
 
   const std::filesystem::path source_path = source_file_path;
   const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
+  nếu (std::filesystem::is_directory(file_or_directory_path)) {
     std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+    trả_về directory.append(default_filename).string();
   }
 
-  return default_filename;
+  trả_về default_filename;
 }
 
 inline bool IsAbsolutePath(const std::string& path_string) {
 #ifdef _WIN32
   const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
+  trả_về path.is_absolute();
+#không_thì
+  trả_về !path_string.empty() && path_string.front() == '/';
 #endif
 }
 
@@ -67,9 +67,9 @@ inline bool IsRelativePathToParentPath(const std::string& path_string) {
 #ifdef _WIN32
   const auto path = std::filesystem::path{ToPathString(path_string)};
   const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
+  trả_về relative_path.find(L"..") != std::wstring::npos;
+#không_thì
+  trả_về !path_string.empty() && path_string.find("..") != std::string::npos;
 #endif
 }
 

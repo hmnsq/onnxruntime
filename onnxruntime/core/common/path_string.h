@@ -9,7 +9,7 @@
 // for std::tolower or std::towlower
 #ifdef _WIN32
 #include <cwctype>
-#else
+#không_thì
 #include <cctype>
 #endif
 
@@ -17,7 +17,7 @@
 #ifdef _WIN32
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
 #define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
+#không_thì
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
 #define ORT_TSTR_CONVERT_FROM_STRING(X) X
 #endif
@@ -33,7 +33,7 @@ using PathChar = ORTCHAR_T;
 using PathString = std::basic_string<PathChar>;
 
 inline PathString ToPathString(const PathString& s) {
-  return s;
+  trả_về s;
 }
 
 #ifdef _WIN32
@@ -41,41 +41,41 @@ inline PathString ToPathString(const PathString& s) {
 static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
 
 inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+  trả_về ToWideString(s);
 }
 inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+  trả_về ToWideString(s);
 }
 inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
+  trả_về ToWideString(s);
 }
 
 inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+  trả_về std::towlower(c);
 }
 
 inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+  trả_về ToUTF8String(s);
 }
 
-#else
+#không_thì
 
 static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
 
 inline PathString ToPathString(const char* s) {
-  return s;
+  trả_về s;
 }
 
 inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+  trả_về PathString{s};
 }
 
 inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+  trả_về std::tolower(c);
 }
 
 inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+  trả_về s;
 }
 
 #endif
