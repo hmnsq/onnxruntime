@@ -1,0 +1,531 @@
+# What is still missing
+
+76 languages. Each line says in how many languages it is missing.
+
+## Files in languages BURP cannot read yet
+
+
+## Keywords with no word in a language's table
+
+- shraeni:get: 75
+- shraeni:cerr: 75
+- shraeni:ostream: 75
+- shraeni:flush: 75
+- shraeni:ios: 75
+- shraeni:trunc: 75
+- shraeni:clear: 75
+- shraeni:ptrdiff_t: 71
+- guru:size_t: 71
+- shraeni:size_t: 71
+- shraeni:wchar_t: 71
+- guru:wchar_t: 71
+- shraeni:va_list: 71
+- shraeni:errno: 71
+- shraeni:va_start: 71
+- shraeni:va_end: 71
+- shraeni:tm: 71
+- shraeni:mktime: 71
+- guru:tolower: 71
+- shraeni:time_t: 71
+- shraeni:difftime: 71
+- shraeni:close: 71
+- shraeni:open: 70
+- shraeni:memset: 70
+- shraeni:nullptr: 67
+- shraeni:using: 67
+- shraeni:typename: 67
+- shraeni:#endif: 66
+- guru:#endif: 66
+- shraeni:#ifdef: 66
+- guru:#pragma: 66
+- shraeni:#define: 66
+- shraeni:#ifndef: 66
+- shraeni:#pragma: 66
+- guru:#ifdef: 66
+- guru:#define: 66
+- shraeni:#undef: 66
+- guru:#ifndef: 66
+- shraeni:endl: 66
+- shraeni:left: 66
+- shraeni:delete: 66
+- shraeni:auto: 62
+- shraeni:unsigned: 62
+- guru:auto: 62
+- guru:template: 62
+- shraeni:long: 62
+- guru:unsigned: 62
+- shraeni:template: 62
+- shraeni:operator: 62
+- guru:isspace: 62
+- shraeni:strlen: 62
+- shraeni:true: 38
+- shraeni:namespace: 26
+- shraeni:bool: 26
+- shraeni:false: 26
+- shraeni:const: 25
+- guru:const: 25
+- shraeni:void: 25
+- shraeni:static: 25
+- guru:void: 25
+- shraeni:#elif: 25
+- guru:public: 25
+- guru:static: 25
+- shraeni:switch: 25
+- shraeni:assert: 25
+- guru:private: 25
+- shraeni:this: 25
+- shraeni:default: 25
+- guru:switch: 25
+- guru:default: 25
+- shraeni:continue: 25
+- shraeni:NULL: 25
+- guru:#elif: 25
+- shraeni:free: 25
+- shraeni:class: 25
+- shraeni:public: 25
+- shraeni:do: 25
+- shraeni:private: 25
+- shraeni:for: 9
+- guru:for: 9
+- shraeni:case: 9
+- shraeni:break: 9
+- guru:inline: 9
+- guru:char: 9
+- shraeni:char: 9
+- guru:break: 9
+- guru:case: 9
+- shraeni:double: 9
+- guru:struct: 9
+- shraeni:inline: 9
+- shraeni:struct: 9
+- shraeni:sizeof: 9
+- shraeni:volatile: 9
+- guru:protected: 9
+- guru:sizeof: 9
+- shraeni:enum: 9
+- guru:enum: 9
+- shraeni:if: 1
+- guru:return: 1
+- shraeni:return: 1
+- shraeni:int: 1
+- guru:if: 1
+- shraeni:#if: 1
+- shraeni:else: 1
+- shraeni:#else: 1
+- guru:#if: 1
+- guru:else: 1
+- guru:#else: 1
+- guru:while: 1
+- shraeni:while: 1
+
+## Names with no dictionary entry (the most common first)
+
+- `std`: 76
+- `defined`: 76
+- `uarch`: 76
+- `s`: 76
+- `string`: 76
+- `idx`: 76
+- `onnxruntime`: 76
+- `Severity`: 76
+- `cp`: 76
+- `logging`: 76
+- `i`: 76
+- `_WIN32`: 76
+- `len`: 76
+- `ThreadPool`: 76
+- `src`: 76
+- `str`: 76
+- `Profiler`: 76
+- `ThreadPoolProfiler`: 76
+- `midr`: 76
+- `once`: 76
+- `CPUIDInfo`: 76
+- `LoggingManager`: 76
+- `logger_id`: 76
+- `tp`: 76
+- `dest`: 76
+- `string_view`: 76
+- `enabled_`: 76
+- `ONNXRUNTIME`: 76
+- `fn`: 76
+- `FAIL`: 76
+- `uint32_t`: 76
+- `now`: 76
+- `underlying_threadpool_`: 76
+- `ORT_ENFORCE`: 76
+- `ep_profiler`: 76
+- `events_`: 76
+- `event_arg`: 76
+- `Eigen`: 76
+- `_MSC_VER`: 76
+- `warning`: 76
+- `c`: 76
+- `T`: 76
+- `CPUInfo`: 76
+- `Capture`: 76
+- `chrono`: 76
+- `event_name`: 76
+- `rec`: 76
+- `R`: 76
+- `ss`: 76
+- `core_`: 76
+- `my_shard`: 76
+- `CpuVendorInfo`: 76
+- `common`: 76
+- `sinks_with_severity_`: 76
+- `timestamp`: 76
+- `ch`: 76
+- `thread_idx`: 76
+- `wstr`: 76
+- `has_arm_sve_`: 76
+- `midr_get_part`: 76
+- `ORT_THROW`: 76
+- `ISink`: 76
+- `sink_`: 76
+- `severity`: 76
+- `MainThreadStat`: 76
+- `stat`: 76
+- `numext`: 76
+- `CPUINFO_SUPPORTED`: 76
+- `core_uarchs_`: 76
+- `is_armv8_narrow_ld_`: 76
+- `Logger`: 76
+- `WOStreamSink`: 76
+- `OStreamSink`: 76
+- `ts`: 76
+- `ep_profilers_`: 76
+- `ch1`: 76
+- `CPUIDINFO_ARCH_ARM`: 76
+- `pytorch_cpuinfo_init_`: 76
+- `coreIdx`: 76
+- `vendor`: 76
+- `Timestamp`: 76
+- `s_default_logger_`: 76
+- `sink`: 76
+- `unique_ptr`: 76
+- `SendImpl`: 76
+- `wstring`: 76
+- `Color`: 76
+- `filesystem`: 76
+- `IsOK`: 76
+- `InlinedHashMap`: 76
+- `state_`: 76
+- `boost`: 76
+- `mp11`: 76
+- `format`: 76
+- `default_min_severity_`: 76
+- `sink_type`: 76
+- `FileSink`: 76
+- `X`: 76
+- `session_logger_`: 76
+- `EventCategory`: 76
+- `OK`: 76
+- `segment_begin_pos`: 76
+- `evt`: 76
+- `points_`: 76
+- `shard`: 76
+- `_shards`: 76
+- `my_home_shard`: 76
+- `thread_options_`: 76
+- `current_parallel_section`: 76
+- `has_arm_neon_dot_`: 76
+- `has_fp16_`: 76
+- `has_arm_sve_i8mm_`: 76
+- `pci_vendor_ids`: 76
+- `nbrcharacters`: 76
+- `DefaultLoggerManagerInstance`: 76
+- `profiling`: 76
+- `SinkType`: 76
+- `begin`: 76
+- `instance_`: 76
+- `concurrency`: 76
+- `GetMainThreadStat`: 76
+- `A`: 76
+- `B`: 76
+- `GetCPUID`: 76
+- `function_id`: 76
+- `is_hybrid_`: 76
+- `has_arm_sve2p1_`: 76
+- `getauxval`: 76
+- `has_arm_neon_i8mm_`: 76
+- `cpuinfo_has_arm_i8mm`: 76
+- `has_arm_neon_bf16_`: 76
+- `coreId`: 76
+- `_AIX`: 76
+- `GCC`: 76
+- `diagnostic`: 76
+- `src_len`: 76
+- `ret`: 76
+- `disable`: 76
+- `kFATAL`: 76
+- `manager`: 76
+- `file`: 76
+- `ios`: 76
+- `flush_`: 76
+- `profile_with_logger_`: 76
+- `file_name`: 76
+- `dur`: 76
+- `ThreadPoolEvent`: 76
+- `extended_eigen_threadpool_`: 76
+- `lc`: 76
+- `div_ceil`: 76
+- `byte_len`: 76
+- `_M_ARM64EC`: 76
+- `CPUIDINFO_ARCH_X86`: 76
+- `CPUIDINFO_ARCH_RISCV64`: 76
+- `has_avx_`: 76
+- `has_arm_sme_`: 76
+- `has_arm_sme2_`: 76
+- `coreid`: 76
+- `cpuinfo_uarch_cortex_a53`: 76
+- `cpuinfo_uarch_cortex_a55r0`: 76
+- `cpuinfo_uarch_cortex_a55`: 76
+- `cpuinfo_vendor`: 76
+- `vendor_info`: 76
+- `UINT32_C`: 76
+- `cpuinfo_uarch_cortex_a76`: 76
+- `WriteJsonString`: 76
+- `error`: 76
+- `ORT_USE_CXX20_STD_CHRONO`: 76
+- `Category`: 76
+- `system_clock`: 76
+- `local_tm`: 76
+- `utc_tm`: 76
+- `tid`: 76
+- `original_severity`: 76
+- `sink_pair`: 76
+- `move`: 76
+- `override`: 76
+- `append`: 76
+- `sync_gpu`: 76
+- `max_events_reached`: 76
+- `is_supported_integer_v`: 76
+- `Clock`: 76
+- `max_efficiency`: 76
+- `_M_AMD64`: 76
+- `decodeMIDR`: 76
+- `LogEarlyWarning`: 76
+- `has_avx512`: 76
+- `AT_HWCAP2`: 76
+- `cpuinfo_has_arm_sve`: 76
+- `core_cnt`: 76
+- `cpuinfo_uarch_unknown`: 76
+- `proc`: 76
+- `syscall`: 76
+- `GetCurrentCoreIdx`: 76
+- `GetCPUIDInfo`: 76
+- `kCpuVendorInfos`: 76
+- `processor`: 76
+- `CP_UTF8`: 76
+- `r`: 76
+- `ostream`: 76
+- `arglist`: 76
+- `truncated`: 76
+- `os`: 76
+- `guard`: 76
+- `CreateLogger`: 76
+- `SendProfileEvent`: 76
+- `GetThreadId`: 76
+- `GetProcessId`: 76
+- `existing_sink`: 76
+- `GetType`: 76
+- `CErrSink`: 76
+- `CLogSink`: 76
+- `ofstream`: 76
+- `file_`: 76
+- `filename`: 76
+- `kWARNING`: 76
+- `kERROR`: 76
+- `flush`: 76
+- `npos`: 76
+- `ENABLE_STATIC_PROFILER_INSTANCE`: 76
+- `session_logger`: 76
+- `custom_logger`: 76
+- `custom_logger_`: 76
+- `mutex_`: 76
+- `category`: 76
+- `delimiter`: 76
+- `s_trimmed`: 76
+- `hash`: 76
+- `thread_pool_name`: 76
+- `thread_pool_name_`: 76
+- `MAX_SHARDS`: 76
+- `affinities`: 76
+- `StopProfiling`: 76
+- `ParallelSection`: 76
+- `ps_`: 76
+- `CurrentThreadId`: 76
+- `mini`: 76
+- `coarser_efficiency`: 76
+- `ParallelFor`: 76
+- `utf8_len`: 76
+- `wc`: 76
+- `resize`: 76
+- `_M_ARM64`: 76
+- `HWCAP_ASIMDDP`: 76
+- `HWCAP_SVE`: 76
+- `HWCAP2_I8MM`: 76
+- `HWCAP2_SVEI8MM`: 76
+- `HWCAP2_SVE2P1`: 76
+- `HWCAP2_BF16`: 76
+- `RISCV_HWPROBE_EXT_ZVFH`: 76
+- `eax`: 76
+- `X86Init`: 76
+- `has_sse3_`: 76
+- `has_sse4_1_`: 76
+- `has_f16c_`: 76
+- `has_amx_bf16_`: 76
+- `has_avx2_`: 76
+- `has_avx512f_`: 76
+- `has_avx512_skylake_`: 76
+- `has_tpause_`: 76
+- `has_avx512_bf16_`: 76
+- `ArmLinuxInit`: 76
+- `cpuinfo_has_arm_neon_dot`: 76
+- `cpuinfo_has_arm_neon_fp16_arith`: 76
+- `cpuinfo_has_arm_neon_bf16`: 76
+- `cpuinfo_has_arm_sme`: 76
+- `cpuinfo_has_arm_sme2`: 76
+- `corep`: 76
+- `core`: 76
+- `ArmWindowsInit`: 76
+- `processor_subkey`: 76
+- `IsProcessorFeaturePresent`: 76
+- `ArmAppleInit`: 76
+- `RiscvLinuxInit`: 76
+- `VendorInfoInit`: 76
+- `vendor_`: 76
+- `vendor_id_`: 76
+- `cpuinfo_vendor_unknown`: 76
+- `cpuinfo_vendor_ibm`: 76
+- `vendor_mapping_it`: 76
+- `MakeString`: 76
+- `cpuinfo_uarch_cortex_a12`: 76
+- `cpuinfo_uarch_cortex_a73`: 76
+- `cpuinfo_uarch_cortex_a75`: 76
+- `cpuinfo_uarch_thunderx2`: 76
+- `cpuinfo_uarch_scorpion`: 76
+- `DENORMAL_INTRINC`: 76
+- `on`: 76
+- `kHexDigits`: 76
+- `ProcessPrintf`: 76
+- `DefaultLoggerMutex`: 76
+- `sink_mutex_`: 76
+- `minutes`: 76
+- `epoch`: 76
+- `default_logger_id`: 76
+- `owns_default_logger_`: 76
+- `location`: 76
+- `format_str`: 76
+- `OnnxRuntimeException`: 76
+- `tid64`: 76
+
+## Comments with no translation
+
+- namespace onnxruntime: 76
+- / <summary>: 76
+- / </summary>: 76
+- default:: 76
+- namespace logging: 76
+- / <seealso cref="ISink" />: 76
+- defined(CPUINFO_SUPPORTED): 76
+- #if (defined(_M_ARM64) || defined(__aarch64__)) && !defined(__ANDROID__): 76
+- flush: 76
+- #if defined(_M_ARM) || defined(__arm__): 76
+- defined(CPUIDINFO_ARCH_ARM): 76
+- #endif /* ARM: 76
+- / Initializes a new instance of the <see cref="FileSink" /> class.: 76
+- / <param name="filename">The filename to write to.</param>: 76
+- / <param name="append">If set to <c>true</c> [append to file]. Otherwise truncate.</param>: 76
+- / <param name="filter_user_data">If set to <c>true</c> [removes user data].</param>: 76
+- / <remarks>Filtering of user data can alternatively be done at the <see cref="LoggingManager" /> lev: 76
+- _WIN32: 76
+- NOLINT: 76
+- #endif /* ARM64 && !defined(__ANDROID__): 76
+- #endif: 76
+- namespace profiling: 76
+- namespace utils: 76
+- ARM: 76
+- defined(__APPLE__): 76
+- defined(CPUIDINFO_ARCH_X86): 76
+- defined(CPUIDINFO_ARCH_RISCV64): 76
+- *
+   * @brief Some ARMv8 power efficient core has narrower 64b load/store
+   *        that needs spe: 76
+- namespace: 76
+- arm or arm64: 76
+- namespace common: 76
+- GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial: 76
+- and should not have any destruction order issues via pragmas instead.: 76
+- https://developercommunity.visualstudio.com/content/problem/249706/gslsuppress-does-not-work-for-i22: 76
+- std::cerr isn't buffered so no flush required: 76
+- / ISink that writes to a file.: 76
+- yellow: 76
+- bold red: 76
+- bold white on red background: 76
+- Two options as there may be multiple calls attempting to write to the same sink at once:: 76
+- 1) Use mutex to synchronize access to the stream.: 76
+- 2) Create the message in an ostringstream and output in one call.: 76
+- Going with #2 as it should scale better at the cost of creating the message in memory first: 76
+- before sending to the stream.: 76
+- TODO: sync_gpu if needed.: 76
+- Parse a Semantic Versioning version from `version_string`.: 76
+- namespace concurrency: 76
+- state_ will be allocated here causing the status to be treated as a failure: 76
+- This file defines the CPUIDINFO_ARCH_* symbols.: 76
+- ARM or ARM64: 76
+- N.B. Support building with older versions of asm/hwcap.h that do not define: 76
+- this capability bit.: 76
+- RISCV64: 76
+- Linux: 76
+- Support querying SVE2.1 when building with Windows SDKs older than 26100.: 76
+- IsProcessorFeaturePresent returns false when the running HAL cannot detect it.: 76
+- The following function is declared in "core/common/cpuid_uarch.h" but we cannot include the whole he: 76
+- some of its symbols are conflict with <cpuinfo.h>: 76
+- CPUINFO_SUPPORTED: 76
+- This change is made to overcome the issue of __get_cpuid returning all zeros, instead use __get_cpui: 76
+- Reference: https://stackoverflow.com/questions/46272579/why-does-get-cpuid-return-all-zeros-for-leaf: 76
+- Add check for AVX512 Skylake since tensorization GEMM need intrinsics from avx512bw/avx512dq.: 76
+- avx512_skylake = avx512f | avx512vl | avx512cd | avx512bw | avx512dq: 76
+- Check for TPAUSE: 76
+- Assuming no hyper-threading, no NUMA groups: 76
+- SVE is enabled only on Linux-based ARM CPUs for now, where it has been tested.: 76
+- ^ defined(__linux__): 76
+- Read MIDR register values from Windows registry: 76
+- There should be one per CPU: 76
+- TODO!! Don't support multiple processor group yet!!: 76
+- buffer for processor registry name: 76
+- * ARM lists for each coprocessor register 5 fields: op0/op1/CRn/CRm/op2.
+     * You need to put thos: 76
+- process midr_values: 76
+- Available from Windows 11 24H2 SDKs; older SDKs lack the constants, in: 76
+- which case detection falls back to cpuinfo above (or SVE stays off).: 76
+- SVE i8mm gates the svmmla QGEMM kernels; without it they must not dispatch.: 76
+- ^ defined(_WIN32): 76
+- Note: We leave is_armv8_narrow_ld_ unset because it only applies to a limited set of uarchs that we : 76
+- to encounter on Apple platforms.: 76
+- TODO figure out how to set core_uarchs_: 76
+- No fallback detection attempted now. Add if needed.: 76
+- defined(CPUIDINFO_ARCH_RISCV64) && defined(__linux__): 76
+- failed to detect current core id. give up: 76
+- don't know how to get core index: 76
+- Note: This should be run after cpuinfo initialization if cpuinfo is enabled.: 76
+- fp16 conversion inst: 76
+- *
+   * @return CPU core micro-architecture running the current thread: 76
+- *
+   * @return CPU core micro-architecture: 76
+- Log function that uses ORT logging if available or writes to stderr.: 76
+- This enables us to log even before ORT logging has been initialized.: 76
+- micro-arch of each core: 76
+- In ARMv8 systems, some power efficient cores has narrower: 76
+- 64b load/store devices. It takes longer for them to load: 76
+- 128b vectore registers.: 76
+- The `cpuinfo_vendor` enum is defined by the cpuinfo library.: 76
+- In case we don't build with cpuinfo, we define our own copy.: 76
+- The enum was copied from here:: 76
+- https://github.com/pytorch/cpuinfo/blob/8a1772a0c5c447df2d18edf33ec4603a8c9c04a6/include/cpuinfo.h#L: 76
+- * Vendor of processor core design: 76
+- * Processor vendor is not known to the library, or the library failed
+     to get vendor information: 76
