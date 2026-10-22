@@ -3,27 +3,27 @@
 
 #pragma once
 
-#include <string>
-#include <type_traits>
+#अन्तर्भाव <string>
+#अन्तर्भाव <type_traits>
 
 // for std::tolower or std::towlower
 #ifdef _WIN32
-#include <cwctype>
-#else
-#include <cctype>
+#अन्तर्भाव <cwctype>
+#अन्यथा
+#अन्तर्भाव <cctype>
 #endif
 
 // for converting / printing ORT_TSTR path strings to std::string
 #ifdef _WIN32
-#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
-#define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
+#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<ब_अक्षर_प्रकार>>().to_bytes(X)
+#define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<ब_अक्षर_प्रकार>>().from_bytes(X);
+#अन्यथा
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
 #define ORT_TSTR_CONVERT_FROM_STRING(X) X
 #endif
 
-#include "core/common/common.h"
-#include "core/session/onnxruntime_c_api.h"
+#अन्तर्भाव "core/common/common.h"
+#अन्तर्भाव "core/session/onnxruntime_c_api.h"
 
 namespace onnxruntime {
 
@@ -32,50 +32,50 @@ using PathChar = ORTCHAR_T;
 // string type for filesystem paths
 using PathString = std::basic_string<PathChar>;
 
-inline PathString ToPathString(const PathString& s) {
-  return s;
+अन्तःस्थ PathString ToPathString(अचर PathString& s) {
+  फर्काऊ s;
 }
 
 #ifdef _WIN32
 
-static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
+static_assert(std::is_same<PathString, std::wstring>::मान, "PathString is not std::wstring!");
 
-inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+अन्तःस्थ PathString ToPathString(std::string_view s) {
+  फर्काऊ ToWideString(s);
 }
-inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+अन्तःस्थ PathString ToPathString(अचर वर्ण* s) {
+  फर्काऊ ToWideString(s);
 }
-inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
-}
-
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+अन्तःस्थ PathString ToPathString(अचर std::string& s) {
+  फर्काऊ ToWideString(s);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+अन्तःस्थ PathChar ToLowerPathChar(PathChar c) {
+  फर्काऊ std::towlower(c);
 }
 
-#else
-
-static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
-
-inline PathString ToPathString(const char* s) {
-  return s;
+अन्तःस्थ std::string PathToUTF8String(अचर PathString& s) {
+  फर्काऊ ToUTF8String(s);
 }
 
-inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+#अन्यथा
+
+static_assert(std::is_same<PathString, std::string>::मान, "PathString is not std::string!");
+
+अन्तःस्थ PathString ToPathString(अचर वर्ण* s) {
+  फर्काऊ s;
 }
 
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+अन्तःस्थ PathString ToPathString(std::string_view s) {
+  फर्काऊ PathString{s};
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+अन्तःस्थ PathChar ToLowerPathChar(PathChar c) {
+  फर्काऊ std::छोटे(c);
+}
+
+अन्तःस्थ std::string PathToUTF8String(अचर PathString& s) {
+  फर्काऊ s;
 }
 
 #endif
