@@ -1,212 +1,212 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // SPDX-FileCopyrightText: Copyright 2026 Arm Limited and/or its affiliates <open-source-office@arm.com>
 // Licensed under the MIT License.
-#include "core/common/cpuid_info.h"
+#ಅನ್ತರ್ಭಾವ "core/common/cpuid_info.h"
 
-#include <iostream>
-#include <optional>
+#ಅನ್ತರ್ಭಾವ <iostream>
+#ಅನ್ತರ್ಭಾವ <optional>
 
-#include "core/common/logging/logging.h"
-#include "core/common/logging/severity.h"
-#include "core/platform/check_intel.h"
+#ಅನ್ತರ್ಭಾವ "core/common/logging/logging.h"
+#ಅನ್ತರ್ಭಾವ "core/common/logging/severity.h"
+#ಅನ್ತರ್ಭಾವ "core/platform/check_intel.h"
 
-#ifdef __linux__
-#if (defined(_M_AMD64) || defined(__x86_64__)) && !defined(__ANDROID__)
-#include <x86intrin.h>
-#endif
-#include <unistd.h>
-#include <sys/syscall.h>
-#if !defined(__NR_getcpu)
-#include <asm-generic/unistd.h>
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ __linux__
+#ಆದರೆ (defined(_M_AMD64) || defined(__x86_64__)) && !defined(__ANDROID__)
+#ಅನ್ತರ್ಭಾವ <x86intrin.h>
+#ಆದರೆ_ಅಂತ್ಯ
+#ಅನ್ತರ್ಭಾವ <unistd.h>
+#ಅನ್ತರ್ಭಾವ <sys/syscall.h>
+#ಆದರೆ !defined(__NR_getcpu)
+#ಅನ್ತರ್ಭಾವ <asm-generic/unistd.h>
+#ಆದರೆ_ಅಂತ್ಯ
 
-#if defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ defined(CPUIDINFO_ARCH_ARM)
 
-#include <sys/auxv.h>
-#include <asm/hwcap.h>
+#ಅನ್ತರ್ಭಾವ <sys/auxv.h>
+#ಅನ್ತರ್ಭಾವ <asm/hwcap.h>
 // N.B. Support building with older versions of asm/hwcap.h that do not define
 // this capability bit.
-#ifndef HWCAP_ASIMDDP
-#define HWCAP_ASIMDDP (1 << 20)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ HWCAP_ASIMDDP
+#ವ್ಯಾಖ್ಯಾನಿಸು HWCAP_ASIMDDP (1 << 20)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef HWCAP_SVE
-#define HWCAP_SVE (1 << 22)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ HWCAP_SVE
+#ವ್ಯಾಖ್ಯಾನಿಸು HWCAP_SVE (1 << 22)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef HWCAP2_I8MM
-#define HWCAP2_I8MM (1 << 13)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ HWCAP2_I8MM
+#ವ್ಯಾಖ್ಯಾನಿಸು HWCAP2_I8MM (1 << 13)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef HWCAP2_SVEI8MM
-#define HWCAP2_SVEI8MM (1 << 9)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ HWCAP2_SVEI8MM
+#ವ್ಯಾಖ್ಯಾನಿಸು HWCAP2_SVEI8MM (1 << 9)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef HWCAP2_SVE2P1
-#define HWCAP2_SVE2P1 (UINT64_C(1) << 36)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ HWCAP2_SVE2P1
+#ವ್ಯಾಖ್ಯಾನಿಸು HWCAP2_SVE2P1 (UINT64_C(1) << 36)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef HWCAP2_BF16
-#define HWCAP2_BF16 (1 << 14)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ HWCAP2_BF16
+#ವ್ಯಾಖ್ಯಾನಿಸು HWCAP2_BF16 (1 << 14)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif  // ARM
+#ಆದರೆ_ಅಂತ್ಯ  // ARM
 
-#if defined(CPUIDINFO_ARCH_RISCV64)
-#include <asm/hwprobe.h>
-#ifndef RISCV_HWPROBE_EXT_ZVFH
-#define RISCV_HWPROBE_EXT_ZVFH (1 << 30)
-#endif
-#ifndef RISCV_HWPROBE_IMA_V
-#define RISCV_HWPROBE_IMA_V (1 << 2)
-#endif
-#endif  // RISCV64
+#ಆದರೆ defined(CPUIDINFO_ARCH_RISCV64)
+#ಅನ್ತರ್ಭಾವ <asm/hwprobe.h>
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ RISCV_HWPROBE_EXT_ZVFH
+#ವ್ಯಾಖ್ಯಾನಿಸು RISCV_HWPROBE_EXT_ZVFH (1 << 30)
+#ಆದರೆ_ಅಂತ್ಯ
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ RISCV_HWPROBE_IMA_V
+#ವ್ಯಾಖ್ಯಾನಿಸು RISCV_HWPROBE_IMA_V (1 << 2)
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ  // RISCV64
 
-#endif  // Linux
+#ಆದರೆ_ಅಂತ್ಯ  // Linux
 
-#if _WIN32
+#ಆದರೆ _WIN32
 
-#include <Windows.h>
+#ಅನ್ತರ್ಭಾವ <Windows.h>
 
-#ifndef PF_ARM_V82_DP_INSTRUCTIONS_AVAILABLE
-#define PF_ARM_V82_DP_INSTRUCTIONS_AVAILABLE 43
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ PF_ARM_V82_DP_INSTRUCTIONS_ಲಭ್ಯ
+#ವ್ಯಾಖ್ಯಾನಿಸು PF_ARM_V82_DP_INSTRUCTIONS_ಲಭ್ಯ 43
+#ಆದರೆ_ಅಂತ್ಯ
 
 // Support querying SVE2.1 when building with Windows SDKs older than 26100.
 // IsProcessorFeaturePresent returns false when the running HAL cannot detect it.
-#ifndef PF_ARM_SVE2_1_INSTRUCTIONS_AVAILABLE
-#define PF_ARM_SVE2_1_INSTRUCTIONS_AVAILABLE 48
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ PF_ARM_SVE2_1_INSTRUCTIONS_ಲಭ್ಯ
+#ವ್ಯಾಖ್ಯಾನಿಸು PF_ARM_SVE2_1_INSTRUCTIONS_ಲಭ್ಯ 48
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif  // _WIN32
+#ಆದರೆ_ಅಂತ್ಯ  // _WIN32
 
-#if defined(__APPLE__)
-#if defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ defined(__APPLE__)
+#ಆದರೆ defined(CPUIDINFO_ARCH_ARM)
 
-#include <sys/sysctl.h>
+#ಅನ್ತರ್ಭಾವ <sys/sysctl.h>
 
-#endif  // defined(CPUIDINFO_ARCH_ARM)
-#endif  // defined(__APPLE__)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(__APPLE__)
 
-#if defined(CPUINFO_SUPPORTED)
-#include <cpuinfo.h>
-#if defined(CPUIDINFO_ARCH_ARM)
-namespace onnxruntime {
+#ಆದರೆ defined(CPUINFO_SUPPORTED)
+#ಅನ್ತರ್ಭಾವ <cpuinfo.h>
+#ಆದರೆ defined(CPUIDINFO_ARCH_ARM)
+ನಾಮಾಕಾಶ onnxruntime {
 // The following function is declared in "core/common/cpuid_uarch.h" but we cannot include the whole header file because
 //  some of its symbols are conflict with <cpuinfo.h>
-void decodeMIDR(uint32_t midr, uint32_t uarch[1]);
+ಶೂನ್ಯ decodeMIDR(uint32_t midr, uint32_t uarch[1]);
 }  // namespace onnxruntime
-#endif
-#else
-#include "core/common/cpuid_uarch.h"
-#endif  // CPUINFO_SUPPORTED
+#ಆದರೆ_ಅಂತ್ಯ
+#ಇಲ್ಲದಿದ್ದರೆ
+#ಅನ್ತರ್ಭಾವ "core/common/cpuid_uarch.h"
+#ಆದರೆ_ಅಂತ್ಯ  // CPUINFO_SUPPORTED
 
-#if defined(CPUIDINFO_ARCH_X86)
-#if defined(_MSC_VER)
-#include <intrin.h>
-#elif defined(__GNUC__)
-#include <cpuid.h>
-#endif
-#endif  // defined(CPUIDINFO_ARCH_X86)
+#ಆದರೆ defined(CPUIDINFO_ARCH_X86)
+#ಆದರೆ defined(_MSC_VER)
+#ಅನ್ತರ್ಭಾವ <intrin.h>
+#ಅಥವಾಆದರೆ defined(__GNUC__)
+#ಅನ್ತರ್ಭಾವ <cpuid.h>
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_X86)
 
-namespace onnxruntime {
+ನಾಮಾಕಾಶ onnxruntime {
 
-void CPUIDInfo::LogEarlyWarning(std::string_view message) {
-  if (logging::LoggingManager::HasDefaultLogger()) {
-    LOGS_DEFAULT(WARNING) << message;
-  } else {
-    std::cerr << "onnxruntime cpuid_info warning: " << message << "\n";
+ಶೂನ್ಯ CPUIDInfo::LogEarlyWarning(std::string_view ಸಂದೇಶ) {
+  ಆದರೆ (logging::LoggingManager::HasDefaultLogger()) {
+    LOGS_DEFAULT(WARNING) << ಸಂದೇಶ;
+  } ಇಲ್ಲದಿದ್ದರೆ {
+    std::cerr << "onnxruntime cpuid_info warning: " << ಸಂದೇಶ << "\n";
   }
 }
 
-#if defined(CPUIDINFO_ARCH_X86)
+#ಆದರೆ defined(CPUIDINFO_ARCH_X86)
 
-static inline void GetCPUID(int function_id, int data[4]) {  // NOLINT
-#if defined(_MSC_VER)
-  __cpuid(reinterpret_cast<int*>(data), function_id);
-#elif defined(__GNUC__)
-  __cpuid(function_id, data[0], data[1], data[2], data[3]);
-#endif
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಶೂನ್ಯ GetCPUID(ಪೂರ್ಣಾಂಕ function_id, ಪೂರ್ಣಾಂಕ ದತ್ತಾಂಶ[4]) {  // NOLINT
+#ಆದರೆ defined(_MSC_VER)
+  __cpuid(reinterpret_cast<ಪೂರ್ಣಾಂಕ*>(ದತ್ತಾಂಶ), function_id);
+#ಅಥವಾಆದರೆ defined(__GNUC__)
+  __cpuid(function_id, ದತ್ತಾಂಶ[0], ದತ್ತಾಂಶ[1], ದತ್ತಾಂಶ[2], ದತ್ತಾಂಶ[3]);
+#ಆದರೆ_ಅಂತ್ಯ
 }
 
-static inline void GetCPUID(int function_id, int sub_leaf, int data[4]) {  // NOLINT
-#if defined(_MSC_VER)
-  __cpuidex(reinterpret_cast<int*>(data), function_id, sub_leaf);
-#elif defined(__GNUC__)
-  __cpuid_count(function_id, sub_leaf, data[0], data[1], data[2], data[3]);
-#endif
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಶೂನ್ಯ GetCPUID(ಪೂರ್ಣಾಂಕ function_id, ಪೂರ್ಣಾಂಕ sub_ಎಲೆ, ಪೂರ್ಣಾಂಕ ದತ್ತಾಂಶ[4]) {  // NOLINT
+#ಆದರೆ defined(_MSC_VER)
+  __cpuidex(reinterpret_cast<ಪೂರ್ಣಾಂಕ*>(ದತ್ತಾಂಶ), function_id, sub_ಎಲೆ);
+#ಅಥವಾಆದರೆ defined(__GNUC__)
+  __cpuid_count(function_id, sub_ಎಲೆ, ದತ್ತಾಂಶ[0], ದತ್ತಾಂಶ[1], ದತ್ತಾಂಶ[2], ದತ್ತಾಂಶ[3]);
+#ಆದರೆ_ಅಂತ್ಯ
 }
 
-static inline int XGETBV() {
-#if defined(_MSC_VER)
-  return static_cast<int>(_xgetbv(0));
-#elif defined(__GNUC__)
-  int eax, edx;
-  __asm__ volatile("xgetbv"
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಪೂರ್ಣಾಂಕ XGETBV() {
+#ಆದರೆ defined(_MSC_VER)
+  ಹಿಂತಿರುಗಿ static_cast<ಪೂರ್ಣಾಂಕ>(_xgetbv(0));
+#ಅಥವಾಆದರೆ defined(__GNUC__)
+  ಪೂರ್ಣಾಂಕ eax, edx;
+  __asm__ ಅಸ್ಥಿರ("xgetbv"
                    : "=a"(eax), "=d"(edx)
                    : "c"(0));
-  return eax;
-#endif
+  ಹಿಂತಿರುಗಿ eax;
+#ಆದರೆ_ಅಂತ್ಯ
 }
 
-void CPUIDInfo::X86Init() {
-  int data[4] = {-1};
-  GetCPUID(0, data);
+ಶೂನ್ಯ CPUIDInfo::X86Init() {
+  ಪೂರ್ಣಾಂಕ ದತ್ತಾಂಶ[4] = {-1};
+  GetCPUID(0, ದತ್ತಾಂಶ);
 
-  int num_IDs = data[0];
-  if (num_IDs >= 1) {
-    GetCPUID(1, data);
-    if (data[2] & (1 << 27)) {
-      constexpr int AVX_MASK = 0x6;
-      constexpr int AVX512_MASK = 0xE6;
-      int value = XGETBV();
-      bool has_sse2 = (data[3] & (1 << 26));
-      has_sse3_ = (data[2] & 0x1);
-      has_sse4_1_ = (data[2] & (1 << 19));
-      bool has_ssse3 = (data[2] & (1 << 9));
-      has_avx_ = has_sse2 && has_ssse3 && (data[2] & (1 << 28)) && ((value & AVX_MASK) == AVX_MASK);
-      bool has_avx512 = (value & AVX512_MASK) == AVX512_MASK;
-      has_f16c_ = has_avx_ && (data[2] & (1 << 29)) && (data[3] & (1 << 26));
+  ಪೂರ್ಣಾಂಕ ಅಂಕೆ_IDs = ದತ್ತಾಂಶ[0];
+  ಆದರೆ (ಅಂಕೆ_IDs >= 1) {
+    GetCPUID(1, ದತ್ತಾಂಶ);
+    ಆದರೆ (ದತ್ತಾಂಶ[2] & (1 << 27)) {
+      constexpr ಪೂರ್ಣಾಂಕ AVX_ಮುಖವಾಡ = 0x6;
+      constexpr ಪೂರ್ಣಾಂಕ AVX512_ಮುಖವಾಡ = 0xE6;
+      ಪೂರ್ಣಾಂಕ value = XGETBV();
+      ತಾರ್ಕಿಕ has_sse2 = (ದತ್ತಾಂಶ[3] & (1 << 26));
+      has_sse3_ = (ದತ್ತಾಂಶ[2] & 0x1);
+      has_sse4_1_ = (ದತ್ತಾಂಶ[2] & (1 << 19));
+      ತಾರ್ಕಿಕ has_ssse3 = (ದತ್ತಾಂಶ[2] & (1 << 9));
+      has_avx_ = has_sse2 && has_ssse3 && (ದತ್ತಾಂಶ[2] & (1 << 28)) && ((value & AVX_ಮುಖವಾಡ) == AVX_ಮುಖವಾಡ);
+      ತಾರ್ಕಿಕ has_avx512 = (value & AVX512_ಮುಖವಾಡ) == AVX512_ಮುಖವಾಡ;
+      has_f16c_ = has_avx_ && (ದತ್ತಾಂಶ[2] & (1 << 29)) && (ದತ್ತಾಂಶ[3] & (1 << 26));
 
-      if (num_IDs >= 7) {
+      ಆದರೆ (ಅಂಕೆ_IDs >= 7) {
         // This change is made to overcome the issue of __get_cpuid returning all zeros, instead use __get_cpuid_count.
         // Reference: https://stackoverflow.com/questions/46272579/why-does-get-cpuid-return-all-zeros-for-leaf-4
-        GetCPUID(7, 0, data);
-        const uint32_t max_SubLeaves = data[0];
-        has_amx_bf16_ = (data[3] & (1 << 22));
-        has_avx2_ = has_avx_ && (data[1] & (1 << 5));
-        has_avx512f_ = has_avx512 && (data[1] & (1 << 16));
+        GetCPUID(7, 0, ದತ್ತಾಂಶ);
+        ಸ್ಥಿರಾಂಕ uint32_t max_SubLeaves = ದತ್ತಾಂಶ[0];
+        has_amx_bf16_ = (ದತ್ತಾಂಶ[3] & (1 << 22));
+        has_avx2_ = has_avx_ && (ದತ್ತಾಂಶ[1] & (1 << 5));
+        has_avx512f_ = has_avx512 && (ದತ್ತಾಂಶ[1] & (1 << 16));
         // Add check for AVX512 Skylake since tensorization GEMM need intrinsics from avx512bw/avx512dq.
         // avx512_skylake = avx512f | avx512vl | avx512cd | avx512bw | avx512dq
-        has_avx512_skylake_ = has_avx512 && (data[1] & ((1 << 16) | (1 << 17) | (1 << 28) | (1 << 30) | (1 << 31)));
-        is_hybrid_ = (data[3] & (1 << 15));
+        has_avx512_skylake_ = has_avx512 && (ದತ್ತಾಂಶ[1] & ((1 << 16) | (1 << 17) | (1 << 28) | (1 << 30) | (1 << 31)));
+        is_hybrid_ = (ದತ್ತಾಂಶ[3] & (1 << 15));
         // Check for TPAUSE
-        CheckIntelResult check_intel = CheckIntel();
-        if (check_intel.is_intel) {
-          has_tpause_ = (data[2] & (1 << 5)) != 0;
+        Check_Intel_ಫಲಿತಾಂಶ check_intel = CheckIntel();
+        ಆದರೆ (check_intel.is_intel) {
+          has_tpause_ = (ದತ್ತಾಂಶ[2] & (1 << 5)) != 0;
         }
-        if (max_SubLeaves >= 1) {
-          GetCPUID(7, 1, data);
-          has_avx512_bf16_ = has_avx512 && (data[0] & (1 << 5));
+        ಆದರೆ (max_SubLeaves >= 1) {
+          GetCPUID(7, 1, ದತ್ತಾಂಶ);
+          has_avx512_bf16_ = has_avx512 && (ದತ್ತಾಂಶ[0] & (1 << 5));
         }
       }
     }
   }
 }
 
-#endif  // defined(CPUIDINFO_ARCH_X86)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_X86)
 
-#if defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(__linux__)
+#ಆದರೆ defined(__linux__)
 
-void CPUIDInfo::ArmLinuxInit() {
+ಶೂನ್ಯ CPUIDInfo::ArmLinuxInit() {
   has_arm_sve2p1_ = ((getauxval(AT_HWCAP2) & HWCAP2_SVE2P1) != 0);
 
   // Assuming no hyper-threading, no NUMA groups
-#if defined(CPUINFO_SUPPORTED)
-  if (pytorch_cpuinfo_init_) {
-    is_hybrid_ = cpuinfo_get_uarchs_count() > 1;
+#ಆದರೆ defined(CPUINFO_SUPPORTED)
+  ಆದರೆ (pytorch_cpuinfo_init_) {
+    is_hybrid_ = cpuinfo_get_uarchs_ಎಣಿಕೆ() > 1;
     has_arm_neon_dot_ = cpuinfo_has_arm_neon_dot();
     has_fp16_ = cpuinfo_has_arm_neon_fp16_arith();
     has_arm_neon_i8mm_ = cpuinfo_has_arm_i8mm();
@@ -217,32 +217,32 @@ void CPUIDInfo::ArmLinuxInit() {
     has_arm_sme_ = cpuinfo_has_arm_sme();
     has_arm_sme2_ = cpuinfo_has_arm_sme2();
 
-    const uint32_t core_cnt = cpuinfo_get_cores_count();
+    ಸ್ಥಿರಾಂಕ uint32_t core_cnt = cpuinfo_get_cores_ಎಣಿಕೆ();
     core_uarchs_.resize(core_cnt, cpuinfo_uarch_unknown);
-    is_armv8_narrow_ld_.resize(core_cnt, false);
-    for (uint32_t c = 0; c < core_cnt; c++) {
-      const struct cpuinfo_processor* proc = cpuinfo_get_processor(c);
-      if (proc == nullptr) {
-        continue;
+    is_armv8_narrow_ld_.resize(core_cnt, ಸುಳ್ಳು);
+    ಗಾಗಿ (uint32_t c = 0; c < core_cnt; c++) {
+      ಸ್ಥಿರಾಂಕ ರಚನೆ cpuinfo_processor* proc = cpuinfo_get_processor(c);
+      ಆದರೆ (proc == ಶೂನ್ಯಸೂಚಕ) {
+        ಮುಂದುವರಿ;
       }
-      const struct cpuinfo_core* corep = proc->core;
-      if (corep == nullptr) {
-        continue;
+      ಸ್ಥಿರಾಂಕ ರಚನೆ cpuinfo_core* corep = proc->core;
+      ಆದರೆ (corep == ಶೂನ್ಯಸೂಚಕ) {
+        ಮುಂದುವರಿ;
       }
-      auto coreid = proc->linux_id;
-      if (coreid < 0 || static_cast<size_t>(coreid) >= core_uarchs_.size()) {
-        continue;
+      ಸ್ವಯಂಚಾಲಿತ coreid = proc->linux_id;
+      ಆದರೆ (coreid < 0 || static_cast<size_t>(coreid) >= core_uarchs_.size()) {
+        ಮುಂದುವರಿ;
       }
 
-      auto uarch = corep->uarch;
+      ಸ್ವಯಂಚಾಲಿತ uarch = corep->uarch;
       core_uarchs_[coreid] = uarch;
-      if (uarch == cpuinfo_uarch_cortex_a53 || uarch == cpuinfo_uarch_cortex_a55r0 ||
+      ಆದರೆ (uarch == cpuinfo_uarch_cortex_a53 || uarch == cpuinfo_uarch_cortex_a55r0 ||
           uarch == cpuinfo_uarch_cortex_a55) {
-        is_armv8_narrow_ld_[coreid] = true;
+        is_armv8_narrow_ld_[coreid] = ನಿಜ;
       }
     }
-  } else
-#endif  // defined(CPUINFO_SUPPORTED)
+  } ಇಲ್ಲದಿದ್ದರೆ
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUINFO_SUPPORTED)
   {
     has_arm_neon_dot_ = ((getauxval(AT_HWCAP) & HWCAP_ASIMDDP) != 0);
     has_fp16_ |= has_arm_neon_dot_;
@@ -257,25 +257,25 @@ void CPUIDInfo::ArmLinuxInit() {
   has_arm_sve_ = has_arm_sve_ || has_arm_sve2p1_;
 }
 
-#elif defined(_WIN32)  // ^ defined(__linux__)
+#ಅಥವಾಆದರೆ defined(_WIN32)  // ^ defined(__linux__)
 
-void CPUIDInfo::ArmWindowsInit() {
+ಶೂನ್ಯ CPUIDInfo::ArmWindowsInit() {
   // Read MIDR register values from Windows registry
   // There should be one per CPU
-  std::vector<uint64_t> midr_values{};
+  std::ಸದಿಶ<uint64_t> midr_ಮೌಲ್ಯಗಳು{};
 
   // TODO!! Don't support multiple processor group yet!!
-  constexpr int MAX_CORES = 64;
-  constexpr int MAX_VALUE_NAME = 4096;
+  constexpr ಪೂರ್ಣಾಂಕ MAX_CORES = 64;
+  constexpr ಪೂರ್ಣಾಂಕ MAX_ಮೌಲ್ಯ_NAME = 4096;
 
-  CHAR processor_subkey[MAX_VALUE_NAME] = "";  // buffer for processor registry name
+  CHAR processor_subkey[MAX_ಮೌಲ್ಯ_NAME] = "";  // buffer for processor registry name
 
-  for (size_t i = 0; i < MAX_CORES - 1; i++) {
-    snprintf(processor_subkey, MAX_VALUE_NAME, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\%d",
-             static_cast<int>(i));
+  ಗಾಗಿ (size_t i = 0; i < MAX_CORES - 1; i++) {
+    snprintf(processor_subkey, MAX_ಮೌಲ್ಯ_NAME, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\%d",
+             static_cast<ಪೂರ್ಣಾಂಕ>(i));
 
-    uint64_t midr_value;
-    unsigned long data_size = sizeof(midr_value);
+    uint64_t midr_ಮೌಲ್ಯ;
+    ಚಿಹ್ನೆರಹಿತ ದೀರ್ಘ ದತ್ತಾಂಶ_ಗಾತ್ರ = ಗಾತ್ರ(midr_ಮೌಲ್ಯ);
 
     /*
      * ARM lists for each coprocessor register 5 fields: op0/op1/CRn/CRm/op2.
@@ -290,39 +290,39 @@ void CPUIDInfo::ArmWindowsInit() {
      *
      * For the CP value of MIDR, op0 = 3 and the others are all = 0, so we come up with 0x4000,
      */
-    if (::RegGetValueA(HKEY_LOCAL_MACHINE, processor_subkey, "CP 4000", RRF_RT_REG_QWORD,
-                       nullptr, &midr_value, &data_size) != ERROR_SUCCESS) {
-      break;
+    ಆದರೆ (::Reg_Get_ಮೌಲ್ಯ_A(HKEY_LOCAL_MACHINE, processor_subkey, "CP 4000", RRF_RT_REG_QWORD,
+                       ಶೂನ್ಯಸೂಚಕ, &midr_ಮೌಲ್ಯ, &ದತ್ತಾಂಶ_ಗಾತ್ರ) != ERROR_SUCCESS) {
+      ನಿಲ್ಲಿಸು;
     }
 
-    midr_values.push_back(midr_value);
+    midr_ಮೌಲ್ಯಗಳು.push_back(midr_ಮೌಲ್ಯ);
   }
 
   // process midr_values
   {
-    uint32_t lastUarch = cpuinfo_uarch_unknown;
-    for (size_t i = 0; i < midr_values.size(); ++i) {
+    uint32_t ಕೊನೆಯ_Uarch = cpuinfo_uarch_unknown;
+    ಗಾಗಿ (size_t i = 0; i < midr_ಮೌಲ್ಯಗಳು.size(); ++i) {
       uint32_t uarch = cpuinfo_uarch_unknown;
-      decodeMIDR(static_cast<uint32_t>(midr_values[i]), &uarch);
+      decodeMIDR(static_cast<uint32_t>(midr_ಮೌಲ್ಯಗಳು[i]), &uarch);
       core_uarchs_.push_back(uarch);
-      if (uarch == cpuinfo_uarch_cortex_a53 || uarch == cpuinfo_uarch_cortex_a55r0 ||
+      ಆದರೆ (uarch == cpuinfo_uarch_cortex_a53 || uarch == cpuinfo_uarch_cortex_a55r0 ||
           uarch == cpuinfo_uarch_cortex_a55) {
-        is_armv8_narrow_ld_.push_back(true);
-      } else {
-        is_armv8_narrow_ld_.push_back(false);
+        is_armv8_narrow_ld_.push_back(ನಿಜ);
+      } ಇಲ್ಲದಿದ್ದರೆ {
+        is_armv8_narrow_ld_.push_back(ಸುಳ್ಳು);
       }
 
-      if (i == 0) {
-        lastUarch = uarch;
-      } else if (lastUarch != uarch) {
-        is_hybrid_ = true;
-        lastUarch = uarch;
+      ಆದರೆ (i == 0) {
+        ಕೊನೆಯ_Uarch = uarch;
+      } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (ಕೊನೆಯ_Uarch != uarch) {
+        is_hybrid_ = ನಿಜ;
+        ಕೊನೆಯ_Uarch = uarch;
       }
     }
   }
 
-#if defined(CPUINFO_SUPPORTED)
-  if (pytorch_cpuinfo_init_) {
+#ಆದರೆ defined(CPUINFO_SUPPORTED)
+  ಆದರೆ (pytorch_cpuinfo_init_) {
     has_arm_neon_dot_ = cpuinfo_has_arm_neon_dot();
     has_fp16_ = cpuinfo_has_arm_neon_fp16_arith();
     has_arm_neon_i8mm_ = cpuinfo_has_arm_i8mm();
@@ -331,28 +331,28 @@ void CPUIDInfo::ArmWindowsInit() {
     has_arm_sme_ = cpuinfo_has_arm_sme();
     has_arm_sme2_ = cpuinfo_has_arm_sme2();
   }
-#endif  // defined(CPUINFO_SUPPORTED)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUINFO_SUPPORTED)
 
-#if defined(PF_ARM_SVE_INSTRUCTIONS_AVAILABLE)
+#ಆದರೆ defined(PF_ARM_SVE_INSTRUCTIONS_ಲಭ್ಯ)
   // Available from Windows 11 24H2 SDKs; older SDKs lack the constants, in
   // which case detection falls back to cpuinfo above (or SVE stays off).
-  has_arm_sve_ = has_arm_sve_ || IsProcessorFeaturePresent(PF_ARM_SVE_INSTRUCTIONS_AVAILABLE) != 0;
-#if defined(PF_ARM_SVE_I8MM_INSTRUCTIONS_AVAILABLE)
+  has_arm_sve_ = has_arm_sve_ || IsProcessorFeaturePresent(PF_ARM_SVE_INSTRUCTIONS_ಲಭ್ಯ) != 0;
+#ಆದರೆ defined(PF_ARM_SVE_I8_MM_INSTRUCTIONS_ಲಭ್ಯ)
   // SVE i8mm gates the svmmla QGEMM kernels; without it they must not dispatch.
   has_arm_sve_i8mm_ = has_arm_sve_ &&
-                      IsProcessorFeaturePresent(PF_ARM_SVE_I8MM_INSTRUCTIONS_AVAILABLE) != 0;
-#endif
-#endif
-  has_arm_sve2p1_ = IsProcessorFeaturePresent(PF_ARM_SVE2_1_INSTRUCTIONS_AVAILABLE) != 0;
+                      IsProcessorFeaturePresent(PF_ARM_SVE_I8_MM_INSTRUCTIONS_ಲಭ್ಯ) != 0;
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ
+  has_arm_sve2p1_ = IsProcessorFeaturePresent(PF_ARM_SVE2_1_INSTRUCTIONS_ಲಭ್ಯ) != 0;
   has_arm_sve_ = has_arm_sve_ || has_arm_sve2p1_;
 }
 
-#elif defined(__APPLE__)  // ^ defined(_WIN32)
+#ಅಥವಾಆದರೆ defined(__APPLE__)  // ^ defined(_WIN32)
 
-void CPUIDInfo::ArmAppleInit() {
-#if defined(CPUINFO_SUPPORTED)
-  if (pytorch_cpuinfo_init_) {
-    is_hybrid_ = cpuinfo_get_uarchs_count() > 1;
+ಶೂನ್ಯ CPUIDInfo::ArmAppleInit() {
+#ಆದರೆ defined(CPUINFO_SUPPORTED)
+  ಆದರೆ (pytorch_cpuinfo_init_) {
+    is_hybrid_ = cpuinfo_get_uarchs_ಎಣಿಕೆ() > 1;
     has_arm_neon_dot_ = cpuinfo_has_arm_neon_dot();
     has_fp16_ = cpuinfo_has_arm_neon_fp16_arith();
     has_arm_neon_i8mm_ = cpuinfo_has_arm_i8mm();
@@ -365,81 +365,81 @@ void CPUIDInfo::ArmAppleInit() {
     // to encounter on Apple platforms.
 
     // TODO figure out how to set core_uarchs_
-  } else
-#endif  // defined(CPUINFO_SUPPORTED)
+  } ಇಲ್ಲದಿದ್ದರೆ
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUINFO_SUPPORTED)
   {
     // No fallback detection attempted now. Add if needed.
   }
 }
 
-#endif  // defined(__APPLE__)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(__APPLE__)
 
-#endif  // defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(CPUIDINFO_ARCH_RISCV64) && defined(__linux__)
-void CPUIDInfo::RiscvLinuxInit() {
-  struct riscv_hwprobe pairs[] = {
-      {RISCV_HWPROBE_KEY_IMA_EXT_0, 0},
+#ಆದರೆ defined(CPUIDINFO_ARCH_RISCV64) && defined(__linux__)
+ಶೂನ್ಯ CPUIDInfo::RiscvLinuxInit() {
+  ರಚನೆ riscv_hwprobe ಜೋಡಿಗಳು[] = {
+      {RISCV_HWPROBE_ಕೀಲಿ_IMA_EXT_0, 0},
   };
-  if (syscall(__NR_riscv_hwprobe, pairs, 1, 0, nullptr, 0) == 0) {
-    has_fp16_ = (pairs[0].value & RISCV_HWPROBE_EXT_ZVFH) != 0;
+  ಆದರೆ (syscall(__NR_riscv_hwprobe, ಜೋಡಿಗಳು, 1, 0, ಶೂನ್ಯಸೂಚಕ, 0) == 0) {
+    has_fp16_ = (ಜೋಡಿಗಳು[0].value & RISCV_HWPROBE_EXT_ZVFH) != 0;
   }
 }
-#endif  // defined(CPUIDINFO_ARCH_RISCV64) && defined(__linux__)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_RISCV64) && defined(__linux__)
 
-uint32_t CPUIDInfo::GetCurrentCoreIdx() const {
-#ifdef _WIN32
-  return GetCurrentProcessorNumber();
-#elif defined(__linux__)
+uint32_t CPUIDInfo::GetCurrentCoreIdx() ಸ್ಥಿರಾಂಕ {
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ _WIN32
+  ಹಿಂತಿರುಗಿ Get_Current_Processor_ಸಂಖ್ಯೆ();
+#ಅಥವಾಆದರೆ defined(__linux__)
   uint32_t coreIdx = 0xFFFFFFFF;
-  if (syscall(__NR_getcpu, &coreIdx, NULL, NULL) != 0) {
+  ಆದರೆ (syscall(__NR_getcpu, &coreIdx, ಖಾಲಿ, ಖಾಲಿ) != 0) {
     // failed to detect current core id. give up
-    return 0xFFFFFFFF;
+    ಹಿಂತಿರುಗಿ 0xFFFFFFFF;
   }
-  return coreIdx;
-#else
-  return 0xFFFFFFFF;  // don't know how to get core index
-#endif
+  ಹಿಂತಿರುಗಿ coreIdx;
+#ಇಲ್ಲದಿದ್ದರೆ
+  ಹಿಂತಿರುಗಿ 0xFFFFFFFF;  // don't know how to get core index
+#ಆದರೆ_ಅಂತ್ಯ
 }
 
 CPUIDInfo::CPUIDInfo() {
-#if defined(CPUINFO_SUPPORTED)
+#ಆದರೆ defined(CPUINFO_SUPPORTED)
   pytorch_cpuinfo_init_ = cpuinfo_initialize();
-  if (!pytorch_cpuinfo_init_) {
+  ಆದರೆ (!pytorch_cpuinfo_init_) {
     LogEarlyWarning(
         "Failed to initialize PyTorch cpuinfo library. May cause CPU EP performance degradation due to undetected CPU "
         "features.");
   }
-#endif  // defined(CPUINFO_SUPPORTED)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUINFO_SUPPORTED)
 
   // Note: This should be run after cpuinfo initialization if cpuinfo is enabled.
   VendorInfoInit();
 
-#ifdef CPUIDINFO_ARCH_X86
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ CPUIDINFO_ARCH_X86
   X86Init();
-#elif defined(CPUIDINFO_ARCH_ARM)
-#if defined(__linux__)
+#ಅಥವಾಆದರೆ defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ defined(__linux__)
   ArmLinuxInit();
-#elif defined(_WIN32)
+#ಅಥವಾಆದರೆ defined(_WIN32)
   ArmWindowsInit();
-#elif defined(__APPLE__)
+#ಅಥವಾಆದರೆ defined(__APPLE__)
   ArmAppleInit();
-#endif
-#endif  // defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(CPUIDINFO_ARCH_RISCV64)
-#if defined(__linux__)
+#ಆದರೆ defined(CPUIDINFO_ARCH_RISCV64)
+#ಆದರೆ defined(__linux__)
   RiscvLinuxInit();
-#endif
-#endif  // defined(CPUIDINFO_ARCH_RISCV64)
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_RISCV64)
 }
 
 CPUIDInfo::~CPUIDInfo() {
-#if defined(CPUINFO_SUPPORTED)
-  if (pytorch_cpuinfo_init_) {
+#ಆದರೆ defined(CPUINFO_SUPPORTED)
+  ಆದರೆ (pytorch_cpuinfo_init_) {
     cpuinfo_deinitialize();
-    pytorch_cpuinfo_init_ = false;
+    pytorch_cpuinfo_init_ = ಸುಳ್ಳು;
   }
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 }
 }  // namespace onnxruntime

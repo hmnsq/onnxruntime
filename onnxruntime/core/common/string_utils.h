@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ಸೂಚನೆ once
 
-#include <algorithm>
-#include <cctype>
-#include <string>
-#include <string_view>
-#include <vector>
+#ಅನ್ತರ್ಭಾವ <algorithm>
+#ಅನ್ತರ್ಭಾವ <cctype>
+#ಅನ್ತರ್ಭಾವ <string>
+#ಅನ್ತರ್ಭಾವ <string_view>
+#ಅನ್ತರ್ಭಾವ <vector>
 
-#include "core/common/common.h"
-#include "core/common/inlined_containers.h"
+#ಅನ್ತರ್ಭಾವ "core/common/common.h"
+#ಅನ್ತರ್ಭಾವ "core/common/inlined_containers.h"
 
 namespace onnxruntime {
 namespace utils {
@@ -22,38 +22,38 @@ namespace utils {
  * @param keep_empty Whether to keep empty substrings.
  * @return The split substrings.
  */
-inline InlinedVector<std::string_view> SplitString(std::string_view string_to_split, std::string_view delimiter,
-                                                   bool keep_empty = false) {
-  ORT_ENFORCE(!delimiter.empty(), "delimiter must not be empty");
-  InlinedVector<std::string_view> result{};
-  std::string_view::size_type segment_begin_pos = 0;
-  while (segment_begin_pos != std::string_view::npos) {
-    const std::string_view::size_type segment_end_pos = string_to_split.find(delimiter, segment_begin_pos);
-    const bool is_segment_empty = segment_begin_pos == segment_end_pos || segment_begin_pos == string_to_split.size();
-    if (!is_segment_empty || keep_empty) {
-      result.push_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
+ಸಾಲೊಳಗೆ Inlined_ಸದಿಶ<std::string_view> ವಿಭಜಿಸು_String(std::string_view string_ಗಮ್ಯ_ವಿಭಜಿಸು, std::string_view delimiter,
+                                                   bool keep_ಖಾಲಿಗಳು = false) {
+  ORT_ENFORCE(!delimiter.ಖಾಲಿಗಳು(), "delimiter must not be empty");
+  Inlined_ಸದಿಶ<std::string_view> ಫಲಿತಾಂಶ{};
+  std::string_view::ಗಾತ್ರ_type segment_begin_pos = 0;
+  ಆಗ (segment_begin_pos != std::string_view::npos) {
+    ಸ್ಥಿರಾಂಕ std::string_view::ಗಾತ್ರ_type segment_ಕೊನೆ_pos = string_ಗಮ್ಯ_ವಿಭಜಿಸು.ಕಂಡುಹಿಡಿ(delimiter, segment_begin_pos);
+    ಸ್ಥಿರಾಂಕ bool is_segment_ಖಾಲಿಗಳು = segment_begin_pos == segment_ಕೊನೆ_pos || segment_begin_pos == string_ಗಮ್ಯ_ವಿಭಜಿಸು.ಗಾತ್ರ_2();
+    ಆದರೆ (!is_segment_ಖಾಲಿಗಳು || keep_ಖಾಲಿಗಳು) {
+      ಫಲಿತಾಂಶ.ತಳ್ಳು_ಹಿಂಭಾಗ(string_ಗಮ್ಯ_ವಿಭಜಿಸು.substr(segment_begin_pos, segment_ಕೊನೆ_pos - segment_begin_pos));
     }
-    segment_begin_pos = (segment_end_pos == std::string_view::npos)
-                            ? segment_end_pos
-                            : segment_end_pos + delimiter.size();
+    segment_begin_pos = (segment_ಕೊನೆ_pos == std::string_view::npos)
+                            ? segment_ಕೊನೆ_pos
+                            : segment_ಕೊನೆ_pos + delimiter.ಗಾತ್ರ_2();
   }
-  return result;
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
 /**
  * Trim a string from start inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromLeft(std::string& s) {
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+ಸಾಲೊಳಗೆ ಶೂನ್ಯ Trim_String_From_ಎಡ(std::string& s) {
+  s.erase(s.begin(), std::ಕಂಡುಹಿಡಿ_if(s.begin(), s.ಕೊನೆ(), [](ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ ch) { ಹಿಂತಿರುಗಿ !std::ಖಾಲಿಯೇ(ch); }));
 }
 
 /**
  * Trim a string from end inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromRight(std::string& s) {
-  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+ಸಾಲೊಳಗೆ ಶೂನ್ಯ Trim_String_From_ಬಲ(std::string& s) {
+  s.erase(std::ಕಂಡುಹಿಡಿ_if(s.rbegin(), s.rend(), [](ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ ch) { ಹಿಂತಿರುಗಿ !std::ಖಾಲಿಯೇ(ch); }).ತಳ(), s.ಕೊನೆ());
 }
 
 /**
@@ -61,30 +61,30 @@ inline void TrimStringFromRight(std::string& s) {
  * @param s The string to trim.
  * @return The trimmed string.
  */
-inline std::string TrimString(std::string_view s) {
+ಸಾಲೊಳಗೆ std::string TrimString(std::string_view s) {
   std::string s_trimmed{s};
-  TrimStringFromRight(s_trimmed);
-  TrimStringFromLeft(s_trimmed);
-  return s_trimmed;
+  Trim_String_From_ಬಲ(s_trimmed);
+  Trim_String_From_ಎಡ(s_trimmed);
+  ಹಿಂತಿರುಗಿ s_trimmed;
 }
 
 /**
  * @brief A consistent way to construct the full qualified op name.
  */
-inline std::string GetFullQualifiedOpName(const std::string& op_type, const std::string& domain) {
-  return MakeString(domain, "::", op_type);
+ಸಾಲೊಳಗೆ std::string Get_ತುಂಬಿದ_Qualified_Op_Name(ಸ್ಥಿರಾಂಕ std::string& op_type, ಸ್ಥಿರಾಂಕ std::string& domain) {
+  ಹಿಂತಿರುಗಿ MakeString(domain, "::", op_type);
 }
 
 /**
  * Use this simple hash to generate unique int by given string input.
  */
-inline uint32_t GetHashFromString(const std::string& str_value) {
+ಸಾಲೊಳಗೆ uint32_t GetHashFromString(ಸ್ಥಿರಾಂಕ std::string& str_ಮೌಲ್ಯ) {
   uint32_t hash = 0;
-  for (char const& c : str_value) {
+  ಗಾಗಿ (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ& c : str_ಮೌಲ್ಯ) {
     hash = hash * 101 + c;
   }
 
-  return hash;
+  ಹಿಂತಿರುಗಿ hash;
 }
 
 /**
@@ -92,15 +92,15 @@ inline uint32_t GetHashFromString(const std::string& str_value) {
  * @param str The string to lowercase.
  * @return The lowercased string.
  */
-inline std::string GetLowercaseString(std::string str) {
+ಸಾಲೊಳಗೆ std::string GetLowercaseString(std::string str) {
   // https://en.cppreference.com/w/cpp/string/byte/tolower
   // The behavior of tolower from <cctype> is undefined if the argument is neither representable as unsigned char
   // nor equal to EOF. To use tolower safely with a plain char (or signed char), the argument must be converted to
   // unsigned char.
-  std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
-    return static_cast<char>(std::tolower(c));
+  std::transform(str.begin(), str.ಕೊನೆ(), str.begin(), [](ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ c) {
+    ಹಿಂತಿರುಗಿ static_cast<ಅಕ್ಷರ>(std::tolower(c));
   });
-  return str;
+  ಹಿಂತಿರುಗಿ str;
 }
 
 }  // namespace utils

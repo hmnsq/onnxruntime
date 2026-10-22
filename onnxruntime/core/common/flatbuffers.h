@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
-#if defined(__GNUC__)
-#include "onnxruntime_config.h"
-#pragma GCC diagnostic push
+#ಸೂಚನೆ once
+#ಆದರೆ defined(__GNUC__)
+#ಅನ್ತರ್ಭಾವ "onnxruntime_config.h"
+#ಸೂಚನೆ GCC diagnostic ತಳ್ಳು
 
-#ifdef HAS_SHORTEN_64_TO_32
-#pragma GCC diagnostic ignored "-Wshorten-64-to-32"
-#endif
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ HAS_SHORTEN_64_ಗಮ್ಯ_32
+#ಸೂಚನೆ GCC diagnostic ignored "-Wshorten-64-to-32"
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ
 
-#include "flatbuffers/flatbuffers.h"
+#ಅನ್ತರ್ಭಾವ "flatbuffers/flatbuffers.h"
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+#ಆದರೆ defined(__GNUC__)
+#ಸೂಚನೆ GCC diagnostic ತೆಗೆ
+#ಆದರೆ_ಅಂತ್ಯ

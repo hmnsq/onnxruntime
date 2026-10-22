@@ -2,75 +2,75 @@
 // SPDX-FileCopyrightText: Copyright 2026 Arm Limited and/or its affiliates <open-source-office@arm.com>
 // Licensed under the MIT License.
 
-#pragma once
+#ಸೂಚನೆ once
 
-#include "core/common/common.h"
-#include "core/common/cpuid_arch_definition.h"
+#ಅನ್ತರ್ಭಾವ "core/common/common.h"
+#ಅನ್ತರ್ಭಾವ "core/common/cpuid_arch_definition.h"
 
 namespace onnxruntime {
 
 class CPUIDInfo {
- public:
-  static const CPUIDInfo& GetCPUIDInfo() {
-    static CPUIDInfo cpuid_info;
-    return cpuid_info;
+ ಸಾರ್ವಜನಿಕ:
+  ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ CPUIDInfo& GetCPUIDInfo() {
+    ಸ್ಥಿರ CPUIDInfo cpuid_info;
+    ಹಿಂತಿರುಗಿ cpuid_info;
   }
 
-  std::string_view GetCPUVendor() const {
-    return vendor_;
+  std::string_view GetCPUVendor() ಸ್ಥಿರಾಂಕ {
+    ಹಿಂತಿರುಗಿ vendor_;
   }
 
-  uint32_t GetCPUVendorId() const {
-    return vendor_id_;
+  uint32_t GetCPUVendorId() ಸ್ಥಿರಾಂಕ {
+    ಹಿಂತಿರುಗಿ vendor_id_;
   }
 
-  bool HasAMX_BF16() const { return has_amx_bf16_; }
-  bool HasAVX() const { return has_avx_; }
-  bool HasAVX2() const { return has_avx2_; }
-  bool HasAVX512f() const { return has_avx512f_; }
-  bool HasAVX512_BF16() const { return has_avx512_bf16_; }
-  bool HasAVX512Skylake() const { return has_avx512_skylake_; }
-  bool HasF16C() const { return has_f16c_; } /*fp16 conversion inst*/
-  bool HasSSE3() const { return has_sse3_; }
-  bool HasSSE4_1() const { return has_sse4_1_; }
-  bool IsHybrid() const { return is_hybrid_; }
-  bool HasTPAUSE() const { return has_tpause_; }
+  bool HasAMX_BF16() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_amx_bf16_; }
+  bool HasAVX() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_avx_; }
+  bool HasAVX2() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_avx2_; }
+  bool HasAVX512f() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_avx512f_; }
+  bool HasAVX512_BF16() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_avx512_bf16_; }
+  bool HasAVX512Skylake() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_avx512_skylake_; }
+  bool HasF16C() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_f16c_; } /*fp16 conversion inst*/
+  bool HasSSE3() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_sse3_; }
+  bool HasSSE4_1() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_sse4_1_; }
+  bool IsHybrid() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ is_hybrid_; }
+  bool HasTPAUSE() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_tpause_; }
 
   // ARM
-  bool HasArmNeonDot() const { return has_arm_neon_dot_; }
-  bool HasArmNeon_I8MM() const { return has_arm_neon_i8mm_; }
-  bool HasArmSve() const { return has_arm_sve_; }
-  bool HasArmSVE2p1() const { return has_arm_sve2p1_; }
-  bool HasArmSVE_I8MM() const { return has_arm_sve_i8mm_; }
-  bool HasArmNeon_BF16() const { return has_arm_neon_bf16_; }
-  bool HasArm_SME() const { return has_arm_sme_; }
-  bool HasArm_SME2() const { return has_arm_sme2_; }
+  bool HasArmNeonDot() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_neon_dot_; }
+  bool HasArmNeon_I8MM() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_neon_i8mm_; }
+  bool HasArmSve() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_sve_; }
+  bool HasArmSVE2p1() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_sve2p1_; }
+  bool HasArmSVE_I8MM() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_sve_i8mm_; }
+  bool HasArmNeon_BF16() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_neon_bf16_; }
+  bool HasArm_SME() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_sme_; }
+  bool HasArm_SME2() ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ has_arm_sme2_; }
 
-  uint32_t GetCurrentCoreIdx() const;
+  uint32_t GetCurrentCoreIdx() ಸ್ಥಿರಾಂಕ;
 
   /**
    * @return CPU core micro-architecture running the current thread
    */
-  int32_t GetCurrentUarch() const {
-    if (core_uarchs_.empty()) {
-      return -1;
+  int32_t GetCurrentUarch() ಸ್ಥಿರಾಂಕ {
+    ಆದರೆ (core_uarchs_.ಖಾಲಿಗಳು()) {
+      ಹಿಂತಿರುಗಿ -1;
     }
 
     uint32_t coreIdx = GetCurrentCoreIdx();
-    if (coreIdx >= core_uarchs_.size()) {
-      return -1;
+    ಆದರೆ (coreIdx >= core_uarchs_.ಗಾತ್ರ_2()) {
+      ಹಿಂತಿರುಗಿ -1;
     }
-    return core_uarchs_[coreIdx];
+    ಹಿಂತಿರುಗಿ core_uarchs_[coreIdx];
   }
 
   /**
    * @return CPU core micro-architecture
    */
-  int32_t GetCoreUarch(uint32_t coreId) const {
-    if (coreId >= core_uarchs_.size()) {
-      return -1;
+  int32_t GetCoreUarch(uint32_t coreId) ಸ್ಥಿರಾಂಕ {
+    ಆದರೆ (coreId >= core_uarchs_.ಗಾತ್ರ_2()) {
+      ಹಿಂತಿರುಗಿ -1;
     }
-    return core_uarchs_[coreId];
+    ಹಿಂತಿರುಗಿ core_uarchs_[coreId];
   }
 
   /**
@@ -78,11 +78,11 @@ class CPUIDInfo {
    *        that needs specialized optimization in kernels
    * @return whether the indicated core has narrower load/store device
    */
-  bool IsCoreArmv8NarrowLd(uint32_t coreId) const {
-    if (coreId >= is_armv8_narrow_ld_.size()) {
-      return false;
+  bool IsCoreArmv8NarrowLd(uint32_t coreId) ಸ್ಥಿರಾಂಕ {
+    ಆದರೆ (coreId >= is_armv8_narrow_ld_.ಗಾತ್ರ_2()) {
+      ಹಿಂತಿರುಗಿ false;
     }
-    return is_armv8_narrow_ld_[coreId];
+    ಹಿಂತಿರುಗಿ is_armv8_narrow_ld_[coreId];
   }
 
   /**
@@ -90,63 +90,63 @@ class CPUIDInfo {
    *        that needs specialized optimization in kernels
    * @return whether the current core has narrower load/store device
    */
-  bool IsCurrentCoreArmv8NarrowLd() const {
-    if (is_armv8_narrow_ld_.empty()) {
-      return false;
+  bool IsCurrentCoreArmv8NarrowLd() ಸ್ಥಿರಾಂಕ {
+    ಆದರೆ (is_armv8_narrow_ld_.ಖಾಲಿಗಳು()) {
+      ಹಿಂತಿರುಗಿ false;
     }
 
     uint32_t coreIdx = GetCurrentCoreIdx();
-    if (coreIdx >= is_armv8_narrow_ld_.size()) {
-      return false;
+    ಆದರೆ (coreIdx >= is_armv8_narrow_ld_.ಗಾತ್ರ_2()) {
+      ಹಿಂತಿರುಗಿ false;
     }
-    return is_armv8_narrow_ld_[coreIdx];
+    ಹಿಂತಿರುಗಿ is_armv8_narrow_ld_[coreIdx];
   }
 
-  bool HasFp16VectorAcceleration() const {
-    return has_fp16_;
+  bool Has_Fp16_ಸದಿಶ_Acceleration() ಸ್ಥಿರಾಂಕ {
+    ಹಿಂತಿರುಗಿ has_fp16_;
   }
 
- private:
+ ಖಾಸಗಿ:
   // Log function that uses ORT logging if available or writes to stderr.
   // This enables us to log even before ORT logging has been initialized.
-  static void LogEarlyWarning(std::string_view message);
+  ಸ್ಥಿರ ಶೂನ್ಯ LogEarlyWarning(std::string_view ಸಂದೇಶ);
 
   CPUIDInfo();
   ~CPUIDInfo();
 
-  void VendorInfoInit();
+  ಶೂನ್ಯ VendorInfoInit();
 
-#if defined(CPUIDINFO_ARCH_X86)
+#ಆದರೆ defined(CPUIDINFO_ARCH_X86)
 
-  void X86Init();
+  ಶೂನ್ಯ X86Init();
 
-#elif defined(CPUIDINFO_ARCH_ARM)
+#ಅಥವಾಆದರೆ defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(__linux__)
+#ಆದರೆ defined(__linux__)
 
-  void ArmLinuxInit();
+  ಶೂನ್ಯ ArmLinuxInit();
 
-#elif defined(_WIN32)
+#ಅಥವಾಆದರೆ defined(_WIN32)
 
-  void ArmWindowsInit();
+  ಶೂನ್ಯ ArmWindowsInit();
 
-#elif defined(__APPLE__)
+#ಅಥವಾಆದರೆ defined(__APPLE__)
 
-  void ArmAppleInit();
+  ಶೂನ್ಯ ArmAppleInit();
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif  // defined(CPUIDINFO_ARCH_ARM)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(CPUIDINFO_ARCH_RISCV64)
-#if defined(__linux__)
-  void RiscvLinuxInit();
-#endif
-#endif  // defined(CPUIDINFO_ARCH_RISCV64)
+#ಆದರೆ defined(CPUIDINFO_ARCH_RISCV64)
+#ಆದರೆ defined(__linux__)
+  ಶೂನ್ಯ RiscvLinuxInit();
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUIDINFO_ARCH_RISCV64)
 
-#if defined(CPUINFO_SUPPORTED)
+#ಆದರೆ defined(CPUINFO_SUPPORTED)
   bool pytorch_cpuinfo_init_{false};
-#endif  // defined(CPUINFO_SUPPORTED)
+#ಆದರೆ_ಅಂತ್ಯ  // defined(CPUINFO_SUPPORTED)
 
   bool has_amx_bf16_{false};
   bool has_avx_{false};
@@ -160,12 +160,12 @@ class CPUIDInfo {
   bool is_hybrid_{false};
   bool has_tpause_{false};
 
-  std::vector<uint32_t> core_uarchs_;  // micro-arch of each core
+  std::ಸದಿಶ<uint32_t> core_uarchs_;  // micro-arch of each core
 
   // In ARMv8 systems, some power efficient cores has narrower
   // 64b load/store devices. It takes longer for them to load
   // 128b vectore registers.
-  std::vector<bool> is_armv8_narrow_ld_;
+  std::ಸದಿಶ<bool> is_armv8_narrow_ld_;
 
   bool has_arm_neon_dot_{false};
   bool has_fp16_{false};

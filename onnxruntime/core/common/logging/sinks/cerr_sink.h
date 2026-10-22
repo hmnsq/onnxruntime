@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ಸೂಚನೆ once
 
-#include <iostream>
-#include "core/common/logging/sinks/ostream_sink.h"
+#ಅನ್ತರ್ಭಾವ <iostream>
+#ಅನ್ತರ್ಭಾವ "core/common/logging/sinks/ostream_sink.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -12,18 +12,18 @@ namespace logging {
 /// A std::cerr based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-#ifdef _WIN32
-class CErrSink : public WOStreamSink {
- public:
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ _WIN32
+class CErrSink : ಸಾರ್ವಜನಿಕ WOStreamSink {
+ ಸಾರ್ವಜನಿಕ:
   CErrSink() : WOStreamSink(std::wcerr, /*flush*/ false) {  // std::cerr isn't buffered so no flush required
   }
 };
-#else
-class CErrSink : public OStreamSink {
- public:
+#ಇಲ್ಲದಿದ್ದರೆ
+class CErrSink : ಸಾರ್ವಜನಿಕ OStreamSink {
+ ಸಾರ್ವಜನಿಕ:
   CErrSink() : OStreamSink(std::cerr, /*flush*/ false) {  // std::cerr isn't buffered so no flush required
   }
 };
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 }  // namespace logging
 }  // namespace onnxruntime

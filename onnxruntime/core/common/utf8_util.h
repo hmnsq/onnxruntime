@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ಸೂಚನೆ once
 
-#include "core/common/common.h"
+#ಅನ್ತರ್ಭಾವ "core/common/common.h"
 
-#include <string>
+#ಅನ್ತರ್ಭಾವ <string>
 
 namespace onnxruntime {
 namespace utf8_util {
@@ -18,140 +18,140 @@ namespace utf8_util {
 /// <param name="ch">lead byte candidate</param>
 /// <param name="len">decoded byte length</param>
 /// <returns>false if the byte does not match any 1-4 byte UTF-8 lead-byte prefix</returns>
-inline bool utf8_bytes(unsigned char ch, size_t& len) {
-  if ((ch & 0x80) == 0) {
+ಸಾಲೊಳಗೆ bool utf8_ಬೈಟುಗಳು(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ ch, ಗಾತ್ರ_t& len) {
+  ಆದರೆ ((ch & 0x80) == 0) {
     len = 1;
-    return true;
+    ಹಿಂತಿರುಗಿ true;
   }
-  if ((ch & 0xE0) == 0xC0) {
+  ಆದರೆ ((ch & 0xE0) == 0xC0) {
     len = 2;
-    return true;
+    ಹಿಂತಿರುಗಿ true;
   }
-  if ((ch & 0xF0) == 0xE0) {
+  ಆದರೆ ((ch & 0xF0) == 0xE0) {
     len = 3;
-    return true;
+    ಹಿಂತಿರುಗಿ true;
   }
-  if ((ch & 0xF8) == 0xF0) {
+  ಆದರೆ ((ch & 0xF8) == 0xF0) {
     len = 4;
-    return true;
+    ಹಿಂತಿರುಗಿ true;
   }
-  return false;
+  ಹಿಂತಿರುಗಿ false;
 }
 
 // Computes length of the utf8 string in characters
-inline bool utf8_len(const unsigned char* s, size_t bytes, size_t& len) {
-  size_t result = 0;
-  while (bytes > 0) {
-    size_t char_bytes = 0;
-    bool valid = utf8_bytes(*s, char_bytes);
-    if (!valid || bytes < char_bytes) {
-      return false;
+ಸಾಲೊಳಗೆ bool utf8_len(ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ* s, ಗಾತ್ರ_t ಬೈಟುಗಳು, ಗಾತ್ರ_t& len) {
+  ಗಾತ್ರ_t ಫಲಿತಾಂಶ = 0;
+  ಆಗ (ಬೈಟುಗಳು > 0) {
+    ಗಾತ್ರ_t char_ಬೈಟುಗಳು = 0;
+    bool valid = utf8_ಬೈಟುಗಳು(*s, char_ಬೈಟುಗಳು);
+    ಆದರೆ (!valid || ಬೈಟುಗಳು < char_ಬೈಟುಗಳು) {
+      ಹಿಂತಿರುಗಿ false;
     }
-    bytes -= char_bytes;
-    s += char_bytes;
-    ++result;
+    ಬೈಟುಗಳು -= char_ಬೈಟುಗಳು;
+    s += char_ಬೈಟುಗಳು;
+    ++ಫಲಿತಾಂಶ;
   }
-  len = result;
-  return true;
+  len = ಫಲಿತಾಂಶ;
+  ಹಿಂತಿರುಗಿ true;
 }
 
-inline bool utf8_validate(const unsigned char* s, size_t len, size_t& utf8_chars) {
-  size_t utf8_len = 0;
-  size_t idx = 0;
-  while (idx < len) {
-    size_t bytes = 0;
-    auto ch = s[idx];
-    if (utf8_bytes(ch, bytes)) {
-      switch (bytes) {
-        case 1:
-          break;
-        case 2: {
+ಸಾಲೊಳಗೆ bool utf8_validate(ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ* s, ಗಾತ್ರ_t len, ಗಾತ್ರ_t& utf8_chars) {
+  ಗಾತ್ರ_t utf8_len = 0;
+  ಗಾತ್ರ_t idx = 0;
+  ಆಗ (idx < len) {
+    ಗಾತ್ರ_t ಬೈಟುಗಳು = 0;
+    ಸ್ವಯಂಚಾಲಿತ ch = s[idx];
+    ಆದರೆ (utf8_ಬೈಟುಗಳು(ch, ಬೈಟುಗಳು)) {
+      ಆಯ್ಕೆ (ಬೈಟುಗಳು) {
+        ಸ್ಥಿತಿ 1:
+          ನಿಲ್ಲಿಸು;
+        ಸ್ಥಿತಿ 2: {
           // Reject overlong 2-byte sequences. Valid Unicode 2-byte encodings
           // start at U+0080, so lead bytes 0xC0 and 0xC1 are invalid.
-          if (ch < 0xC2u) {
-            return false;
+          ಆದರೆ (ch < 0xC2u) {
+            ಹಿಂತಿರುಗಿ false;
           }
-          if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-            return false;
+          ಆದರೆ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+            ಹಿಂತಿರುಗಿ false;
           }
-        } break;  // 2
-        case 3: {
-          auto ch1 = s[idx];
-          switch (ch1) {
-            case 0xE0u:
-              if (++idx >= len || s[idx] < 0xA0u || s[idx] > 0xBFu) {
-                return false;
+        } ನಿಲ್ಲಿಸು;  // 2
+        ಸ್ಥಿತಿ 3: {
+          ಸ್ವಯಂಚಾಲಿತ ch1 = s[idx];
+          ಆಯ್ಕೆ (ch1) {
+            ಸ್ಥಿತಿ 0xE0u:
+              ಆದರೆ (++idx >= len || s[idx] < 0xA0u || s[idx] > 0xBFu) {
+                ಹಿಂತಿರುಗಿ false;
               }
-              break;
-            case 0xEDu:
-              if (++idx >= len || s[idx] < 0x80u || s[idx] > 0x9Fu) {
-                return false;
+              ನಿಲ್ಲಿಸು;
+            ಸ್ಥಿತಿ 0xEDu:
+              ಆದರೆ (++idx >= len || s[idx] < 0x80u || s[idx] > 0x9Fu) {
+                ಹಿಂತಿರುಗಿ false;
               }
-              break;
-            default: {
-              if ((ch1 >= 0xE1u && ch1 <= 0xECu) ||
+              ನಿಲ್ಲಿಸು;
+            ಪೂರ್ವನಿಯೋಜಿತ: {
+              ಆದರೆ ((ch1 >= 0xE1u && ch1 <= 0xECu) ||
                   (ch1 >= 0xEEu && ch1 <= 0xEFu)) {
-                if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-                  return false;
+                ಆದರೆ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+                  ಹಿಂತಿರುಗಿ false;
                 }
-              } else {
-                return false;
+              } ಇಲ್ಲದಿದ್ದರೆ {
+                ಹಿಂತಿರುಗಿ false;
               }
-            } break;
+            } ನಿಲ್ಲಿಸು;
           }
           // validate byte 3
-          if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-            return false;
+          ಆದರೆ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+            ಹಿಂತಿರುಗಿ false;
           }
-        } break;  // 3
-        case 4: {
-          auto ch1 = s[idx];
-          switch (ch1) {
-            case 0xF0u: {
-              if (++idx >= len || s[idx] < 0x90u || s[idx] > 0xBFu) {
-                return false;
+        } ನಿಲ್ಲಿಸು;  // 3
+        ಸ್ಥಿತಿ 4: {
+          ಸ್ವಯಂಚಾಲಿತ ch1 = s[idx];
+          ಆಯ್ಕೆ (ch1) {
+            ಸ್ಥಿತಿ 0xF0u: {
+              ಆದರೆ (++idx >= len || s[idx] < 0x90u || s[idx] > 0xBFu) {
+                ಹಿಂತಿರುಗಿ false;
               }
-            } break;
-            case 0xF4u: {
-              if (++idx >= len || s[idx] < 0x80u || s[idx] > 0x8Fu) {
-                return false;
+            } ನಿಲ್ಲಿಸು;
+            ಸ್ಥಿತಿ 0xF4u: {
+              ಆದರೆ (++idx >= len || s[idx] < 0x80u || s[idx] > 0x8Fu) {
+                ಹಿಂತಿರುಗಿ false;
               }
-            } break;
-            default: {
-              if (ch1 >= 0xF1u && ch1 <= 0xF3u) {
-                if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-                  return false;
+            } ನಿಲ್ಲಿಸು;
+            ಪೂರ್ವನಿಯೋಜಿತ: {
+              ಆದರೆ (ch1 >= 0xF1u && ch1 <= 0xF3u) {
+                ಆದರೆ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+                  ಹಿಂತಿರುಗಿ false;
                 }
-              } else {
-                return false;
+              } ಇಲ್ಲದಿದ್ದರೆ {
+                ಹಿಂತಿರುಗಿ false;
               }
-            } break;
+            } ನಿಲ್ಲಿಸು;
           }
           // validate bytes 3 and 4
-          size_t stop = idx + 2;
-          while (idx < stop) {
-            if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-              return false;
+          ಗಾತ್ರ_t stop = idx + 2;
+          ಆಗ (idx < stop) {
+            ಆದರೆ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+              ಹಿಂತಿರುಗಿ false;
             }
           }
-        } break;  // 4
-        default:
+        } ನಿಲ್ಲಿಸು;  // 4
+        ಪೂರ್ವನಿಯೋಜಿತ:
           // no chars longer than 4
-          return false;
+          ಹಿಂತಿರುಗಿ false;
       }  // switch bytes
       ++idx;
       ++utf8_len;
-    } else {
-      return false;
+    } ಇಲ್ಲದಿದ್ದರೆ {
+      ಹಿಂತಿರುಗಿ false;
     }
   }
   // End index must match
   // the end of the last byte sequence.
-  if (idx != len) {
-    return false;
+  ಆದರೆ (idx != len) {
+    ಹಿಂತಿರುಗಿ false;
   }
   utf8_chars = utf8_len;
-  return true;
+  ಹಿಂತಿರುಗಿ true;
 }
 
 // UTF-8 <-> wchar_t conversion utilities for non-Windows builds.
@@ -163,190 +163,190 @@ inline bool utf8_validate(const unsigned char* s, size_t len, size_t& utf8_chars
 // with 16-bit wchar_t cannot represent supplementary-plane characters correctly
 // via these helpers.
 // On Windows, use the Win32 MultiByteToWideChar/WideCharToMultiByte APIs instead.
-#ifndef _WIN32
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ _WIN32
 
-static_assert(sizeof(wchar_t) >= 4,
+static_assert(ಗಾತ್ರ(wchar_t) >= 4,
               "Non-Windows UTF-8/wchar_t conversion helpers require wchar_t to be at least 32 bits.");
 
 /// Compute the number of UTF-8 bytes required to encode a wide string.
-inline size_t WideToUtf8RequiredSize(const std::wstring& wstr) {
-  size_t result = 0;
-  for (wchar_t wc : wstr) {
+ಸಾಲೊಳಗೆ ಗಾತ್ರ_t Wide_ಗಮ್ಯ_Utf8_Required_ಗಾತ್ರ(ಸ್ಥಿರಾಂಕ std::wstring& wstr) {
+  ಗಾತ್ರ_t ಫಲಿತಾಂಶ = 0;
+  ಗಾಗಿ (wchar_t wc : wstr) {
     char32_t cp = static_cast<char32_t>(wc);
-    if (cp >= 0xD800 && cp <= 0xDFFF) {
+    ಆದರೆ (cp >= 0xD800 && cp <= 0xDFFF) {
       ORT_THROW("Invalid Unicode surrogate codepoint U+", std::hex, static_cast<uint32_t>(cp));
     }
-    if (cp <= 0x7F) {
-      result += 1;
-    } else if (cp <= 0x7FF) {
-      result += 2;
-    } else if (cp <= 0xFFFF) {
-      result += 3;
-    } else if (cp <= 0x10FFFF) {
-      result += 4;
-    } else {
+    ಆದರೆ (cp <= 0x7F) {
+      ಫಲಿತಾಂಶ += 1;
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (cp <= 0x7FF) {
+      ಫಲಿತಾಂಶ += 2;
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (cp <= 0xFFFF) {
+      ಫಲಿತಾಂಶ += 3;
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (cp <= 0x10FFFF) {
+      ಫಲಿತಾಂಶ += 4;
+    } ಇಲ್ಲದಿದ್ದರೆ {
       ORT_THROW("Invalid Unicode codepoint U+", std::hex, static_cast<uint32_t>(cp));
     }
   }
-  return result;
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
 /// Convert a wide string to UTF-8, writing into a pre-allocated std::string.
 /// The string is resized to the actual number of bytes written.
-inline Status WideToUtf8(const std::wstring& wstr, std::string& str) {
-  if (wstr.empty()) {
+ಸಾಲೊಳಗೆ ಸ್ಥಿತಿ_3 Wide_ಗಮ್ಯ_Utf8(ಸ್ಥಿರಾಂಕ std::wstring& wstr, std::string& str) {
+  ಆದರೆ (wstr.ಖಾಲಿಗಳು()) {
     str.clear();
-    return Status::OK();
+    ಹಿಂತಿರುಗಿ ಸ್ಥಿತಿ_3::OK();
   }
 
-  char* dest = str.data();
-  char* dest_end = dest + str.size();
+  ಅಕ್ಷರ* dest = str.ದತ್ತಾಂಶ();
+  ಅಕ್ಷರ* dest_ಕೊನೆ = dest + str.ಗಾತ್ರ_2();
 
-  for (wchar_t wc : wstr) {
+  ಗಾಗಿ (wchar_t wc : wstr) {
     char32_t cp = static_cast<char32_t>(wc);
-    if (cp >= 0xD800 && cp <= 0xDFFF) {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL,
+    ಆದರೆ (cp >= 0xD800 && cp <= 0xDFFF) {
+      ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL,
                              "Invalid Unicode surrogate codepoint during UTF-8 conversion");
     }
-    if (cp <= 0x7F) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 1) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+    ಆದರೆ (cp <= 0x7F) {
+      ಸ್ಥಿರಾಂಕ ಗಾತ್ರ_t ಉಳಿದ = static_cast<ಗಾತ್ರ_t>(dest_ಕೊನೆ - dest);
+      ಆದರೆ (ಉಳಿದ < 1) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(cp);
-    } else if (cp <= 0x7FF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 2) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<ಅಕ್ಷರ>(cp);
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (cp <= 0x7FF) {
+      ಸ್ಥಿರಾಂಕ ಗಾತ್ರ_t ಉಳಿದ = static_cast<ಗಾತ್ರ_t>(dest_ಕೊನೆ - dest);
+      ಆದರೆ (ಉಳಿದ < 2) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xC0 | (cp >> 6));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else if (cp <= 0xFFFF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 3) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<ಅಕ್ಷರ>(0xC0 | (cp >> 6));
+      *dest++ = static_cast<ಅಕ್ಷರ>(0x80 | (cp & 0x3F));
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (cp <= 0xFFFF) {
+      ಸ್ಥಿರಾಂಕ ಗಾತ್ರ_t ಉಳಿದ = static_cast<ಗಾತ್ರ_t>(dest_ಕೊನೆ - dest);
+      ಆದರೆ (ಉಳಿದ < 3) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xE0 | (cp >> 12));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else if (cp <= 0x10FFFF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 4) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<ಅಕ್ಷರ>(0xE0 | (cp >> 12));
+      *dest++ = static_cast<ಅಕ್ಷರ>(0x80 | ((cp >> 6) & 0x3F));
+      *dest++ = static_cast<ಅಕ್ಷರ>(0x80 | (cp & 0x3F));
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (cp <= 0x10FFFF) {
+      ಸ್ಥಿರಾಂಕ ಗಾತ್ರ_t ಉಳಿದ = static_cast<ಗಾತ್ರ_t>(dest_ಕೊನೆ - dest);
+      ಆದರೆ (ಉಳಿದ < 4) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xF0 | (cp >> 18));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 12) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL,
+      *dest++ = static_cast<ಅಕ್ಷರ>(0xF0 | (cp >> 18));
+      *dest++ = static_cast<ಅಕ್ಷರ>(0x80 | ((cp >> 12) & 0x3F));
+      *dest++ = static_cast<ಅಕ್ಷರ>(0x80 | ((cp >> 6) & 0x3F));
+      *dest++ = static_cast<ಅಕ್ಷರ>(0x80 | (cp & 0x3F));
+    } ಇಲ್ಲದಿದ್ದರೆ {
+      ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL,
                              "Invalid Unicode codepoint during UTF-8 conversion");
     }
   }
 
-  str.resize(static_cast<size_t>(dest - str.data()));
-  return Status::OK();
+  str.resize(static_cast<ಗಾತ್ರ_t>(dest - str.ದತ್ತಾಂಶ()));
+  ಹಿಂತಿರುಗಿ ಸ್ಥಿತಿ_3::OK();
 }
 
 /// Convert a UTF-8 string to a wide string, writing into a pre-allocated std::wstring.
 /// The wstring is resized to the actual number of characters written.
 /// Validates continuation bytes and rejects overlong encodings and surrogates.
-inline Status Utf8ToWide(const std::string& str, std::wstring& wstr) {
-  if (str.empty()) {
+ಸಾಲೊಳಗೆ ಸ್ಥಿತಿ_3 Utf8_ಗಮ್ಯ_Wide(ಸ್ಥಿರಾಂಕ std::string& str, std::wstring& wstr) {
+  ಆದರೆ (str.ಖಾಲಿಗಳು()) {
     wstr.clear();
-    return Status::OK();
+    ಹಿಂತಿರುಗಿ ಸ್ಥಿತಿ_3::OK();
   }
 
-  if (wstr.size() < str.size()) {
-    wstr.resize(str.size());
+  ಆದರೆ (wstr.ಗಾತ್ರ_2() < str.ಗಾತ್ರ_2()) {
+    wstr.resize(str.ಗಾತ್ರ_2());
   }
 
-  const auto* src = reinterpret_cast<const unsigned char*>(str.data());
-  const auto* src_end = src + str.size();
-  wchar_t* dest = wstr.data();
+  ಸ್ಥಿರಾಂಕ ಸ್ವಯಂಚಾಲಿತ* src = reinterpret_cast<ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ*>(str.ದತ್ತಾಂಶ());
+  ಸ್ಥಿರಾಂಕ ಸ್ವಯಂಚಾಲಿತ* src_ಕೊನೆ = src + str.ಗಾತ್ರ_2();
+  wchar_t* dest = wstr.ದತ್ತಾಂಶ();
 
-  while (src < src_end) {
+  ಆಗ (src < src_ಕೊನೆ) {
     char32_t cp = 0;
-    size_t byte_len = 0;
+    ಗಾತ್ರ_t byte_len = 0;
 
-    if ((*src & 0x80) == 0) {
+    ಆದರೆ ((*src & 0x80) == 0) {
       cp = *src;
       byte_len = 1;
-    } else if ((*src & 0xE0) == 0xC0) {
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ ((*src & 0xE0) == 0xC0) {
       byte_len = 2;
-      if (static_cast<size_t>(src_end - src) < 2) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      ಆದರೆ (static_cast<ಗಾತ್ರ_t>(src_ಕೊನೆ - src) < 2) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      ಆದರೆ ((src[1] & 0xC0) != 0x80) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x1F) << 6) |
            static_cast<char32_t>(src[1] & 0x3F);
       // Reject overlong encoding (must be >= 0x80 for 2-byte)
-      if (cp < 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      ಆದರೆ (cp < 0x80) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
-    } else if ((*src & 0xF0) == 0xE0) {
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ ((*src & 0xF0) == 0xE0) {
       byte_len = 3;
-      if (static_cast<size_t>(src_end - src) < 3) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      ಆದರೆ (static_cast<ಗಾತ್ರ_t>(src_ಕೊನೆ - src) < 3) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      ಆದರೆ ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x0F) << 12) |
            (static_cast<char32_t>(src[1] & 0x3F) << 6) |
            static_cast<char32_t>(src[2] & 0x3F);
       // Reject overlong encoding (must be >= 0x800 for 3-byte)
-      if (cp < 0x800) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      ಆದರೆ (cp < 0x800) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
       // Reject UTF-16 surrogates (U+D800..U+DFFF)
-      if (cp >= 0xD800 && cp <= 0xDFFF) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8: surrogate codepoint");
+      ಆದರೆ (cp >= 0xD800 && cp <= 0xDFFF) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Invalid UTF-8: surrogate codepoint");
       }
-    } else if ((*src & 0xF8) == 0xF0) {
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ ((*src & 0xF8) == 0xF0) {
       byte_len = 4;
-      if (static_cast<size_t>(src_end - src) < 4) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      ಆದರೆ (static_cast<ಗಾತ್ರ_t>(src_ಕೊನೆ - src) < 4) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80 || (src[3] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      ಆದರೆ ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80 || (src[3] & 0xC0) != 0x80) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x07) << 18) |
            (static_cast<char32_t>(src[1] & 0x3F) << 12) |
            (static_cast<char32_t>(src[2] & 0x3F) << 6) |
            static_cast<char32_t>(src[3] & 0x3F);
       // Reject overlong encoding (must be >= 0x10000 for 4-byte)
-      if (cp < 0x10000) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      ಆದರೆ (cp < 0x10000) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
       // Reject codepoints beyond Unicode range
-      if (cp > 0x10FFFF) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8: codepoint beyond U+10FFFF");
+      ಆದರೆ (cp > 0x10FFFF) {
+        ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Invalid UTF-8: codepoint beyond U+10FFFF");
       }
-    } else {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 lead byte");
+    } ಇಲ್ಲದಿದ್ದರೆ {
+      ಹಿಂತಿರುಗಿ ORT_MAKE_ಸ್ಥಿತಿ(ONNXRUNTIME, FAIL, "Invalid UTF-8 lead byte");
     }
 
     *dest++ = static_cast<wchar_t>(cp);
     src += byte_len;
   }
 
-  wstr.resize(static_cast<size_t>(dest - wstr.data()));
-  return Status::OK();
+  wstr.resize(static_cast<ಗಾತ್ರ_t>(dest - wstr.ದತ್ತಾಂಶ()));
+  ಹಿಂತಿರುಗಿ ಸ್ಥಿತಿ_3::OK();
 }
 
 /// Convenience: convert UTF-8 string to wstring (throws on error).
-inline std::wstring Utf8ToWideString(const std::string& s) {
+ಸಾಲೊಳಗೆ std::wstring Utf8_ಗಮ್ಯ_Wide_String(ಸ್ಥಿರಾಂಕ std::string& s) {
   // UTF-8 byte count is an upper bound on wchar_t count
-  std::wstring result;
-  result.resize(s.size());
-  ORT_THROW_IF_ERROR(Utf8ToWide(s, result));
-  return result;
+  std::wstring ಫಲಿತಾಂಶ;
+  ಫಲಿತಾಂಶ.resize(s.ಗಾತ್ರ_2());
+  ORT_THROW_IF_ERROR(Utf8_ಗಮ್ಯ_Wide(s, ಫಲಿತಾಂಶ));
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
-#endif  // !_WIN32
+#ಆದರೆ_ಅಂತ್ಯ  // !_WIN32
 
 }  // namespace utf8_util
 }  // namespace onnxruntime

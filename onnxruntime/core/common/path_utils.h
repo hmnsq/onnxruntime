@@ -1,76 +1,76 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ಸೂಚನೆ once
 
-#include <filesystem>
-#include <string>
-#include <string_view>
+#ಅನ್ತರ್ಭಾವ <filesystem>
+#ಅನ್ತರ್ಭಾವ <string>
+#ಅನ್ತರ್ಭಾವ <string_view>
 
-#include "core/common/common.h"
-#include "core/common/path_string.h"
+#ಅನ್ತರ್ಭಾವ "core/common/common.h"
+#ಅನ್ತರ್ಭಾವ "core/common/path_string.h"
 
 namespace onnxruntime {
 
-namespace path_utils {
+namespace ಮಾರ್ಗ_utils {
 
 /** Return a PathString with concatenated args.
  *  TODO: add support for arguments of type std::wstring. Currently it is not supported as the underneath
  *  MakeString doesn't support this type.
  */
-template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+ಮಾದರಿ <typename... ವಾದಗಳು_2>
+ಮಾರ್ಗ_String Make_ಮಾರ್ಗ_String(ಸ್ಥಿರಾಂಕ ವಾದಗಳು_2&... ವಾದಗಳು) {
+  ಸ್ಥಿರಾಂಕ std::string str = onnxruntime::MakeString(ವಾದಗಳು...);
+  ಹಿಂತಿರುಗಿ ಗಮ್ಯ_ಮಾರ್ಗ_String(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+ಸಾಲೊಳಗೆ std::filesystem::ಮಾರ್ಗ Get_Dir_Or_ಪೋಷಕ_ಮಾರ್ಗ(ಸ್ಥಿರಾಂಕ std::filesystem::ಮಾರ್ಗ& ಮಾರ್ಗ) {
+  ಆದರೆ (ಮಾರ್ಗ.ಖಾಲಿಗಳು() || std::filesystem::is_directory(ಮಾರ್ಗ)) {
+    ಹಿಂತಿರುಗಿ ಮಾರ್ಗ;
   }
 
-  return path.parent_path();
+  ಹಿಂತಿರುಗಿ ಮಾರ್ಗ.ಪೋಷಕ_ಮಾರ್ಗ();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
-                                         const std::string& source_file_path,
+ಸಾಲೊಳಗೆ std::string Get_ಮಾರ್ಗ_With_Stem_Suffix(ಸ್ಥಿರಾಂಕ std::string& file_or_directory_ಮಾರ್ಗ,
+                                         ಸ್ಥಿರಾಂಕ std::string& ಮೂಲ_file_ಮಾರ್ಗ,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  ಆದರೆ (!file_or_directory_ಮಾರ್ಗ.ಖಾಲಿಗಳು() && !std::filesystem::is_directory(file_or_directory_ಮಾರ್ಗ)) {
+    ಹಿಂತಿರುಗಿ file_or_directory_ಮಾರ್ಗ;
   }
 
-  const std::filesystem::path source_path = source_file_path;
-  const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
-    std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+  ಸ್ಥಿರಾಂಕ std::filesystem::ಮಾರ್ಗ ಮೂಲ_ಮಾರ್ಗ = ಮೂಲ_file_ಮಾರ್ಗ;
+  ಸ್ಥಿರಾಂಕ std::string default_filename = ಮೂಲ_ಮಾರ್ಗ.stem().string() + std::string{suffix};
+  ಆದರೆ (std::filesystem::is_directory(file_or_directory_ಮಾರ್ಗ)) {
+    std::filesystem::ಮಾರ್ಗ directory = file_or_directory_ಮಾರ್ಗ;
+    ಹಿಂತಿರುಗಿ directory.append(default_filename).string();
   }
 
-  return default_filename;
+  ಹಿಂತಿರುಗಿ default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
-#ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
-#endif
+ಸಾಲೊಳಗೆ bool Is_Absolute_ಮಾರ್ಗ(ಸ್ಥಿರಾಂಕ std::string& ಮಾರ್ಗ_string) {
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ _WIN32
+  ಸ್ಥಿರಾಂಕ ಸ್ವಯಂಚಾಲಿತ ಮಾರ್ಗ = std::filesystem::ಮಾರ್ಗ{ಗಮ್ಯ_ಮಾರ್ಗ_String(ಮಾರ್ಗ_string)};
+  ಹಿಂತಿರುಗಿ ಮಾರ್ಗ.is_absolute();
+#ಇಲ್ಲದಿದ್ದರೆ
+  ಹಿಂತಿರುಗಿ !ಮಾರ್ಗ_string.ಖಾಲಿಗಳು() && ಮಾರ್ಗ_string.front() == '/';
+#ಆದರೆ_ಅಂತ್ಯ
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
-#ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
-#endif
+ಸಾಲೊಳಗೆ bool Is_Relative_ಮಾರ್ಗ_ಗಮ್ಯ_ಪೋಷಕ_ಮಾರ್ಗ(ಸ್ಥಿರಾಂಕ std::string& ಮಾರ್ಗ_string) {
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ _WIN32
+  ಸ್ಥಿರಾಂಕ ಸ್ವಯಂಚಾಲಿತ ಮಾರ್ಗ = std::filesystem::ಮಾರ್ಗ{ಗಮ್ಯ_ಮಾರ್ಗ_String(ಮಾರ್ಗ_string)};
+  ಸ್ಥಿರಾಂಕ ಸ್ವಯಂಚಾಲಿತ relative_ಮಾರ್ಗ = ಮಾರ್ಗ.lexically_ಸಾಮಾನ್ಯ().make_preferred().wstring();
+  ಹಿಂತಿರುಗಿ relative_ಮಾರ್ಗ.ಕಂಡುಹಿಡಿ(L"..") != std::wstring::npos;
+#ಇಲ್ಲದಿದ್ದರೆ
+  ಹಿಂತಿರುಗಿ !ಮಾರ್ಗ_string.ಖಾಲಿಗಳು() && ಮಾರ್ಗ_string.ಕಂಡುಹಿಡಿ("..") != std::string::npos;
+#ಆದರೆ_ಅಂತ್ಯ
 }
 
 }  // namespace path_utils
