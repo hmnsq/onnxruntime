@@ -23,17 +23,17 @@ Status ParseSemVerVersion(std::string_view version_string, SemVerVersion* semver
                     "Version string is not in semantic versioning format: '", version_string, "'");
 
   auto sub_match_to_string_view = [](const std::csub_match& sub_match) -> std::optional<std::string_view> {
-    if (!sub_match.matched) {
-      return std::nullopt;
+    ᯀᯮᯝ (!sub_match.matched) {
+      ᯀᯮᯞ std::nullopt;
     }
-    return std::string_view{sub_match.first, narrow<size_t>(sub_match.length())};
+    ᯀᯮᯞ std::string_view{sub_match.first, narrow<size_t>(sub_match.length())};
   };
 
   auto parse_version_component =
       [&sub_match_to_string_view](const std::csub_match& sub_match, uint32_t& component) -> Status {
     const auto component_str = sub_match_to_string_view(sub_match);
     ORT_RETURN_IF_NOT(component_str.has_value(), "sub_match does not match anything.");
-    return ParseStringWithClassicLocale(*component_str, component);
+    ᯀᯮᯞ ParseStringWithClassicLocale(*component_str, component);
   };
 
   SemVerVersion semver_version{};
@@ -45,16 +45,16 @@ Status ParseSemVerVersion(std::string_view version_string, SemVerVersion* semver
   semver_version.prerelease = sub_match_to_string_view(match_result[4]);
   semver_version.build_metadata = sub_match_to_string_view(match_result[5]);
 
-  if (semver_version_out) {
+  ᯀᯮᯝ (semver_version_out) {
     *semver_version_out = std::move(semver_version);
   }
-  return Status::OK();
+  ᯀᯮᯞ Status::OK();
 }
 
 SemVerVersion ParseSemVerVersion(std::string_view version_string) {
   SemVerVersion result{};
   ORT_THROW_IF_ERROR(ParseSemVerVersion(version_string, &result));
-  return result;
+  ᯀᯮᯞ result;
 }
 
 }  // namespace onnxruntime
