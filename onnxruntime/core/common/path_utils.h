@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <filesystem>
-#include <string>
-#include <string_view>
+#ଅନ୍ତର୍ଭାଵ <filesystem>
+#ଅନ୍ତର୍ଭାଵ <string>
+#ଅନ୍ତର୍ଭାଵ <string_view>
 
-#include "core/common/common.h"
-#include "core/common/path_string.h"
+#ଅନ୍ତର୍ଭାଵ "core/common/common.h"
+#ଅନ୍ତର୍ଭାଵ "core/common/path_string.h"
 
 namespace onnxruntime {
 
@@ -19,57 +19,57 @@ namespace path_utils {
  *  MakeString doesn't support this type.
  */
 template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+PathString MakePathString(ଅଚଳ Args&... args) {
+  ଅଚଳ std::string str = onnxruntime::MakeString(args...);
+  ଫେରନ୍ତୁ ToPathString(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+ଧାଡ଼ିଭିତରେ std::filesystem::path GetDirOrParentPath(ଅଚଳ std::filesystem::path& path) {
+  ଯଦି (path.empty() || std::filesystem::is_directory(path)) {
+    ଫେରନ୍ତୁ path;
   }
 
-  return path.parent_path();
+  ଫେରନ୍ତୁ path.parent_path();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
-                                         const std::string& source_file_path,
+ଧାଡ଼ିଭିତରେ std::string GetPathWithStemSuffix(ଅଚଳ std::string& file_or_directory_path,
+                                         ଅଚଳ std::string& source_file_path,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  ଯଦି (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
+    ଫେରନ୍ତୁ file_or_directory_path;
   }
 
-  const std::filesystem::path source_path = source_file_path;
-  const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
+  ଅଚଳ std::filesystem::path source_path = source_file_path;
+  ଅଚଳ std::string default_filename = source_path.stem().string() + std::string{suffix};
+  ଯଦି (std::filesystem::is_directory(file_or_directory_path)) {
     std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+    ଫେରନ୍ତୁ directory.append(default_filename).string();
   }
 
-  return default_filename;
+  ଫେରନ୍ତୁ default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
+ଧାଡ଼ିଭିତରେ bool IsAbsolutePath(ଅଚଳ std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
+  ଅଚଳ auto path = std::filesystem::path{ToPathString(path_string)};
+  ଫେରନ୍ତୁ path.is_absolute();
+#ଅନ୍ୟଥା
+  ଫେରନ୍ତୁ !path_string.empty() && path_string.front() == '/';
 #endif
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
+ଧାଡ଼ିଭିତରେ bool IsRelativePathToParentPath(ଅଚଳ std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
+  ଅଚଳ auto path = std::filesystem::path{ToPathString(path_string)};
+  ଅଚଳ auto relative_path = path.lexically_normal().make_preferred().wstring();
+  ଫେରନ୍ତୁ relative_path.find(L"..") != std::wstring::npos;
+#ଅନ୍ୟଥା
+  ଫେରନ୍ତୁ !path_string.empty() && path_string.find("..") != std::string::npos;
 #endif
 }
 

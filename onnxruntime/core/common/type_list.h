@@ -7,7 +7,7 @@ namespace onnxruntime {
 
 // this type represents a compile-time list of types
 template <typename... T>
-struct TypeList {};
+ସଂରଚନା TypeList {};
 
 }  // namespace onnxruntime
 

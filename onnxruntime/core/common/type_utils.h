@@ -3,19 +3,19 @@
 
 #pragma once
 
-#include <cstdint>
-#include <type_traits>
+#ଅନ୍ତର୍ଭାଵ <cstdint>
+#ଅନ୍ତର୍ଭାଵ <type_traits>
 
 namespace onnxruntime {
 namespace utils {
 template <typename T>
-struct IsByteType : std::false_type {};
+ସଂରଚନା IsByteType : std::false_type {};
 
 template <>
-struct IsByteType<uint8_t> : std::true_type {};
+ସଂରଚନା IsByteType<uint8_t> : std::true_type {};
 
 template <>
-struct IsByteType<int8_t> : std::true_type {};
+ସଂରଚନା IsByteType<int8_t> : std::true_type {};
 
 }  // namespace utils
 }  // namespace onnxruntime
