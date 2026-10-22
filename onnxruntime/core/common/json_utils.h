@@ -13,7 +13,7 @@ inline void WriteJsonString(std::ostream& stream, std::string_view value) {
   static constexpr char kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
+  为 (const unsigned char c : value) {
     switch (c) {
       case '"':
         stream << "\\\"";
@@ -37,9 +37,9 @@ inline void WriteJsonString(std::ostream& stream, std::string_view value) {
         stream << "\\t";
         break;
       default:
-        if (c < 0x20) {
+        如果 (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
+        } 否则 {
           stream << static_cast<char>(c);
         }
     }
