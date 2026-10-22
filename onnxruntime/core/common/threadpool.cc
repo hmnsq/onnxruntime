@@ -13,67 +13,67 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include <memory>
-#include <optional>
+#ضمن <memory>
+#ضمن <optional>
 
-#include "core/platform/threadpool.h"
-#include "core/common/common.h"
-#include "core/common/cpuid_info.h"
-#include "core/common/eigen_common_wrapper.h"
-#include "core/platform/EigenNonBlockingThreadPool.h"
-#include <mutex>
-#if !defined(ORT_MINIMAL_BUILD)
+#ضمن "core/platform/threadpool.h"
+#ضمن "core/common/common.h"
+#ضمن "core/common/cpuid_info.h"
+#ضمن "core/common/eigen_common_wrapper.h"
+#ضمن "core/platform/EigenNonBlockingThreadPool.h"
+#ضمن <mutex>
+#إذا !defined(ORT_MINIMAL_BUILD)
 #ifdef _WIN32
-#include <Windows.h>
-#include "processthreadsapi.h"
-#include <codecvt>
-#include <locale>
-#elif defined(__APPLE__)
-#if defined(__x86_64__) || defined(__i386__)
-#include <cpuid.h>
+#ضمن <Windows.h>
+#ضمن "processthreadsapi.h"
+#ضمن <codecvt>
+#ضمن <locale>
+#وإلاإذا defined(__APPLE__)
+#إذا defined(__x86_64__) || defined(__i386__)
+#ضمن <cpuid.h>
 #endif
-#elif defined(__wasm__)
-#include <emscripten/threading.h>
-#else
-#include <sched.h>
+#وإلاإذا defined(__wasm__)
+#ضمن <emscripten/threading.h>
+#وإلا
+#ضمن <sched.h>
 #endif
 #endif
-#if defined(_MSC_VER) && !defined(__clang__)
+#إذا defined(_MSC_VER) && !defined(__clang__)
 // Chance of arithmetic overflow could be reduced
 #pragma warning(disable : 26451)
 #endif
-namespace onnxruntime {
+نطاق onnxruntime {
 
-namespace concurrency {
+نطاق concurrency {
 
-#if !defined(ORT_MINIMAL_BUILD)
-ThreadPoolProfiler::ThreadPoolProfiler(int num_threads, const CHAR_TYPE* thread_pool_name) : num_threads_(num_threads) {
-  child_thread_stats_.assign(num_threads, {});
-  if (thread_pool_name) {
+#إذا !defined(ORT_MINIMAL_BUILD)
+ThreadPoolProfiler::ThreadPoolProfiler(صحيح رەقەم_threads, ثابت CHAR_TYPE* thread_pool_name) : رەقەم_threads_2(رەقەم_threads) {
+  child_thread_stats_.assign(رەقەم_threads, {});
+  إذا (thread_pool_name) {
 #ifdef _WIN32
     thread_pool_name_ = ToUTF8String(thread_pool_name);
-#else
+#وإلا
     thread_pool_name_ = thread_pool_name;
 #endif
-  } else {
+  } وإلا {
     thread_pool_name_ = "unnamed_thread_pool";
   }
 }
 
 ThreadPoolProfiler::~ThreadPoolProfiler() {
-  enabled_ = false;
+  enabled_ = خطأ;
 }
 
-void ThreadPoolProfiler::Start() {
+فراغ ThreadPoolProfiler::Start() {
   enabled_ = true;
 }
 
 ThreadPoolProfiler::MainThreadStat& ThreadPoolProfiler::GetMainThreadStat() {
-  static thread_local std::unique_ptr<MainThreadStat> stat;
-  if (!stat) {
+  ساكن thread_local std::unique_ptr<MainThreadStat> stat;
+  إذا (!stat) {
     stat = std::make_unique<MainThreadStat>();
   }
-  return *stat;
+  أرجع *stat;
 }
 
 std::string ThreadPoolProfiler::Stop() {
@@ -86,11 +86,11 @@ std::string ThreadPoolProfiler::Stop() {
      << "}, \"sub_threads\": {"
      << DumpChildThreadStat()
      << "}}";
-  return ss.str();
+  أرجع ss.str();
 }
 
-void ThreadPoolProfiler::LogStartAndCoreAndBlock(std::ptrdiff_t block_size) {
-  if (enabled_) {
+فراغ ThreadPoolProfiler::LogStartAndCoreAndBlock(std::ptrdiff_t block_size) {
+  إذا (enabled_) {
     MainThreadStat& stat = GetMainThreadStat();
     stat.LogCore();
     stat.LogBlockSize(block_size);
@@ -98,67 +98,67 @@ void ThreadPoolProfiler::LogStartAndCoreAndBlock(std::ptrdiff_t block_size) {
   }
 }
 
-void ThreadPoolProfiler::LogCoreAndBlock(std::ptrdiff_t block_size) {
-  if (enabled_) {
+فراغ ThreadPoolProfiler::LogCoreAndBlock(std::ptrdiff_t block_size) {
+  إذا (enabled_) {
     MainThreadStat& stat = GetMainThreadStat();
     stat.LogCore();
     stat.LogBlockSize(block_size);
   }
 }
 
-void ThreadPoolProfiler::LogStart() {
-  if (enabled_) {
+فراغ ThreadPoolProfiler::LogStart() {
+  إذا (enabled_) {
     GetMainThreadStat().LogStart();
   }
 }
 
-void ThreadPoolProfiler::LogEnd(ThreadPoolEvent evt) {
-  if (enabled_) {
+فراغ ThreadPoolProfiler::LogEnd(ThreadPoolEvent evt) {
+  إذا (enabled_) {
     GetMainThreadStat().LogEnd(evt);
   }
 }
 
-void ThreadPoolProfiler::LogEndAndStart(ThreadPoolEvent evt) {
-  if (enabled_) {
+فراغ ThreadPoolProfiler::LogEndAndStart(ThreadPoolEvent evt) {
+  إذا (enabled_) {
     GetMainThreadStat().LogEndAndStart(evt);
   }
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogCore() {
+فراغ ThreadPoolProfiler::MainThreadStat::LogCore() {
 #ifdef _WIN32
-  core_ = GetCurrentProcessorNumber();
-#elif defined(__APPLE__)
-#if defined(__x86_64__) || defined(__i386__)
+  core_ = Get_Current_Processor_سان();
+#وإلاإذا defined(__APPLE__)
+#إذا defined(__x86_64__) || defined(__i386__)
   uint32_t CPUInfo[4];
   __cpuid_count(1, 0, CPUInfo[0], CPUInfo[1], CPUInfo[2], CPUInfo[3]);
-  if ((CPUInfo[3] & (1 << 9)) != 0) {
+  إذا ((CPUInfo[3] & (1 << 9)) != 0) {
     core_ = (unsigned)CPUInfo[1] >> 24;
   }
 #endif
-#elif defined(__wasm__)
-  core_ = emscripten_num_logical_cores();
-#elif defined(_AIX)
+#وإلاإذا defined(__wasm__)
+  core_ = emscripten_رەقەم_logical_cores();
+#وإلاإذا defined(_AIX)
   core_ = mycpu();
-#else
+#وإلا
   core_ = sched_getcpu();
 #endif
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogBlockSize(std::ptrdiff_t block_size) {
+فراغ ThreadPoolProfiler::MainThreadStat::LogBlockSize(std::ptrdiff_t block_size) {
   blocks_.emplace_back(block_size);
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogStart() {
+فراغ ThreadPoolProfiler::MainThreadStat::LogStart() {
   points_.emplace_back(Clock::now());
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogEnd(ThreadPoolEvent evt) {
+فراغ ThreadPoolProfiler::MainThreadStat::LogEnd(ThreadPoolEvent evt) {
   ORT_ENFORCE(!points_.empty(), "LogStart must pair with LogEnd");
   events_[evt] += TimeDiffMicroSeconds(points_.back(), Clock::now());
   points_.pop_back();
 }
 
-void ThreadPoolProfiler::MainThreadStat::LogEndAndStart(ThreadPoolEvent evt) {
+فراغ ThreadPoolProfiler::MainThreadStat::LogEndAndStart(ThreadPoolEvent evt) {
   ORT_ENFORCE(!points_.empty(), "LogStart must pair with LogEnd");
   events_[evt] += TimeDiffMicroSeconds(points_.back(), Clock::now());
   points_.back() = Clock::now();
@@ -168,62 +168,62 @@ std::string ThreadPoolProfiler::MainThreadStat::Reset() {
   ORT_ENFORCE(points_.empty(), "LogStart must pair with LogEnd");
   std::stringstream ss;
   ss << "\"thread_id\": \"" << std::this_thread::get_id() << "\", \"block_size\": [";
-  if (!blocks_.empty()) {
+  إذا (!blocks_.empty()) {
     std::copy(blocks_.begin(), blocks_.end() - 1, std::ostream_iterator<std::ptrdiff_t>(ss, ", "));
     ss << blocks_.back();
     blocks_.clear();
   }
   ss << "], \"core\": " << core_ << ", ";
-  for (int i = 0; i < MAX_EVENT; ++i) {
+  لكل (صحيح i = 0; i < MAX_EVENT; ++i) {
     ss << "\"" << ThreadPoolProfiler::GetEventName(static_cast<ThreadPoolEvent>(i))
        << "\": " << events_[i] << ((i == MAX_EVENT - 1) ? std::string{} : ", ");
   }
-  memset(events_, 0, sizeof(uint64_t) * MAX_EVENT);
-  return ss.str();
+  memset(events_, 0, حجم(uint64_t) * MAX_EVENT);
+  أرجع ss.str();
 }
 
-const char* ThreadPoolProfiler::GetEventName(ThreadPoolEvent event) {
-  switch (event) {
-    case DISTRIBUTION:
-      return "Distribution";
-    case DISTRIBUTION_ENQUEUE:
-      return "DistributionEnqueue";
-    case RUN:
-      return "Run";
-    case WAIT:
-      return "Wait";
-    case WAIT_REVOKE:
-      return "WaitRevoke";
-    default:
-      return "UnknownEvent";
+ثابت حرف* ThreadPoolProfiler::GetEventName(ThreadPoolEvent event) {
+  بدل (event) {
+    حالة DISTRIBUTION:
+      أرجع "Distribution";
+    حالة DISTRIBUTION_ENQUEUE:
+      أرجع "DistributionEnqueue";
+    حالة RUN:
+      أرجع "Run";
+    حالة WAIT:
+      أرجع "Wait";
+    حالة WAIT_REVOKE:
+      أرجع "WaitRevoke";
+    افتراضي:
+      أرجع "UnknownEvent";
   }
 }
 
-void ThreadPoolProfiler::LogThreadId(int thread_idx) {
+فراغ ThreadPoolProfiler::LogThreadId(صحيح thread_idx) {
   child_thread_stats_[thread_idx].thread_id_ = std::this_thread::get_id();
 }
 
-void ThreadPoolProfiler::LogRun(int thread_idx) {
-  if (enabled_) {
-    child_thread_stats_[thread_idx].num_run_++;
+فراغ ThreadPoolProfiler::LogRun(صحيح thread_idx) {
+  إذا (enabled_) {
+    child_thread_stats_[thread_idx].رەقەم_run++;
     auto now = Clock::now();
-    if (child_thread_stats_[thread_idx].core_ < 0 ||
+    إذا (child_thread_stats_[thread_idx].core_ < 0 ||
         TimeDiffMicroSeconds(child_thread_stats_[thread_idx].last_logged_point_, now) > 10000) {
 #ifdef _WIN32
-      child_thread_stats_[thread_idx].core_ = GetCurrentProcessorNumber();
-#elif defined(__APPLE__)
-#if defined(__x86_64__) || defined(__i386__)
+      child_thread_stats_[thread_idx].core_ = Get_Current_Processor_سان();
+#وإلاإذا defined(__APPLE__)
+#إذا defined(__x86_64__) || defined(__i386__)
       uint32_t CPUInfo[4];
       __cpuid_count(1, 0, CPUInfo[0], CPUInfo[1], CPUInfo[2], CPUInfo[3]);
-      if ((CPUInfo[3] & (1 << 9)) != 0) {
+      إذا ((CPUInfo[3] & (1 << 9)) != 0) {
         child_thread_stats_[thread_idx].core_ = (unsigned)CPUInfo[1] >> 24;
       }
 #endif
-#elif defined(__wasm__)
-      child_thread_stats_[thread_idx].core_ = emscripten_num_logical_cores();
-#elif defined(_AIX)
+#وإلاإذا defined(__wasm__)
+      child_thread_stats_[thread_idx].core_ = emscripten_رەقەم_logical_cores();
+#وإلاإذا defined(_AIX)
       child_thread_stats_[thread_idx].core_ = mycpu();
-#else
+#وإلا
       child_thread_stats_[thread_idx].core_ = sched_getcpu();
 #endif
       child_thread_stats_[thread_idx].last_logged_point_ = now;
@@ -233,13 +233,13 @@ void ThreadPoolProfiler::LogRun(int thread_idx) {
 
 std::string ThreadPoolProfiler::DumpChildThreadStat() {
   std::stringstream ss;
-  for (int i = 0; i < num_threads_; ++i) {
+  لكل (صحيح i = 0; i < رەقەم_threads_2; ++i) {
     ss << "\"" << child_thread_stats_[i].thread_id_ << "\": {"
-       << "\"num_run\": " << child_thread_stats_[i].num_run_ << ", "
+       << "\"num_run\": " << child_thread_stats_[i].رەقەم_run << ", "
        << "\"core\": " << child_thread_stats_[i].core_ << "}"
-       << (i == num_threads_ - 1 ? "" : ",");
+       << (i == رەقەم_threads_2 - 1 ? "" : ",");
   }
-  return ss.str();
+  أرجع ss.str();
 }
 #endif
 
@@ -256,41 +256,41 @@ std::string ThreadPoolProfiler::DumpChildThreadStat() {
 #pragma warning(disable : 4324) /* Padding added to LoopCounterShard, LoopCounter for alignment */
 #endif
 
-static constexpr int CACHE_LINE_BYTES = 64;
-static constexpr unsigned MAX_SHARDS = 8;
+ساكن constexpr صحيح CACHE_قۇر_BYTES = 64;
+ساكن constexpr unsigned MAX_SHARDS = 8;
 
-static constexpr int TaskGranularityFactor = 4;
+ساكن constexpr صحيح TaskGranularityFactor = 4;
 
-struct alignas(CACHE_LINE_BYTES) LoopCounterShard {
+بنية alignas(CACHE_قۇر_BYTES) LoopCounterShard {
   ::std::atomic<uint64_t> _next{0};
   uint64_t _end{0};
 };
 
-static_assert(sizeof(LoopCounterShard) == CACHE_LINE_BYTES, "Expected loop counter shards to match cache-line size");
+static_assert(حجم(LoopCounterShard) == CACHE_قۇر_BYTES, "Expected loop counter shards to match cache-line size");
 
-class alignas(CACHE_LINE_BYTES) LoopCounter {
- public:
-  LoopCounter(uint64_t num_iterations,
+صنف alignas(CACHE_قۇر_BYTES) LoopCounter {
+ عام:
+  LoopCounter(uint64_t رەقەم_iterations,
               uint64_t d_of_p,
-              uint64_t block_size = 1) : _num_shards(GetNumShards(num_iterations,
+              uint64_t block_size = 1) : رەقەم_shards(Get_رەقەم_Shards(رەقەم_iterations,
                                                                   d_of_p,
                                                                   block_size)) {
     // Divide the iteration space between the shards.  If the iteration
     // space does not divide evenly into shards of multiples of
     // block_size then the final shard is left uneven.
 
-    auto num_blocks = num_iterations / block_size;
-    auto blocks_per_shard = num_blocks / _num_shards;
+    auto رەقەم_blocks = رەقەم_iterations / block_size;
+    auto blocks_per_shard = رەقەم_blocks / رەقەم_shards;
     auto iterations_per_shard = blocks_per_shard * block_size;
 
-    for (uint64_t shard = 0; shard < _num_shards; shard++) {
+    لكل (uint64_t shard = 0; shard < رەقەم_shards; shard++) {
       // Initialize with a relaxed store; synchronization with worker
       // threads is provided via the thread pool
       _shards[shard]._next.store(shard * iterations_per_shard,
                                  ::std::memory_order_relaxed);
 
-      bool is_last_shard = (shard == _num_shards - 1);
-      _shards[shard]._end = is_last_shard ? num_iterations : ((shard + 1) * iterations_per_shard);
+      منطقي is_last_shard = (shard == رەقەم_shards - 1);
+      _shards[shard]._end = is_last_shard ? رەقەم_iterations : ((shard + 1) * iterations_per_shard);
     }
   }
 
@@ -303,36 +303,36 @@ class alignas(CACHE_LINE_BYTES) LoopCounter {
   // tend to run the same iterations in the next loop.  This helps
   // operators with a series of short loops, such as GRU.
 
-  unsigned GetHomeShard(unsigned idx) const {
-    return idx % _num_shards;
+  unsigned GetHomeShard(unsigned idx) ثابت {
+    أرجع idx % رەقەم_shards;
   }
 
   // Attempt to claim iterations from the sharded counter.  The function either
   // returns true, along with a block of exactly block_size iterations, or it returns false
   // if all of the iterations have been claimed.
-  bool ClaimIterations(unsigned my_home_shard,
+  منطقي ClaimIterations(unsigned my_home_shard,
                        unsigned& my_shard,
                        uint64_t& my_start,
                        uint64_t& my_end,
                        uint64_t block_size) {
-    do {
-      if (_shards[my_shard]._next < _shards[my_shard]._end) {
+    افعل {
+      إذا (_shards[my_shard]._next < _shards[my_shard]._end) {
         // Appears to be work in the current shard, try to claim with atomic fetch-and-add
         uint64_t temp_start = _shards[my_shard]._next.fetch_add(block_size);
-        if (temp_start < _shards[my_shard]._end) {
+        إذا (temp_start < _shards[my_shard]._end) {
           my_start = temp_start;
           my_end = std::min(_shards[my_shard]._end, temp_start + block_size);
-          return true;
+          أرجع true;
         }
       }
       // Work in the current shard is exhausted, move to the next shard, until
       // we are back at the home shard.
-      my_shard = (my_shard + 1) % _num_shards;
-    } while (my_shard != my_home_shard);
-    return false;
+      my_shard = (my_shard + 1) % رەقەم_shards;
+    } طالما (my_shard != my_home_shard);
+    أرجع خطأ;
   }
 
- private:
+ خاص:
   // Derive the number of shards to use for a given loop.  We require
   // at least one block of work per shard, and subject to the
   // constraints:
@@ -344,26 +344,26 @@ class alignas(CACHE_LINE_BYTES) LoopCounter {
   // - The number of shards is <= the number of threads (d_of_p).
   //   Hence, at low thread counts, each of N threads will get its own
   //   shard representing 1/N of the work.
-  constexpr static unsigned GetNumShards(uint64_t num_iterations,
+  constexpr ساكن unsigned Get_رەقەم_Shards(uint64_t رەقەم_iterations,
                                          uint64_t d_of_p,
                                          uint64_t block_size) {
-    unsigned num_shards = 0;
-    auto num_blocks = num_iterations / block_size;
-    if (num_blocks == 0) {
-      num_shards = 1;
-    } else if (num_blocks < MAX_SHARDS) {
-      num_shards = static_cast<unsigned>(num_blocks);
-    } else {
-      num_shards = MAX_SHARDS;
+    unsigned رەقەم_shards_2 = 0;
+    auto رەقەم_blocks = رەقەم_iterations / block_size;
+    إذا (رەقەم_blocks == 0) {
+      رەقەم_shards_2 = 1;
+    } وإلا إذا (رەقەم_blocks < MAX_SHARDS) {
+      رەقەم_shards_2 = static_cast<unsigned>(رەقەم_blocks);
+    } وإلا {
+      رەقەم_shards_2 = MAX_SHARDS;
     }
-    if (num_shards > d_of_p) {
-      num_shards = static_cast<unsigned>(d_of_p);
+    إذا (رەقەم_shards_2 > d_of_p) {
+      رەقەم_shards_2 = static_cast<unsigned>(d_of_p);
     }
-    return num_shards;
+    أرجع رەقەم_shards_2;
   }
 
-  alignas(CACHE_LINE_BYTES) LoopCounterShard _shards[MAX_SHARDS];
-  const unsigned _num_shards;
+  alignas(CACHE_قۇر_BYTES) LoopCounterShard _shards[MAX_SHARDS];
+  ثابت unsigned رەقەم_shards;
 };
 
 #ifdef _MSC_VER
@@ -371,29 +371,29 @@ class alignas(CACHE_LINE_BYTES) LoopCounter {
 #endif
 
 ThreadPool::ThreadPool(Env* env,
-                       const ThreadOptions& thread_options,
-                       const NAME_CHAR_TYPE* name,
-                       int degree_of_parallelism,
-                       int spin_duration_us,
-                       bool force_hybrid,
-                       unsigned int spin_backoff_max)
+                       ثابت ThreadOptions& thread_options,
+                       ثابت NAME_CHAR_TYPE* name,
+                       صحيح degree_of_parallelism,
+                       صحيح spin_duration_us,
+                       منطقي force_hybrid,
+                       unsigned صحيح spin_backoff_max)
     : thread_options_(thread_options), force_hybrid_(force_hybrid) {
   // In the current implementation, a thread pool with degree_of_parallelism==1 uses
   // the caller as one of the threads for executing work.  Hence we only create
   // additional thread(s) for degree_of_parallelism>=2.
-  assert(degree_of_parallelism >= 1);
-  if (degree_of_parallelism >= 2) {
-    int threads_to_create = degree_of_parallelism - 1;
+  أكد(degree_of_parallelism >= 1);
+  إذا (degree_of_parallelism >= 2) {
+    صحيح threads_to_create = degree_of_parallelism - 1;
 
-    if (!thread_options_.affinities.empty()) {
+    إذا (!thread_options_.affinities.empty()) {
       // Remove first affinity element as designated for the caller thread
       thread_options_.affinities.erase(thread_options_.affinities.begin());
-      assert(thread_options_.affinities.size() >= size_t(threads_to_create));
+      أكد(thread_options_.affinities.size() >= size_t(threads_to_create));
     }
 
 #ifdef ORT_ENABLE_SESSION_THREADPOOL_CALLBACKS
     using PoolType = ThreadPoolTempl<Env, WorkWithCallbackPolicy>;
-#else
+#وإلا
     using PoolType = ThreadPoolTempl<Env, WorkNoCallbackPolicy>;
 #endif
     extended_eigen_threadpool_ =
@@ -405,37 +405,37 @@ ThreadPool::ThreadPool(Env* env,
   }
 }
 
-ThreadPool::~ThreadPool() = default;
+ThreadPool::~ThreadPool() = افتراضي;
 
 // Base case for parallel loops, running iterations 0..total, divided into blocks
 // of block_size iterations, and calling into a function that takes a start..end
 // range of indices to run.
-void ThreadPool::ParallelForFixedBlockSizeScheduling(const std::ptrdiff_t total,
-                                                     const std::ptrdiff_t block_size,
-                                                     const std::function<void(std::ptrdiff_t, std::ptrdiff_t)>& fn) {
-  if (total <= 0)
-    return;
+فراغ ThreadPool::ParallelForFixedBlockSizeScheduling(ثابت std::ptrdiff_t total,
+                                                     ثابت std::ptrdiff_t block_size,
+                                                     ثابت std::function<فراغ(std::ptrdiff_t, std::ptrdiff_t)>& fn) {
+  إذا (total <= 0)
+    أرجع;
 
-  if (total <= block_size) {
+  إذا (total <= block_size) {
     fn(0, total);
-    return;
+    أرجع;
   }
 
-  auto d_of_p = DegreeOfParallelism(this);
-  if (thread_options_.dynamic_block_base_ <= 0) {
+  auto d_of_p = DegreeOfParallelism(هذا);
+  إذا (thread_options_.dynamic_block_base_ <= 0) {
     // Split the work across threads in the pool.  Each work item will run a loop claiming iterations,
     // hence we need at most one for each thread, even if the number of blocks of iterations is larger.
-    auto num_blocks = total / block_size;
-    auto num_threads_inc_main = NumThreads() + 1;
-    int num_work_items = static_cast<int>(std::min(static_cast<std::ptrdiff_t>(num_threads_inc_main), num_blocks));
-    assert(num_work_items > 0);
+    auto رەقەم_blocks = total / block_size;
+    auto رەقەم_threads_inc_main = رەقەم_Threads() + 1;
+    صحيح رەقەم_work_بۇيۇملار = static_cast<صحيح>(std::min(static_cast<std::ptrdiff_t>(رەقەم_threads_inc_main), رەقەم_blocks));
+    أكد(رەقەم_work_بۇيۇملار > 0);
 
     LoopCounter lc(total, d_of_p, block_size);
-    std::function<void(unsigned)> run_work = [&](unsigned idx) {
+    std::function<فراغ(unsigned)> run_work = [&](unsigned idx) {
       unsigned my_home_shard = lc.GetHomeShard(idx);
       unsigned my_shard = my_home_shard;
       uint64_t my_iter_start, my_iter_end;
-      while (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, block_size)) {
+      طالما (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, block_size)) {
         fn(static_cast<std::ptrdiff_t>(my_iter_start),
            static_cast<std::ptrdiff_t>(my_iter_end));
       }
@@ -443,63 +443,63 @@ void ThreadPool::ParallelForFixedBlockSizeScheduling(const std::ptrdiff_t total,
     // Run the work in the thread pool (and in the current thread).  Synchronization with helping
     // threads is handled within RunInParallel, hence we can deallocate lc and other state captured by
     // run_work.
-    RunInParallel(run_work, num_work_items, block_size);
-  } else {
-    int num_of_blocks = d_of_p * thread_options_.dynamic_block_base_;
-    std::ptrdiff_t base_block_size = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long double>(total) / num_of_blocks)));
-    alignas(CACHE_LINE_BYTES) std::atomic<std::ptrdiff_t> left{total};
+    RunInParallel(run_work, رەقەم_work_بۇيۇملار, block_size);
+  } وإلا {
+    صحيح رەقەم_of_blocks = d_of_p * thread_options_.dynamic_block_base_;
+    std::ptrdiff_t base_block_size = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long مزدوج>(total) / رەقەم_of_blocks)));
+    alignas(CACHE_قۇر_BYTES) std::atomic<std::ptrdiff_t> left{total};
     LoopCounter lc(total, d_of_p, base_block_size);
-    std::function<void(unsigned)> run_work = [&](unsigned idx) {
+    std::function<فراغ(unsigned)> run_work = [&](unsigned idx) {
       std::ptrdiff_t b = base_block_size;
       unsigned my_home_shard = lc.GetHomeShard(idx);
       unsigned my_shard = my_home_shard;
       uint64_t my_iter_start, my_iter_end;
-      while (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, b)) {
+      طالما (lc.ClaimIterations(my_home_shard, my_shard, my_iter_start, my_iter_end, b)) {
         fn(static_cast<std::ptrdiff_t>(my_iter_start),
            static_cast<std::ptrdiff_t>(my_iter_end));
         auto todo = left.fetch_sub(static_cast<std::ptrdiff_t>(my_iter_end - my_iter_start), std::memory_order_relaxed);
-        if (b > 1) {
-          b = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long double>(todo) / num_of_blocks)));
+        إذا (b > 1) {
+          b = static_cast<std::ptrdiff_t>(std::max(1LL, std::llroundl(static_cast<long مزدوج>(todo) / رەقەم_of_blocks)));
         }
       }
     };
     // Distribute task among all threads in the pool, reduce number of work items if
     // num_of_blocks is smaller than number of threads.
-    RunInParallel(run_work, std::min(NumThreads() + 1, num_of_blocks), base_block_size);
+    RunInParallel(run_work, std::min(رەقەم_Threads() + 1, رەقەم_of_blocks), base_block_size);
   }
 }
 
-void ThreadPool::SimpleParallelFor(std::ptrdiff_t total, const std::function<void(std::ptrdiff_t)>& fn) {
+فراغ ThreadPool::SimpleParallelFor(std::ptrdiff_t total, ثابت std::function<فراغ(std::ptrdiff_t)>& fn) {
   ParallelForFixedBlockSizeScheduling(total, 1, [&](std::ptrdiff_t first, std::ptrdiff_t last) {
-    for (std::ptrdiff_t idx = first; idx < last; idx++) {
+    لكل (std::ptrdiff_t idx = first; idx < last; idx++) {
       fn(idx);
     }
   });
 }
 
-void ThreadPool::Schedule(std::function<void()> fn) {
-  if (underlying_threadpool_) {
+فراغ ThreadPool::Schedule(std::function<فراغ()> fn) {
+  إذا (underlying_threadpool_) {
     underlying_threadpool_->Schedule(std::move(fn));
-  } else {
+  } وإلا {
     fn();
   }
 }
 
-void ThreadPool::StartProfiling() {
-  if (underlying_threadpool_) {
+فراغ ThreadPool::StartProfiling() {
+  إذا (underlying_threadpool_) {
     underlying_threadpool_->StartProfiling();
   }
 }
 
 std::string ThreadPool::StopProfiling() {
-  if (underlying_threadpool_) {
-    return underlying_threadpool_->StopProfiling();
-  } else {
-    return {};
+  إذا (underlying_threadpool_) {
+    أرجع underlying_threadpool_->StopProfiling();
+  } وإلا {
+    أرجع {};
   }
 }
 
-namespace {
+نطاق {
 thread_local std::optional<ThreadPoolParallelSection> current_parallel_section;
 }
 
@@ -507,7 +507,7 @@ ThreadPool::ParallelSection::ParallelSection(ThreadPool* tp) {
   ORT_ENFORCE(!current_parallel_section.has_value(), "Nested parallelism not supported");
   ORT_ENFORCE(!ps_);
   tp_ = tp;
-  if (tp && tp->underlying_threadpool_) {
+  إذا (tp && tp->underlying_threadpool_) {
     current_parallel_section.emplace();
     ps_ = &*current_parallel_section;
     tp_->underlying_threadpool_->StartParallelSection(*ps_);
@@ -515,44 +515,44 @@ ThreadPool::ParallelSection::ParallelSection(ThreadPool* tp) {
 }
 
 ThreadPool::ParallelSection::~ParallelSection() {
-  if (current_parallel_section) {
+  إذا (current_parallel_section) {
     tp_->underlying_threadpool_->EndParallelSection(*ps_);
     current_parallel_section.reset();
   }
 }
 
-void ThreadPool::RunInParallel(std::function<void(unsigned idx)> fn, unsigned n, std::ptrdiff_t block_size) {
-  if (underlying_threadpool_) {
-    if (current_parallel_section.has_value()) {
+فراغ ThreadPool::RunInParallel(std::function<فراغ(unsigned idx)> fn, unsigned n, std::ptrdiff_t block_size) {
+  إذا (underlying_threadpool_) {
+    إذا (current_parallel_section.has_value()) {
       underlying_threadpool_->RunInParallelSection(*current_parallel_section,
                                                    std::move(fn),
                                                    n, block_size);
-    } else {
+    } وإلا {
       underlying_threadpool_->RunInParallel(std::move(fn),
                                             n, block_size);
     }
-  } else {
+  } وإلا {
     fn(0);
   }
 }
 
-bool ThreadPool::ShouldParallelizeLoop(const std::ptrdiff_t num_iterations,
-                                       const std::ptrdiff_t block_size) const {
+منطقي ThreadPool::ShouldParallelizeLoop(ثابت std::ptrdiff_t رەقەم_iterations,
+                                       ثابت std::ptrdiff_t block_size) ثابت {
   // Do not parallelize trivial loops, with only a single block of work
-  if (block_size <= 0 || num_iterations <= block_size) {
-    return false;
+  إذا (block_size <= 0 || رەقەم_iterations <= block_size) {
+    أرجع خطأ;
   }
 
   // Do not parallelize loops with only a single thread available.  If the
   // caller is outside the current pool (ID == -1) then we parallelize
   // if the pool has any threads.  If the caller is inside the current pool
   // (ID != -1) then we require at least one additional thread in the pool.
-  if ((CurrentThreadId() == -1 && NumThreads() == 0) ||
-      (CurrentThreadId() != -1 && NumThreads() == 1)) {
-    return false;
+  إذا ((CurrentThreadId() == -1 && رەقەم_Threads() == 0) ||
+      (CurrentThreadId() != -1 && رەقەم_Threads() == 1)) {
+    أرجع خطأ;
   }
 
-  return true;
+  أرجع true;
 }
 
 using CostModel = Eigen::TensorCostModel<Eigen::ThreadPoolDevice>;
@@ -562,149 +562,149 @@ using CostModel = Eigen::TensorCostModel<Eigen::ThreadPoolDevice>;
 // overheads; not too large to mitigate tail effect and potential load
 // imbalance and we also want number of blocks to be evenly dividable across
 // threads.
-static ptrdiff_t CalculateParallelForBlock(const ptrdiff_t n, const Eigen::TensorOpCost& cost,
-                                           std::function<ptrdiff_t(ptrdiff_t)> block_align, int num_threads) {
-  const double block_size_f = 1.0 / CostModel::taskSize(1, cost);
+ساكن ptrdiff_t CalculateParallelForBlock(ثابت ptrdiff_t n, ثابت Eigen::TensorOpCost& cost,
+                                           std::function<ptrdiff_t(ptrdiff_t)> block_align, صحيح رەقەم_threads) {
+  ثابت مزدوج block_size_f = 1.0 / CostModel::taskSize(1, cost);
   constexpr ptrdiff_t max_oversharding_factor = 4;
   ptrdiff_t block_size = Eigen::numext::mini(
       n,
-      Eigen::numext::maxi<ptrdiff_t>(Eigen::numext::div_ceil<ptrdiff_t>(n, max_oversharding_factor * num_threads), static_cast<ptrdiff_t>(block_size_f)));
-  const ptrdiff_t max_block_size = Eigen::numext::mini(n, 2 * block_size);
+      Eigen::numext::maxi<ptrdiff_t>(Eigen::numext::div_ceil<ptrdiff_t>(n, max_oversharding_factor * رەقەم_threads), static_cast<ptrdiff_t>(block_size_f)));
+  ثابت ptrdiff_t max_block_size = Eigen::numext::mini(n, 2 * block_size);
 
-  if (block_align) {
+  إذا (block_align) {
     ptrdiff_t new_block_size = block_align(block_size);
-    assert(new_block_size >= block_size);
+    أكد(new_block_size >= block_size);
     block_size = Eigen::numext::mini(n, new_block_size);
   }
 
-  ptrdiff_t block_count = Eigen::numext::div_ceil(n, block_size);
+  ptrdiff_t block_سانى = Eigen::numext::div_ceil(n, block_size);
 
   // Calculate parallel efficiency as fraction of total CPU time used for
   // computations:
-  double max_efficiency =
-      static_cast<double>(block_count) / (Eigen::numext::div_ceil<ptrdiff_t>(block_count, num_threads) * num_threads);
+  مزدوج max_efficiency =
+      static_cast<مزدوج>(block_سانى) / (Eigen::numext::div_ceil<ptrdiff_t>(block_سانى, رەقەم_threads) * رەقەم_threads);
 
   // Now try to increase block size up to max_block_size as long as it
   // doesn't decrease parallel efficiency.
-  for (ptrdiff_t prev_block_count = block_count; max_efficiency < 1.0 && prev_block_count > 1;) {
+  لكل (ptrdiff_t prev_block_سانى = block_سانى; max_efficiency < 1.0 && prev_block_سانى > 1;) {
     // This is the next block size that divides size into a smaller number
     // of blocks than the current block_size.
-    ptrdiff_t coarser_block_size = Eigen::numext::div_ceil(n, prev_block_count - 1);
-    if (block_align) {
+    ptrdiff_t coarser_block_size = Eigen::numext::div_ceil(n, prev_block_سانى - 1);
+    إذا (block_align) {
       ptrdiff_t new_block_size = block_align(coarser_block_size);
-      assert(new_block_size >= coarser_block_size);
+      أكد(new_block_size >= coarser_block_size);
       coarser_block_size = Eigen::numext::mini(n, new_block_size);
     }
-    if (coarser_block_size > max_block_size) {
-      break;  // Reached max block size. Stop.
+    إذا (coarser_block_size > max_block_size) {
+      اكسر;  // Reached max block size. Stop.
     }
     // Recalculate parallel efficiency.
-    const ptrdiff_t coarser_block_count = Eigen::numext::div_ceil(n, coarser_block_size);
-    assert(coarser_block_count < prev_block_count);
-    prev_block_count = coarser_block_count;
-    const double coarser_efficiency =
-        static_cast<double>(coarser_block_count) / (Eigen::numext::div_ceil<ptrdiff_t>(coarser_block_count, num_threads) * num_threads);
-    if (coarser_efficiency + 0.01 >= max_efficiency) {
+    ثابت ptrdiff_t coarser_block_سانى = Eigen::numext::div_ceil(n, coarser_block_size);
+    أكد(coarser_block_سانى < prev_block_سانى);
+    prev_block_سانى = coarser_block_سانى;
+    ثابت مزدوج coarser_efficiency =
+        static_cast<مزدوج>(coarser_block_سانى) / (Eigen::numext::div_ceil<ptrdiff_t>(coarser_block_سانى, رەقەم_threads) * رەقەم_threads);
+    إذا (coarser_efficiency + 0.01 >= max_efficiency) {
       // Taking it.
       block_size = coarser_block_size;
-      if (max_efficiency < coarser_efficiency) {
+      إذا (max_efficiency < coarser_efficiency) {
         max_efficiency = coarser_efficiency;
       }
     }
   }
 
-  return block_size;
+  أرجع block_size;
 }
 
-void ThreadPool::ParallelFor(std::ptrdiff_t n, const TensorOpCost& c,
-                             const std::function<void(std::ptrdiff_t first, std::ptrdiff_t)>& f) {
+فراغ ThreadPool::ParallelFor(std::ptrdiff_t n, ثابت TensorOpCost& c,
+                             ثابت std::function<فراغ(std::ptrdiff_t first, std::ptrdiff_t)>& f) {
   ORT_ENFORCE(n >= 0);
   Eigen::TensorOpCost cost{c.bytes_loaded, c.bytes_stored, c.compute_cycles};
-  auto d_of_p = DegreeOfParallelism(this);
+  auto d_of_p = DegreeOfParallelism(هذا);
   // Compute small problems directly in the caller thread.
-  if ((!ShouldParallelizeLoop(n)) ||
-      CostModel::numThreads(static_cast<double>(n), cost, d_of_p) == 1) {
+  إذا ((!ShouldParallelizeLoop(n)) ||
+      CostModel::رەقەم_Threads_2(static_cast<مزدوج>(n), cost, d_of_p) == 1) {
     f(0, n);
-    return;
+    أرجع;
   }
 
   ptrdiff_t block = CalculateParallelForBlock(n, cost, nullptr, d_of_p);
   ParallelForFixedBlockSizeScheduling(n, block, f);
 }
 
-void ThreadPool::ParallelFor(std::ptrdiff_t total, double cost_per_unit,
-                             const std::function<void(std::ptrdiff_t first, std::ptrdiff_t)>& fn) {
-  ParallelFor(total, TensorOpCost{0, 0, static_cast<double>(cost_per_unit)}, fn);
+فراغ ThreadPool::ParallelFor(std::ptrdiff_t total, مزدوج cost_per_unit,
+                             ثابت std::function<فراغ(std::ptrdiff_t first, std::ptrdiff_t)>& fn) {
+  ParallelFor(total, TensorOpCost{0, 0, static_cast<مزدوج>(cost_per_unit)}, fn);
 }
 
-bool ThreadPool::ShouldParallelize(const concurrency::ThreadPool* tp) {
-  return (DegreeOfParallelism(tp) != 1);
+منطقي ThreadPool::ShouldParallelize(ثابت concurrency::ThreadPool* tp) {
+  أرجع (DegreeOfParallelism(tp) != 1);
 }
 
-int ThreadPool::DegreeOfParallelism(const concurrency::ThreadPool* tp) {
+صحيح ThreadPool::DegreeOfParallelism(ثابت concurrency::ThreadPool* tp) {
   // When not using OpenMP, we parallelize over the N threads created by the pool
   // tp, plus 1 for the thread entering a loop.
-  if (tp) {
-    if (tp->force_hybrid_ || CPUIDInfo::GetCPUIDInfo().IsHybrid()) {
-      return ((tp->NumThreads() + 1)) * TaskGranularityFactor;
-    } else {
-      return ((tp->NumThreads() + 1));
+  إذا (tp) {
+    إذا (tp->force_hybrid_ || CPUIDInfo::GetCPUIDInfo().IsHybrid()) {
+      أرجع ((tp->رەقەم_Threads() + 1)) * TaskGranularityFactor;
+    } وإلا {
+      أرجع ((tp->رەقەم_Threads() + 1));
     }
-  } else {
-    return 1;
+  } وإلا {
+    أرجع 1;
   }
 }
 
-void ThreadPool::StartProfiling(concurrency::ThreadPool* tp) {
-  if (tp) {
+فراغ ThreadPool::StartProfiling(concurrency::ThreadPool* tp) {
+  إذا (tp) {
     tp->StartProfiling();
   }
 }
 
 std::string ThreadPool::StopProfiling(concurrency::ThreadPool* tp) {
-  if (tp) {
-    return tp->StopProfiling();
-  } else {
-    return {};
+  إذا (tp) {
+    أرجع tp->StopProfiling();
+  } وإلا {
+    أرجع {};
   }
 }
 
-void ThreadPool::EnableSpinning() {
-  if (extended_eigen_threadpool_) {
+فراغ ThreadPool::EnableSpinning() {
+  إذا (extended_eigen_threadpool_) {
     extended_eigen_threadpool_->EnableSpinning();
   }
 }
 
-void ThreadPool::DisableSpinning() {
-  if (extended_eigen_threadpool_) {
+فراغ ThreadPool::DisableSpinning() {
+  إذا (extended_eigen_threadpool_) {
     extended_eigen_threadpool_->DisableSpinning();
   }
 }
 
 // Return the number of threads created by the pool.
-int ThreadPool::NumThreads() const {
-  if (underlying_threadpool_) {
-    return underlying_threadpool_->NumThreads();
-  } else {
-    return 0;
+صحيح ThreadPool::رەقەم_Threads() ثابت {
+  إذا (underlying_threadpool_) {
+    أرجع underlying_threadpool_->رەقەم_Threads();
+  } وإلا {
+    أرجع 0;
   }
 }
 
 // Return ID of the current thread within this pool.  Returns -1 for a thread outside the
 // current pool.
-int ThreadPool::CurrentThreadId() const {
-  if (underlying_threadpool_) {
-    return underlying_threadpool_->CurrentThreadId();
-  } else {
-    return -1;
+صحيح ThreadPool::CurrentThreadId() ثابت {
+  إذا (underlying_threadpool_) {
+    أرجع underlying_threadpool_->CurrentThreadId();
+  } وإلا {
+    أرجع -1;
   }
 }
 
-void ThreadPool::TryParallelFor(concurrency::ThreadPool* tp, std::ptrdiff_t total, const TensorOpCost& cost_per_unit,
-                                const std::function<void(std::ptrdiff_t first, std::ptrdiff_t last)>& fn) {
-  if (tp == nullptr) {
+فراغ ThreadPool::TryParallelFor(concurrency::ThreadPool* tp, std::ptrdiff_t total, ثابت TensorOpCost& cost_per_unit,
+                                ثابت std::function<فراغ(std::ptrdiff_t first, std::ptrdiff_t last)>& fn) {
+  إذا (tp == nullptr) {
     fn(0, total);
-    return;
+    أرجع;
   }
   tp->ParallelFor(total, cost_per_unit, fn);
 }
