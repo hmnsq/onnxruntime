@@ -15,7 +15,7 @@ namespace onnxruntime {
 // See https://github.com/semver/semver/blob/v2.0.0/semver.md.
 
 // Semantic Versioning version components.
-struct SemVerVersion {
+sa_nracanaa SemVerVersion {
   uint32_t major{};
   uint32_t minor{};
   uint32_t patch{};
