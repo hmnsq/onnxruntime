@@ -1,66 +1,66 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/spin_pause.h"
+#अन्तर्भाव "core/common/spin_pause.h"
 
-#include <algorithm>
-#include <atomic>
-#include <chrono>
-#include <cstdint>
+#अन्तर्भाव <algorithm>
+#अन्तर्भाव <atomic>
+#अन्तर्भाव <chrono>
+#अन्तर्भाव <cstdint>
 
-#if defined(_M_AMD64) || defined(_M_ARM64) || defined(_M_ARM64EC)
-#include <intrin.h>
-#endif
+#यदि defined(_M_AMD64) || defined(_M_ARM64) || defined(_M_ARM64EC)
+#अन्तर्भाव <intrin.h>
+#यदि_अन्तः
 
-#if defined(__x86_64__)
-#include <xmmintrin.h>
-#endif
+#यदि defined(__x86_64__)
+#अन्तर्भाव <xmmintrin.h>
+#यदि_अन्तः
 
-#if defined(_M_AMD64) || defined(__x86_64__)
-#include "core/common/cpuid_info.h"
-#if defined(__WAITPKG__)
-#include <x86intrin.h>
-#endif
-#endif
+#यदि defined(_M_AMD64) || defined(__x86_64__)
+#अन्तर्भाव "core/common/cpuid_info.h"
+#यदि defined(__WAITPKG__)
+#अन्तर्भाव <x86intrin.h>
+#यदि_अन्तः
+#यदि_अन्तः
 
-namespace onnxruntime {
-namespace concurrency {
+नामाकाश onnxruntime {
+नामाकाश concurrency {
 
 // Intrinsic to use in spin-loops
-void SpinPause() {
-#if (defined(_M_AMD64) || defined(__x86_64__)) && \
+शून्य SpinPause() {
+#यदि (defined(_M_AMD64) || defined(__x86_64__)) && \
     !defined(_M_ARM64EC) &&                       \
     !defined(__ANDROID__) &&                      \
     !defined(__APPLE__)
 
-  static const bool has_tpause = CPUIDInfo::GetCPUIDInfo().HasTPAUSE();
-  static constexpr uint64_t tpause_spin_delay_cycles = 1000;
-  if (has_tpause) {
-#if (defined(_WIN32) && !defined(__clang__)) || defined(__WAITPKG__)
-    _tpause(0x0, __rdtsc() + tpause_spin_delay_cycles);
-#else
+  स्थिर ध्रुव तार्किक has_tpause = CPUIDInfo::GetCPUIDInfo().HasTPAUSE();
+  स्थिर constexpr uint64_t tpause_spin_delay_आवृत्तयः = 1000;
+  यदि (has_tpause) {
+#यदि (defined(_WIN32) && !defined(__clang__)) || defined(__WAITPKG__)
+    _tpause(0x0, __rdtsc() + tpause_spin_delay_आवृत्तयः);
+#अन्यथा
     _mm_pause();
-#endif
-  } else {
+#यदि_अन्तः
+  } अन्यथा {
     _mm_pause();
   }
-#elif defined(_M_ARM64) || defined(_M_ARM64EC)
+#नोचेद्यदि defined(_M_ARM64) || defined(_M_ARM64EC)
   // ARM64 hint that yields the pipeline without descheduling the thread.
   // MSVC intrinsic — GCC-style inline asm is not supported by MSVC.
   __yield();
-#elif defined(__aarch64__)
+#नोचेद्यदि defined(__aarch64__)
   // ARM64 hint (GCC/Clang). Emitted as a non-inline asm statement so the
   // optimizer cannot elide it from the calibration loop.
   __asm__ __volatile__("yield" ::: "memory");
-#elif defined(__arm__)
+#नोचेद्यदि defined(__arm__)
   __asm__ __volatile__("yield" ::: "memory");
-#else
+#अन्यथा
   // Generic fallback: a compiler barrier. This prevents the optimizer from
   // collapsing the SpinPause() calls in the calibration loop into nothing.
   // It is intentionally much cheaper than std::this_thread::yield() so that
   // callers in worker spin loops do not pay scheduler overhead.
   std::atomic_signal_fence(std::memory_order_seq_cst);
-#endif
+#यदि_अन्तः
 }
 
 // Measure the average wall-clock cost of one SpinPause() call in nanoseconds.
@@ -77,29 +77,29 @@ void SpinPause() {
 //     pause latency. This is still the correct quantity to use for scaling
 //     an iteration count because the worker spin loop executes the same
 //     SpinPause() call.
-int CalibrateSpinPauseNs() {
-  static const int ns_per_iter = []() {
-    constexpr int kWarmupIters = 256;
-    constexpr int kCalibrationIters = 1024;
+पूर्णाङ्क CalibrateSpinPauseNs() {
+  स्थिर ध्रुव पूर्णाङ्क ns_प्रत्येकम्_iter = []() {
+    constexpr पूर्णाङ्क kWarmupIters = 256;
+    constexpr पूर्णाङ्क kCalibrationIters = 1024;
     // Use a volatile sink so the optimizer cannot conclude SpinPause() is
     // side-effect-free and delete the calibration loops. This is belt-and-
     // suspenders on top of the fallback barrier inside SpinPause() above.
-    [[maybe_unused]] volatile int sink = 0;
-    for (int i = 0; i < kWarmupIters; i++) {
+    [[maybe_unused]] चञ्चल पूर्णाङ्क sink = 0;
+    प्रति (पूर्णाङ्क i = 0; i < kWarmupIters; i++) {
       SpinPause();
       sink = sink + 1;
     }
-    auto start = std::chrono::steady_clock::now();
-    for (int i = 0; i < kCalibrationIters; i++) {
+    स्वचालित start = std::chrono::steady_clock::now();
+    प्रति (पूर्णाङ्क i = 0; i < kCalibrationIters; i++) {
       SpinPause();
       sink = sink + 1;
     }
-    auto elapsed_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    स्वचालित elapsed_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
                           std::chrono::steady_clock::now() - start)
-                          .count();
-    return static_cast<int>(std::max<int64_t>(elapsed_ns / kCalibrationIters, 1));
+                          .गणनम्();
+    प्रत्यागम static_cast<पूर्णाङ्क>(std::max<int64_t>(elapsed_ns / kCalibrationIters, 1));
   }();
-  return ns_per_iter;
+  प्रत्यागम ns_प्रत्येकम्_iter;
 }
 
 }  // namespace concurrency

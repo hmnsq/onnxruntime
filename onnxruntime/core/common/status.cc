@@ -11,81 +11,81 @@ limitations under the License.
 ==============================================================================*/
 // Modifications Copyright (c) Microsoft.
 
-#include "core/common/status.h"
-#include "core/common/common.h"
+#अन्तर्भाव "core/common/status.h"
+#अन्तर्भाव "core/common/common.h"
 
-namespace onnxruntime {
-namespace common {
-Status::Status(StatusCategory category, int code, const std::string& msg) {
+नामाकाश onnxruntime {
+नामाकाश common {
+स्थितिः_2::स्थितिः_2(स्थितिः_Category category, पूर्णाङ्क code, ध्रुव std::string& सन्देशः_2) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<पूर्णाङ्क>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, सन्देशः_2);
 }
 
-Status::Status(StatusCategory category, int code, const char* msg) {
+स्थितिः_2::स्थितिः_2(स्थितिः_Category category, पूर्णाङ्क code, ध्रुव वर्ण* सन्देशः_2) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<पूर्णाङ्क>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, सन्देशः_2);
 }
 
-Status::Status(StatusCategory category, int code)
-    : Status(category, code, "") {
+स्थितिः_2::स्थितिः_2(स्थितिः_Category category, पूर्णाङ्क code)
+    : स्थितिः_2(category, code, "") {
 }
 
-StatusCategory Status::Category() const noexcept {
-  return IsOK() ? common::NONE : state_->category;
+स्थितिः_Category स्थितिः_2::Category() ध्रुव noexcept {
+  प्रत्यागम IsOK() ? common::NONE : state_->category;
 }
 
-int Status::Code() const noexcept {
-  return IsOK() ? static_cast<int>(common::OK) : state_->code;
+पूर्णाङ्क स्थितिः_2::संहिता() ध्रुव noexcept {
+  प्रत्यागम IsOK() ? static_cast<पूर्णाङ्क>(common::OK) : state_->code;
 }
 
-const std::string& Status::ErrorMessage() const noexcept {
-  return IsOK() ? EmptyString() : state_->msg;
+ध्रुव std::string& स्थितिः_2::Error_सन्देशः() ध्रुव noexcept {
+  प्रत्यागम IsOK() ? रिक्तानि_String() : state_->सन्देशः_2;
 }
 
-std::string Status::ToString() const {
-  if (state_ == nullptr) {
-    return std::string("OK");
+std::string स्थितिः_2::गन्तव्यम्_String() ध्रुव {
+  यदि (state_ == शून्यसूचकः) {
+    प्रत्यागम std::string("OK");
   }
 
   std::string result;
 
-  if (common::SYSTEM == state_->category) {
+  यदि (common::SYSTEM == state_->category) {
     result += "SystemError";
     result += " : ";
     result += std::to_string(errno);
-  } else if (common::ONNXRUNTIME == state_->category) {
+  } अन्यथा यदि (common::ONNXRUNTIME == state_->category) {
     result += "[ONNXRuntimeError]";
     result += " : ";
-    result += std::to_string(Code());
+    result += std::to_string(संहिता());
     result += " : ";
-    result += StatusCodeToString(static_cast<StatusCode>(Code()));
+    result += स्थितिः_संहिता_गन्तव्यम्_String(static_cast<स्थितिः_संहिता>(संहिता()));
     result += " : ";
-    result += state_->msg;
+    result += state_->सन्देशः_2;
   }
 
-  return result;
+  प्रत्यागम result;
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
 // and should not have any destruction order issues via pragmas instead.
 // https://developercommunity.visualstudio.com/content/problem/249706/gslsuppress-does-not-work-for-i22-c-core-guideline.html
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 26426)
-#endif
+#यदि_परिभाषितम् _MSC_VER
+#निर्देशः warning(push)
+#निर्देशः warning(disable : 26426)
+#यदि_अन्तः
 
-const std::string& Status::EmptyString() noexcept {
-  static std::string s_empty;
-  return s_empty;
+ध्रुव std::string& स्थितिः_2::रिक्तानि_String() noexcept {
+  स्थिर std::string s_रिक्तानि;
+  प्रत्यागम s_रिक्तानि;
 }
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#यदि_परिभाषितम् _MSC_VER
+#निर्देशः warning(pop)
+#यदि_अन्तः
 
 }  // namespace common
 }  // namespace onnxruntime

@@ -1,20 +1,20 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#निर्देशः once
 
-#include <fstream>
-#include "core/common/logging/sinks/ostream_sink.h"
+#अन्तर्भाव <fstream>
+#अन्तर्भाव "core/common/logging/sinks/ostream_sink.h"
 
 namespace onnxruntime {
 namespace logging {
-#ifndef _WIN32
+#यदि_अपरिभाषितम् _WIN32
 /// <summary>
 /// ISink that writes to a file.
 /// </summary>
 /// <seealso cref="ISink" />
-class FileSink : public OStreamSink {
- public:
+class FileSink : सार्वजनिक OStreamSink {
+ सार्वजनिक:
   /// <summary>
   /// Initializes a new instance of the <see cref="FileSink" /> class.
   /// </summary>
@@ -22,8 +22,8 @@ class FileSink : public OStreamSink {
   /// <param name="append">If set to <c>true</c> [append to file]. Otherwise truncate.</param>
   /// <param name="filter_user_data">If set to <c>true</c> [removes user data].</param>
   /// <remarks>Filtering of user data can alternatively be done at the <see cref="LoggingManager" /> level.</remarks>
-  FileSink(std::unique_ptr<std::ofstream> file, bool filter_user_data)
-      : OStreamSink(*file, /*flush*/ true), file_(std::move(file)), filter_user_data_{filter_user_data} {
+  FileSink(std::unique_ptr<std::ofstream> file, bool filter_user_दत्त)
+      : OStreamSink(*file, /*flush*/ true), file_(std::move(file)), filter_user_दत्त_2{filter_user_दत्त} {
   }
 
   /// <summary>
@@ -33,29 +33,29 @@ class FileSink : public OStreamSink {
   /// <param name="append">If set to <c>true</c> [append to file]. Otherwise truncate.</param>
   /// <param name="filter_user_data">If set to <c>true</c> [removes user data].</param>
   /// <remarks>Filtering of user data can alternatively be done at the <see cref="LoggingManager" /> level.</remarks>
-  FileSink(const std::string& filename, bool append, bool filter_user_data)
-      : FileSink{std::make_unique<std::ofstream>(filename, std::ios::out | (append ? std::ios::app : std::ios::trunc)),
-                 filter_user_data} {
+  FileSink(ध्रुव std::string& filename, bool append, bool filter_user_दत्त)
+      : FileSink{std::make_unique<std::ofstream>(filename, std::ios::बहिर्गमनम् | (append ? std::ios::app : std::ios::trunc)),
+                 filter_user_दत्त} {
   }
 
- private:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    if (!filter_user_data_ || message.DataType() != DataType::USER) {
-      OStreamSink::SendImpl(timestamp, logger_id, message);
+ गुप्त:
+  शून्य SendImpl(ध्रुव Timestamp& timestamp, ध्रुव std::string& logger_id, ध्रुव Capture& सन्देशः) override {
+    यदि (!filter_user_दत्त_2 || सन्देशः.दत्त_Type() != दत्त_Type::USER) {
+      OStreamSink::SendImpl(timestamp, logger_id, सन्देशः);
     }
   }
 
   std::unique_ptr<std::ofstream> file_;
-  bool filter_user_data_;
+  bool filter_user_दत्त_2;
 };
 
-#else
+#अन्यथा
 /// <summary>
 /// ISink that writes to a file.
 /// </summary>
 /// <seealso cref="ISink" />
-class FileSink : public WOStreamSink {
- public:
+class FileSink : सार्वजनिक WOStreamSink {
+ सार्वजनिक:
   /// <summary>
   /// Initializes a new instance of the <see cref="FileSink" /> class.
   /// </summary>
@@ -63,8 +63,8 @@ class FileSink : public WOStreamSink {
   /// <param name="append">If set to <c>true</c> [append to file]. Otherwise truncate.</param>
   /// <param name="filter_user_data">If set to <c>true</c> [removes user data].</param>
   /// <remarks>Filtering of user data can alternatively be done at the <see cref="LoggingManager" /> level.</remarks>
-  FileSink(std::unique_ptr<std::wofstream> file, bool filter_user_data)
-      : WOStreamSink(*file, /*flush*/ true), file_(std::move(file)), filter_user_data_{filter_user_data} {
+  FileSink(std::unique_ptr<std::wofstream> file, bool filter_user_दत्त)
+      : WOStreamSink(*file, /*flush*/ true), file_(std::move(file)), filter_user_दत्त_2{filter_user_दत्त} {
   }
 
   /// <summary>
@@ -74,21 +74,21 @@ class FileSink : public WOStreamSink {
   /// <param name="append">If set to <c>true</c> [append to file]. Otherwise truncate.</param>
   /// <param name="filter_user_data">If set to <c>true</c> [removes user data].</param>
   /// <remarks>Filtering of user data can alternatively be done at the <see cref="LoggingManager" /> level.</remarks>
-  FileSink(const std::wstring& filename, bool append, bool filter_user_data)
-      : FileSink{std::make_unique<std::wofstream>(filename, std::ios::out | (append ? std::ios::app : std::ios::trunc)),
-                 filter_user_data} {
+  FileSink(ध्रुव std::wstring& filename, bool append, bool filter_user_दत्त)
+      : FileSink{std::make_unique<std::wofstream>(filename, std::ios::बहिर्गमनम् | (append ? std::ios::app : std::ios::trunc)),
+                 filter_user_दत्त} {
   }
 
- private:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    if (!filter_user_data_ || message.DataType() != DataType::USER) {
-      WOStreamSink::SendImpl(timestamp, logger_id, message);
+ गुप्त:
+  शून्य SendImpl(ध्रुव Timestamp& timestamp, ध्रुव std::string& logger_id, ध्रुव Capture& सन्देशः) override {
+    यदि (!filter_user_दत्त_2 || सन्देशः.दत्त_Type() != दत्त_Type::USER) {
+      WOStreamSink::SendImpl(timestamp, logger_id, सन्देशः);
     }
   }
 
   std::unique_ptr<std::wofstream> file_;
-  bool filter_user_data_;
+  bool filter_user_दत्त_2;
 };
-#endif
+#यदि_अन्तः
 }  // namespace logging
 }  // namespace onnxruntime

@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#निर्देशः once
 
-#include <cstdint>
-#include <optional>
-#include <string_view>
+#अन्तर्भाव <cstdint>
+#अन्तर्भाव <optional>
+#अन्तर्भाव <string_view>
 
-#include "core/common/status.h"
+#अन्तर्भाव "core/common/status.h"
 
 namespace onnxruntime {
 
@@ -15,7 +15,7 @@ namespace onnxruntime {
 // See https://github.com/semver/semver/blob/v2.0.0/semver.md.
 
 // Semantic Versioning version components.
-struct SemVerVersion {
+संरचना Sem_Ver_संस्करणम् {
   uint32_t major{};
   uint32_t minor{};
   uint32_t patch{};
@@ -25,9 +25,9 @@ struct SemVerVersion {
 
 // Parse a Semantic Versioning version from `version_string`.
 // If provided, the parsed version components will be written to `semver_version`.
-Status ParseSemVerVersion(std::string_view version_string, SemVerVersion* semver_version);
+स्थितिः_2 Parse_Sem_Ver_संस्करणम्(std::string_view संस्करणम्_string, Sem_Ver_संस्करणम्* semver_संस्करणम्);
 
 // Parse a Semantic Versioning version from `version_string`.
-SemVerVersion ParseSemVerVersion(std::string_view version_string);
+Sem_Ver_संस्करणम् Parse_Sem_Ver_संस्करणम्(std::string_view संस्करणम्_string);
 
 }  // namespace onnxruntime

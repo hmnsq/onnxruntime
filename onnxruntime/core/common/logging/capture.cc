@@ -1,64 +1,64 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/logging.h"
-#include <gsl/gsl>
+#अन्तर्भाव "core/common/logging/capture.h"
+#अन्तर्भाव "core/common/logging/logging.h"
+#अन्तर्भाव <gsl/gsl>
 
-namespace onnxruntime {
-namespace logging {
+नामाकाश onnxruntime {
+नामाकाश logging {
 
-void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
+शून्य Capture::CapturePrintf(msvc_printf_check ध्रुव वर्ण* format, ...) {
   va_list arglist;
   va_start(arglist, format);
 
   ProcessPrintf(format, arglist);
 
-  va_end(arglist);
+  va_अन्तः(arglist);
 }
 
 // from https://github.com/KjellKod/g3log/blob/master/src/logcapture.cpp LogCapture::capturef
 // License: https://github.com/KjellKod/g3log/blob/master/LICENSE
 // Modifications Copyright (c) Microsoft.
-void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list args) {
-  static constexpr auto kTruncatedWarningText = "[...truncated...]";
-  static constexpr int kMaxMessageSize = 2048;
-  char message_buffer[kMaxMessageSize];
-  const auto message = gsl::make_span(message_buffer);
+शून्य Capture::ProcessPrintf(msvc_printf_check ध्रुव वर्ण* format, va_list तर्काः) {
+  स्थिर constexpr स्वचालित kTruncatedWarningText = "[...truncated...]";
+  स्थिर constexpr पूर्णाङ्क k_Max_सन्देशः_आकार = 2048;
+  वर्ण सन्देशः_बफर[k_Max_सन्देशः_आकार];
+  ध्रुव स्वचालित सन्देशः = gsl::make_विस्तृतिः(सन्देशः_बफर);
 
-  bool error = false;
-  bool truncated = false;
+  तार्किक error = असत्य;
+  तार्किक truncated = असत्य;
 
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
+#यदि (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
   errno = 0;
-  const int nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
-  if (nbrcharacters < 0) {
+  ध्रुव पूर्णाङ्क nbrcharacters = vsnprintf_s(सन्देशः.दत्त(), सन्देशः.size(), _TRUNCATE, format, तर्काः);
+  यदि (nbrcharacters < 0) {
     error = errno != 0;
     truncated = !error;
   }
-#else
-#ifdef __APPLE__
-  const int nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
-#else
-  const int nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
-#endif
+#अन्यथा
+#यदि_परिभाषितम् __APPLE__
+  ध्रुव पूर्णाङ्क nbrcharacters = vsnprintf_l(सन्देशः.दत्त(), सन्देशः.size(), शून्यसूचकः, format, तर्काः);
+#अन्यथा
+  ध्रुव पूर्णाङ्क nbrcharacters = vsnprintf(सन्देशः.दत्त(), सन्देशः.size(), format, तर्काः);
+#यदि_अन्तः
   error = nbrcharacters < 0;
-  truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > message.size());
-#endif
+  truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > सन्देशः.size());
+#यदि_अन्तः
 
-  if (error) {
-    stream_ << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
-    stream_ << '"' << format << '"' << std::endl;
-  } else if (truncated) {
-    stream_ << message.data() << kTruncatedWarningText;
-  } else {
-    stream_ << message.data();
+  यदि (error) {
+    प्रवाहः_2 << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
+    प्रवाहः_2 << '"' << format << '"' << std::पङ्क्त्यन्तः;
+  } अन्यथा यदि (truncated) {
+    प्रवाहः_2 << सन्देशः.दत्त() << kTruncatedWarningText;
+  } अन्यथा {
+    प्रवाहः_2 << सन्देशः.दत्त();
   }
 }
 
 Capture::~Capture() {
-  if (logger_ != nullptr) {
-    logger_->Log(*this);
+  यदि (logger_ != शून्यसूचकः) {
+    logger_->Log(*एतत्);
   }
 }
 }  // namespace logging

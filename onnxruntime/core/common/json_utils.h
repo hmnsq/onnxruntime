@@ -1,50 +1,50 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#निर्देशः once
 
-#include <ostream>
-#include <string_view>
+#अन्तर्भाव <ostream>
+#अन्तर्भाव <string_view>
 
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+अन्तःस्थ शून्य WriteJsonString(std::ostream& प्रवाहः, std::string_view मानम्) {
+  स्थिर constexpr वर्ण kHexDigits[] = "0123456789abcdef";
 
-  stream << '"';
-  for (const unsigned char c : value) {
-    switch (c) {
-      case '"':
-        stream << "\\\"";
-        break;
-      case '\\':
-        stream << "\\\\";
-        break;
-      case '\b':
-        stream << "\\b";
-        break;
-      case '\f':
-        stream << "\\f";
-        break;
-      case '\n':
-        stream << "\\n";
-        break;
-      case '\r':
-        stream << "\\r";
-        break;
-      case '\t':
-        stream << "\\t";
-        break;
-      default:
-        if (c < 0x20) {
-          stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+  प्रवाहः << '"';
+  प्रति (ध्रुव अचिह्नित वर्ण c : मानम्) {
+    विकल्प (c) {
+      पक्ष '"':
+        प्रवाहः << "\\\"";
+        भङ्ग;
+      पक्ष '\\':
+        प्रवाहः << "\\\\";
+        भङ्ग;
+      पक्ष '\b':
+        प्रवाहः << "\\b";
+        भङ्ग;
+      पक्ष '\f':
+        प्रवाहः << "\\f";
+        भङ्ग;
+      पक्ष '\n':
+        प्रवाहः << "\\n";
+        भङ्ग;
+      पक्ष '\r':
+        प्रवाहः << "\\r";
+        भङ्ग;
+      पक्ष '\t':
+        प्रवाहः << "\\t";
+        भङ्ग;
+      स्वभाव:
+        यदि (c < 0x20) {
+          प्रवाहः << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
+        } अन्यथा {
+          प्रवाहः << static_cast<वर्ण>(c);
         }
     }
   }
-  stream << '"';
+  प्रवाहः << '"';
 }
 
 }  // namespace common
