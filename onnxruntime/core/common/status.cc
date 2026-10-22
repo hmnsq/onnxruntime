@@ -11,81 +11,81 @@ limitations under the License.
 ==============================================================================*/
 // Modifications Copyright (c) Microsoft.
 
-#include "core/common/status.h"
-#include "core/common/common.h"
+#అన్తర్భావ "core/common/status.h"
+#అన్తర్భావ "core/common/common.h"
 
-namespace onnxruntime {
-namespace common {
-Status::Status(StatusCategory category, int code, const std::string& msg) {
+నామాకాశ onnxruntime {
+నామాకాశ common {
+స్థితి_3::స్థితి_3(స్థితి_Category category, పూర్ణాంకం code, స్థిరరాశి std::string& సందేశం_2) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<పూర్ణాంకం>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, సందేశం_2);
 }
 
-Status::Status(StatusCategory category, int code, const char* msg) {
+స్థితి_3::స్థితి_3(స్థితి_Category category, పూర్ణాంకం code, స్థిరరాశి అక్షరం* సందేశం_2) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<పూర్ణాంకం>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, సందేశం_2);
 }
 
-Status::Status(StatusCategory category, int code)
-    : Status(category, code, "") {
+స్థితి_3::స్థితి_3(స్థితి_Category category, పూర్ణాంకం code)
+    : స్థితి_3(category, code, "") {
 }
 
-StatusCategory Status::Category() const noexcept {
-  return IsOK() ? common::NONE : state_->category;
+స్థితి_Category స్థితి_3::Category() స్థిరరాశి noexcept {
+  తిరిగి IsOK() ? common::NONE : state_->category;
 }
 
-int Status::Code() const noexcept {
-  return IsOK() ? static_cast<int>(common::OK) : state_->code;
+పూర్ణాంకం స్థితి_3::సంకేతం_2() స్థిరరాశి noexcept {
+  తిరిగి IsOK() ? static_cast<పూర్ణాంకం>(common::OK) : state_->code;
 }
 
-const std::string& Status::ErrorMessage() const noexcept {
-  return IsOK() ? EmptyString() : state_->msg;
+స్థిరరాశి std::string& స్థితి_3::Error_సందేశం() స్థిరరాశి noexcept {
+  తిరిగి IsOK() ? ఖాళీలు_String() : state_->సందేశం_2;
 }
 
-std::string Status::ToString() const {
-  if (state_ == nullptr) {
-    return std::string("OK");
+std::string స్థితి_3::గమ్యం_String() స్థిరరాశి {
+  ఒకవేళ (state_ == శూన్యసూచిక) {
+    తిరిగి std::string("OK");
   }
 
   std::string result;
 
-  if (common::SYSTEM == state_->category) {
+  ఒకవేళ (common::SYSTEM == state_->category) {
     result += "SystemError";
     result += " : ";
     result += std::to_string(errno);
-  } else if (common::ONNXRUNTIME == state_->category) {
+  } లేకపోతే ఒకవేళ (common::ONNXRUNTIME == state_->category) {
     result += "[ONNXRuntimeError]";
     result += " : ";
-    result += std::to_string(Code());
+    result += std::to_string(సంకేతం_2());
     result += " : ";
-    result += StatusCodeToString(static_cast<StatusCode>(Code()));
+    result += స్థితి_సంకేతం_గమ్యం_String(static_cast<స్థితి_సంకేతం>(సంకేతం_2()));
     result += " : ";
-    result += state_->msg;
+    result += state_->సందేశం_2;
   }
 
-  return result;
+  తిరిగి result;
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
 // and should not have any destruction order issues via pragmas instead.
 // https://developercommunity.visualstudio.com/content/problem/249706/gslsuppress-does-not-work-for-i22-c-core-guideline.html
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 26426)
-#endif
+#నిర్వచితమైతే _MSC_VER
+#సూచన warning(push)
+#సూచన warning(disable : 26426)
+#అయితే_ముగింపు
 
-const std::string& Status::EmptyString() noexcept {
-  static std::string s_empty;
-  return s_empty;
+స్థిరరాశి std::string& స్థితి_3::ఖాళీలు_String() noexcept {
+  స్థిర std::string s_ఖాళీలు;
+  తిరిగి s_ఖాళీలు;
 }
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#నిర్వచితమైతే _MSC_VER
+#సూచన warning(pop)
+#అయితే_ముగింపు
 
 }  // namespace common
 }  // namespace onnxruntime

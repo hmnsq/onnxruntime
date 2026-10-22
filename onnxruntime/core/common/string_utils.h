@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#సూచన once
 
-#include <algorithm>
-#include <cctype>
-#include <string>
-#include <string_view>
-#include <vector>
+#అన్తర్భావ <algorithm>
+#అన్తర్భావ <cctype>
+#అన్తర్భావ <string>
+#అన్తర్భావ <string_view>
+#అన్తర్భావ <vector>
 
-#include "core/common/common.h"
-#include "core/common/inlined_containers.h"
+#అన్తర్భావ "core/common/common.h"
+#అన్తర్భావ "core/common/inlined_containers.h"
 
 namespace onnxruntime {
 namespace utils {
@@ -22,38 +22,38 @@ namespace utils {
  * @param keep_empty Whether to keep empty substrings.
  * @return The split substrings.
  */
-inline InlinedVector<std::string_view> SplitString(std::string_view string_to_split, std::string_view delimiter,
-                                                   bool keep_empty = false) {
-  ORT_ENFORCE(!delimiter.empty(), "delimiter must not be empty");
-  InlinedVector<std::string_view> result{};
-  std::string_view::size_type segment_begin_pos = 0;
-  while (segment_begin_pos != std::string_view::npos) {
-    const std::string_view::size_type segment_end_pos = string_to_split.find(delimiter, segment_begin_pos);
-    const bool is_segment_empty = segment_begin_pos == segment_end_pos || segment_begin_pos == string_to_split.size();
-    if (!is_segment_empty || keep_empty) {
-      result.push_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
+అంతఃవరుస Inlined_సదిశ<std::string_view> విభజించు_String(std::string_view string_గమ్యం_విభజించు, std::string_view delimiter,
+                                                   bool keep_ఖాళీలు = false) {
+  ORT_ENFORCE(!delimiter.ఖాళీలు(), "delimiter must not be empty");
+  Inlined_సదిశ<std::string_view> ఫలితం{};
+  std::string_view::కొలత_type segment_begin_pos = 0;
+  అయితే (segment_begin_pos != std::string_view::npos) {
+    స్థిరరాశి std::string_view::కొలత_type segment_చివర_pos = string_గమ్యం_విభజించు.కనుగొను(delimiter, segment_begin_pos);
+    స్థిరరాశి bool is_segment_ఖాళీలు = segment_begin_pos == segment_చివర_pos || segment_begin_pos == string_గమ్యం_విభజించు.కొలత();
+    ఒకవేళ (!is_segment_ఖాళీలు || keep_ఖాళీలు) {
+      ఫలితం.నెట్టు_వెనుక(string_గమ్యం_విభజించు.substr(segment_begin_pos, segment_చివర_pos - segment_begin_pos));
     }
-    segment_begin_pos = (segment_end_pos == std::string_view::npos)
-                            ? segment_end_pos
-                            : segment_end_pos + delimiter.size();
+    segment_begin_pos = (segment_చివర_pos == std::string_view::npos)
+                            ? segment_చివర_pos
+                            : segment_చివర_pos + delimiter.కొలత();
   }
-  return result;
+  తిరిగి ఫలితం;
 }
 
 /**
  * Trim a string from start inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromLeft(std::string& s) {
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+అంతఃవరుస శూన్య Trim_String_From_ఎడమ(std::string& s) {
+  s.erase(s.begin(), std::కనుగొను_if(s.begin(), s.చివర(), [](గుర్తులేని అక్షరం ch) { తిరిగి !std::ఖాళీనా(ch); }));
 }
 
 /**
  * Trim a string from end inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromRight(std::string& s) {
-  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+అంతఃవరుస శూన్య Trim_String_From_కుడి(std::string& s) {
+  s.erase(std::కనుగొను_if(s.rbegin(), s.rend(), [](గుర్తులేని అక్షరం ch) { తిరిగి !std::ఖాళీనా(ch); }).పునాది(), s.చివర());
 }
 
 /**
@@ -61,30 +61,30 @@ inline void TrimStringFromRight(std::string& s) {
  * @param s The string to trim.
  * @return The trimmed string.
  */
-inline std::string TrimString(std::string_view s) {
+అంతఃవరుస std::string TrimString(std::string_view s) {
   std::string s_trimmed{s};
-  TrimStringFromRight(s_trimmed);
-  TrimStringFromLeft(s_trimmed);
-  return s_trimmed;
+  Trim_String_From_కుడి(s_trimmed);
+  Trim_String_From_ఎడమ(s_trimmed);
+  తిరిగి s_trimmed;
 }
 
 /**
  * @brief A consistent way to construct the full qualified op name.
  */
-inline std::string GetFullQualifiedOpName(const std::string& op_type, const std::string& domain) {
-  return MakeString(domain, "::", op_type);
+అంతఃవరుస std::string Get_నిండిన_Qualified_Op_Name(స్థిరరాశి std::string& op_type, స్థిరరాశి std::string& domain) {
+  తిరిగి MakeString(domain, "::", op_type);
 }
 
 /**
  * Use this simple hash to generate unique int by given string input.
  */
-inline uint32_t GetHashFromString(const std::string& str_value) {
+అంతఃవరుస uint32_t GetHashFromString(స్థిరరాశి std::string& str_విలువ) {
   uint32_t hash = 0;
-  for (char const& c : str_value) {
+  కొరకు (అక్షరం స్థిరరాశి& c : str_విలువ) {
     hash = hash * 101 + c;
   }
 
-  return hash;
+  తిరిగి hash;
 }
 
 /**
@@ -92,15 +92,15 @@ inline uint32_t GetHashFromString(const std::string& str_value) {
  * @param str The string to lowercase.
  * @return The lowercased string.
  */
-inline std::string GetLowercaseString(std::string str) {
+అంతఃవరుస std::string GetLowercaseString(std::string str) {
   // https://en.cppreference.com/w/cpp/string/byte/tolower
   // The behavior of tolower from <cctype> is undefined if the argument is neither representable as unsigned char
   // nor equal to EOF. To use tolower safely with a plain char (or signed char), the argument must be converted to
   // unsigned char.
-  std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
-    return static_cast<char>(std::tolower(c));
+  std::transform(str.begin(), str.చివర(), str.begin(), [](గుర్తులేని అక్షరం c) {
+    తిరిగి static_cast<అక్షరం>(std::tolower(c));
   });
-  return str;
+  తిరిగి str;
 }
 
 }  // namespace utils

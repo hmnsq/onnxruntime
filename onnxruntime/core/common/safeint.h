@@ -1,59 +1,59 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#సూచన once
 
-#include "core/common/exceptions.h"
+#అన్తర్భావ "core/common/exceptions.h"
 
 // Setup the infrastructure to throw ORT exceptions so they're caught by existing handlers.
 
-template <typename E>
-class SafeIntExceptionHandler;
+మూస <typename E>
+class సురక్షిత_Int_Exception_Handler;
 
-template <>
-class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
- public:
-  [[noreturn]] static void SafeIntOnOverflow() {
+మూస <>
+class సురక్షిత_Int_Exception_Handler<onnxruntime::OnnxRuntimeException> {
+ బహిరంగ:
+  [[noreturn]] స్థిర శూన్య సురక్షిత_Int_On_అధికప్రవాహం() {
     ORT_THROW("Integer overflow");
   }
 
-  [[noreturn]] static void SafeIntOnDivZero() {
+  [[noreturn]] స్థిర శూన్య సురక్షిత_Int_On_Div_Zero() {
     ORT_THROW("Divide by zero");
   }
 };
 
-#define SAFEINT_EXCEPTION_HANDLER_CPP 1
-#define SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
+#నిర్వచించు SAFEINT_EXCEPTION_HANDLER_CPP 1
+#నిర్వచించు సురక్షిత_Int_Default_Exception_Handler సురక్షిత_Int_Exception_Handler<onnxruntime::OnnxRuntimeException>
 
-#if defined(__GNUC__)
-#include "onnxruntime_config.h"
-#pragma GCC diagnostic push
-#ifdef HAS_UNUSED_BUT_SET_PARAMETER
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-#endif
-#endif
-#include "SafeInt.hpp"
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+#ఒకవేళ defined(__GNUC__)
+#అన్తర్భావ "onnxruntime_config.h"
+#సూచన GCC diagnostic నెట్టు
+#నిర్వచితమైతే HAS_వాడని_BUT_సమితి_PARAMETER
+#సూచన GCC diagnostic ignored "-Wunused-but-set-parameter"
+#అయితే_ముగింపు
+#అయితే_ముగింపు
+#అన్తర్భావ "SafeInt.hpp"
+#ఒకవేళ defined(__GNUC__)
+#సూచన GCC diagnostic తీయి
+#అయితే_ముగింపు
 
-#include <type_traits>
+#అన్తర్భావ <type_traits>
 
 namespace onnxruntime {
 
-template <typename T>
+మూస <typename T>
 using remove_cvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 
-template <typename T>
-inline constexpr bool is_supported_integer_v =
+మూస <typename T>
+అంతఃవరుస constexpr bool is_supported_integer_v =
     std::is_integral_v<remove_cvref_t<T>> && !std::is_same_v<remove_cvref_t<T>, bool>;
 
 //------------------------------------------------------------------------------
 // Safe multiplication of two or more integer values into an explicit result type R.
 // Throws OnnxRuntimeException on overflow.
 //------------------------------------------------------------------------------
-template <typename R, typename T, typename U, typename... Rest>
-[[nodiscard]] R SafeMul(T a, U b, Rest... rest) {
+మూస <typename R, typename T, typename U, typename... Rest>
+[[nodiscard]] R సురక్షిత_Mul(T a, U b, Rest... rest) {
   static_assert(is_supported_integer_v<R>,
                 "SafeMul requires an integral result type (excluding bool)");
   static_assert(is_supported_integer_v<T> && is_supported_integer_v<U>,
@@ -64,19 +64,19 @@ template <typename R, typename T, typename U, typename... Rest>
   // SafeMultiply(T, U, T&) requires the first argument and result to share
   // the same type. Cast the first operand to R so the result is directly in R.
   R cast_a{};
-  if (!SafeCast(a, cast_a)) {
-    SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
+  ఒకవేళ (!సురక్షిత_Cast(a, cast_a)) {
+    సురక్షిత_Int_Default_Exception_Handler::సురక్షిత_Int_On_అధికప్రవాహం();
   }
 
-  R result{};
-  if (!SafeMultiply(cast_a, b, result)) {
-    SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
+  R ఫలితం{};
+  ఒకవేళ (!సురక్షిత_Multiply(cast_a, b, ఫలితం)) {
+    సురక్షిత_Int_Default_Exception_Handler::సురక్షిత_Int_On_అధికప్రవాహం();
   }
 
-  if constexpr (sizeof...(rest) > 0) {
-    return SafeMul<R>(result, rest...);
-  } else {
-    return result;
+  ఒకవేళ constexpr (పరిమాణం...(rest) > 0) {
+    తిరిగి సురక్షిత_Mul<R>(ఫలితం, rest...);
+  } లేకపోతే {
+    తిరిగి ఫలితం;
   }
 }
 

@@ -1,51 +1,51 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/profiler_common.h"
+#అన్తర్భావ "core/common/profiler_common.h"
 
-#ifndef _MSC_VER
-#include <cxxabi.h>
-#endif
-#include <string.h>
-#include <string>
+#నిర్వచితం_కాకపోతే _MSC_VER
+#అన్తర్భావ <cxxabi.h>
+#అయితే_ముగింపు
+#అన్తర్భావ <string.h>
+#అన్తర్భావ <string>
 
-namespace onnxruntime {
-namespace profiling {
+నామాకాశ onnxruntime {
+నామాకాశ profiling {
 
-static constexpr int kMaxSymbolSize = 1024;
+స్థిర constexpr పూర్ణాంకం k_Max_చిహ్నం_కొలత = 1024;
 
-std::string demangle(const char* name) {
-#ifndef _MSC_VER
-  if (!name) {
-    return "";
+std::string demangle(స్థిరరాశి అక్షరం* name) {
+#నిర్వచితం_కాకపోతే _MSC_VER
+  ఒకవేళ (!name) {
+    తిరిగి "";
   }
 
-  if (strlen(name) > kMaxSymbolSize) {
-    return name;
+  ఒకవేళ (అక్షరశ్రేణి_పొడవు(name) > k_Max_చిహ్నం_కొలత) {
+    తిరిగి name;
   }
 
-  int status;
+  పూర్ణాంకం స్థితి_2;
   size_t len = 0;
-  char* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
-  if (status != 0) {
-    return name;
+  అక్షరం* demangled = abi::__cxa_demangle(name, శూన్యసూచిక, &len, &స్థితి_2);
+  ఒకవేళ (స్థితి_2 != 0) {
+    తిరిగి name;
   }
   std::string res(demangled);
   // The returned buffer must be freed!
-  free(demangled);
-  return res;
-#else
+  విడుదల(demangled);
+  తిరిగి res;
+#లేకపోతే
   // TODO(anyone): demangling on Windows
-  if (!name) {
-    return "";
-  } else {
-    return name;
+  ఒకవేళ (!name) {
+    తిరిగి "";
+  } లేకపోతే {
+    తిరిగి name;
   }
-#endif
+#అయితే_ముగింపు
 }
 
-std::string demangle(const std::string& name) {
-  return demangle(name.c_str());
+std::string demangle(స్థిరరాశి std::string& name) {
+  తిరిగి demangle(name.c_str());
 }
 
 }  // namespace profiling

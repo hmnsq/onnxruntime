@@ -22,15 +22,15 @@ Abstract:
 
 --*/
 
-#pragma once
+#సూచన once
 
-#include <cstdint>
+#అన్తర్భావ <cstdint>
 
-#include "core/common/cpuid_arch_definition.h"
+#అన్తర్భావ "core/common/cpuid_arch_definition.h"
 
 namespace onnxruntime {
 
-enum CPUIDINFOuarch {
+గణన CPUIDINFOuarch {
   /** Microarchitecture is unknown, or the library failed to get information about the microarchitecture from OS */
   cpuinfo_uarch_unknown = 0,
 
@@ -181,10 +181,10 @@ enum CPUIDINFOuarch {
   cpuinfo_uarch_taishan_v110 = 0x00C00100,
 };
 
-#if defined(CPUIDINFO_ARCH_ARM)
+#ఒకవేళ defined(CPUIDINFO_ARCH_ARM)
 
-void decodeMIDR(uint32_t midr, uint32_t uarch[1]);
+శూన్య decodeMIDR(uint32_t midr, uint32_t uarch[1]);
 
-#endif  // arm or arm64
+#అయితే_ముగింపు  // arm or arm64
 
 }  // namespace onnxruntime

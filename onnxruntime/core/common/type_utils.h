@@ -1,21 +1,21 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#సూచన once
 
-#include <cstdint>
-#include <type_traits>
+#అన్తర్భావ <cstdint>
+#అన్తర్భావ <type_traits>
 
 namespace onnxruntime {
 namespace utils {
-template <typename T>
-struct IsByteType : std::false_type {};
+మూస <typename T>
+నిర్మాణం IsByteType : std::false_type {};
 
-template <>
-struct IsByteType<uint8_t> : std::true_type {};
+మూస <>
+నిర్మాణం IsByteType<uint8_t> : std::true_type {};
 
-template <>
-struct IsByteType<int8_t> : std::true_type {};
+మూస <>
+నిర్మాణం IsByteType<int8_t> : std::true_type {};
 
 }  // namespace utils
 }  // namespace onnxruntime

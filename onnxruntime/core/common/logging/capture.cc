@@ -1,64 +1,64 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/logging.h"
-#include <gsl/gsl>
+#అన్తర్భావ "core/common/logging/capture.h"
+#అన్తర్భావ "core/common/logging/logging.h"
+#అన్తర్భావ <gsl/gsl>
 
-namespace onnxruntime {
-namespace logging {
+నామాకాశ onnxruntime {
+నామాకాశ logging {
 
-void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
+శూన్య Capture::CapturePrintf(msvc_printf_check స్థిరరాశి అక్షరం* format, ...) {
   va_list arglist;
-  va_start(arglist, format);
+  va_ప్రారంభం(arglist, format);
 
   ProcessPrintf(format, arglist);
 
-  va_end(arglist);
+  va_చివర(arglist);
 }
 
 // from https://github.com/KjellKod/g3log/blob/master/src/logcapture.cpp LogCapture::capturef
 // License: https://github.com/KjellKod/g3log/blob/master/LICENSE
 // Modifications Copyright (c) Microsoft.
-void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list args) {
-  static constexpr auto kTruncatedWarningText = "[...truncated...]";
-  static constexpr int kMaxMessageSize = 2048;
-  char message_buffer[kMaxMessageSize];
-  const auto message = gsl::make_span(message_buffer);
+శూన్య Capture::ProcessPrintf(msvc_printf_check స్థిరరాశి అక్షరం* format, va_list వాదనలు) {
+  స్థిర constexpr స్వయంచాలక k_Truncated_Warning_పాఠ్యం = "[...truncated...]";
+  స్థిర constexpr పూర్ణాంకం k_Max_సందేశం_కొలత = 2048;
+  అక్షరం సందేశం_బఫరు[k_Max_సందేశం_కొలత];
+  స్థిరరాశి స్వయంచాలక సందేశం = gsl::make_పరిధి(సందేశం_బఫరు);
 
-  bool error = false;
-  bool truncated = false;
+  తార్కిక error = అబద్ధం;
+  తార్కిక truncated = అబద్ధం;
 
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
+#ఒకవేళ (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
   errno = 0;
-  const int nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
-  if (nbrcharacters < 0) {
+  స్థిరరాశి పూర్ణాంకం nbrcharacters = vsnprintf_s(సందేశం.దత్తాంశం(), సందేశం.size(), _TRUNCATE, format, వాదనలు);
+  ఒకవేళ (nbrcharacters < 0) {
     error = errno != 0;
     truncated = !error;
   }
-#else
-#ifdef __APPLE__
-  const int nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
-#else
-  const int nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
-#endif
+#లేకపోతే
+#నిర్వచితమైతే __APPLE__
+  స్థిరరాశి పూర్ణాంకం nbrcharacters = vsnprintf_l(సందేశం.దత్తాంశం(), సందేశం.size(), శూన్యసూచిక, format, వాదనలు);
+#లేకపోతే
+  స్థిరరాశి పూర్ణాంకం nbrcharacters = vsnprintf(సందేశం.దత్తాంశం(), సందేశం.size(), format, వాదనలు);
+#అయితే_ముగింపు
   error = nbrcharacters < 0;
-  truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > message.size());
-#endif
+  truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > సందేశం.size());
+#అయితే_ముగింపు
 
-  if (error) {
-    stream_ << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
-    stream_ << '"' << format << '"' << std::endl;
-  } else if (truncated) {
-    stream_ << message.data() << kTruncatedWarningText;
-  } else {
-    stream_ << message.data();
+  ఒకవేళ (error) {
+    ప్రవాహం_2 << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
+    ప్రవాహం_2 << '"' << format << '"' << std::పంక్తి_ముగింపు;
+  } లేకపోతే ఒకవేళ (truncated) {
+    ప్రవాహం_2 << సందేశం.దత్తాంశం() << k_Truncated_Warning_పాఠ్యం;
+  } లేకపోతే {
+    ప్రవాహం_2 << సందేశం.దత్తాంశం();
   }
 }
 
 Capture::~Capture() {
-  if (logger_ != nullptr) {
-    logger_->Log(*this);
+  ఒకవేళ (logger_ != శూన్యసూచిక) {
+    logger_->Log(*ఇది);
   }
 }
 }  // namespace logging

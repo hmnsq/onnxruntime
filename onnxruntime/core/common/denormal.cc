@@ -1,45 +1,45 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
-#define PLATFORM_X86
-#endif
+#ఒకవేళ defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
+#నిర్వచించు PLATFORM_X86
+#అయితే_ముగింపు
 
-#if defined(PLATFORM_X86)
-#if defined(_MSC_VER)
-#include <intrin.h>
-#define DENORMAL_INTRINC
+#ఒకవేళ defined(PLATFORM_X86)
+#ఒకవేళ defined(_MSC_VER)
+#అన్తర్భావ <intrin.h>
+#నిర్వచించు DENORMAL_INTRINC
 // intrins headers at gcc 4.8 and older are not usable without compiler flags.
 // clang claims gnuc 4.2, but it has a proper intrin header.
-#elif defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ >= 5) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 8))))
-#include <cpuid.h>
-#include <x86intrin.h>
-#define DENORMAL_INTRINC
-#endif
-#endif
+#లేదావేళ defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ >= 5) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 8))))
+#అన్తర్భావ <cpuid.h>
+#అన్తర్భావ <x86intrin.h>
+#నిర్వచించు DENORMAL_INTRINC
+#అయితే_ముగింపు
+#అయితే_ముగింపు
 
-#include "core/common/common.h"
-#include "core/common/cpuid_info.h"
-#include "core/common/denormal.h"
+#అన్తర్భావ "core/common/common.h"
+#అన్తర్భావ "core/common/cpuid_info.h"
+#అన్తర్భావ "core/common/denormal.h"
 
-namespace onnxruntime {
+నామాకాశ onnxruntime {
 
-bool SetDenormalAsZero(bool on) {
-#ifdef DENORMAL_INTRINC
-  if (CPUIDInfo::GetCPUIDInfo().HasSSE3()) {
-    if (on) {
-      _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+తార్కిక సమితి_Denormal_As_Zero(తార్కిక on) {
+#నిర్వచితమైతే DENORMAL_INTRINC
+  ఒకవేళ (CPUIDInfo::GetCPUIDInfo().HasSSE3()) {
+    ఒకవేళ (on) {
+      MM_సమితి_DENORMALS_ZERO_బహుళకం(_MM_DENORMALS_ZERO_ON);
       _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-    } else {
-      _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_OFF);
+    } లేకపోతే {
+      MM_సమితి_DENORMALS_ZERO_బహుళకం(_MM_DENORMALS_ZERO_OFF);
       _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_OFF);
     }
-    return true;
+    తిరిగి నిజం;
   }
-#else
-  ORT_UNUSED_PARAMETER(on);
-#endif
-  return false;
+#లేకపోతే
+  ORT_వాడని_PARAMETER(on);
+#అయితే_ముగింపు
+  తిరిగి అబద్ధం;
 }
 
 }  // namespace onnxruntime

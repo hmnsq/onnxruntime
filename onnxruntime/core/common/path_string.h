@@ -1,83 +1,83 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#సూచన once
 
-#include <string>
-#include <type_traits>
+#అన్తర్భావ <string>
+#అన్తర్భావ <type_traits>
 
 // for std::tolower or std::towlower
-#ifdef _WIN32
-#include <cwctype>
-#else
-#include <cctype>
-#endif
+#నిర్వచితమైతే _WIN32
+#అన్తర్భావ <cwctype>
+#లేకపోతే
+#అన్తర్భావ <cctype>
+#అయితే_ముగింపు
 
 // for converting / printing ORT_TSTR path strings to std::string
-#ifdef _WIN32
-#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
-#define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
-#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
-#define ORT_TSTR_CONVERT_FROM_STRING(X) X
-#endif
+#నిర్వచితమైతే _WIN32
+#నిర్వచించు ORT_TSTR_CONVERT_గమ్యం_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().గమ్యం_బైట్లు(X)
+#నిర్వచించు ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_బైట్లు(X);
+#లేకపోతే
+#నిర్వచించు ORT_TSTR_CONVERT_గమ్యం_PRINTABLE_STRING(X) X
+#నిర్వచించు ORT_TSTR_CONVERT_FROM_STRING(X) X
+#అయితే_ముగింపు
 
-#include "core/common/common.h"
-#include "core/session/onnxruntime_c_api.h"
+#అన్తర్భావ "core/common/common.h"
+#అన్తర్భావ "core/session/onnxruntime_c_api.h"
 
 namespace onnxruntime {
 
 // char type for filesystem paths
-using PathChar = ORTCHAR_T;
+using మార్గం_Char = ORTCHAR_T;
 // string type for filesystem paths
-using PathString = std::basic_string<PathChar>;
+using మార్గం_String = std::basic_string<మార్గం_Char>;
 
-inline PathString ToPathString(const PathString& s) {
-  return s;
+అంతఃవరుస మార్గం_String గమ్యం_మార్గం_String(స్థిరరాశి మార్గం_String& s) {
+  తిరిగి s;
 }
 
-#ifdef _WIN32
+#నిర్వచితమైతే _WIN32
 
-static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
+static_assert(std::is_same<మార్గం_String, std::wstring>::విలువ, "PathString is not std::wstring!");
 
-inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+అంతఃవరుస మార్గం_String గమ్యం_మార్గం_String(std::string_view s) {
+  తిరిగి గమ్యం_Wide_String(s);
 }
-inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+అంతఃవరుస మార్గం_String గమ్యం_మార్గం_String(స్థిరరాశి అక్షరం* s) {
+  తిరిగి గమ్యం_Wide_String(s);
 }
-inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
-}
-
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+అంతఃవరుస మార్గం_String గమ్యం_మార్గం_String(స్థిరరాశి std::string& s) {
+  తిరిగి గమ్యం_Wide_String(s);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+అంతఃవరుస మార్గం_Char గమ్యం_క్రింది_మార్గం_Char(మార్గం_Char c) {
+  తిరిగి std::towlower(c);
 }
 
-#else
-
-static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
-
-inline PathString ToPathString(const char* s) {
-  return s;
+అంతఃవరుస std::string మార్గం_గమ్యం_UTF8_String(స్థిరరాశి మార్గం_String& s) {
+  తిరిగి గమ్యం_UTF8_String(s);
 }
 
-inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+#లేకపోతే
+
+static_assert(std::is_same<మార్గం_String, std::string>::విలువ, "PathString is not std::string!");
+
+అంతఃవరుస మార్గం_String గమ్యం_మార్గం_String(స్థిరరాశి అక్షరం* s) {
+  తిరిగి s;
 }
 
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+అంతఃవరుస మార్గం_String గమ్యం_మార్గం_String(std::string_view s) {
+  తిరిగి మార్గం_String{s};
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+అంతఃవరుస మార్గం_Char గమ్యం_క్రింది_మార్గం_Char(మార్గం_Char c) {
+  తిరిగి std::tolower(c);
 }
 
-#endif
+అంతఃవరుస std::string మార్గం_గమ్యం_UTF8_String(స్థిరరాశి మార్గం_String& s) {
+  తిరిగి s;
+}
+
+#అయితే_ముగింపు
 
 }  // namespace onnxruntime

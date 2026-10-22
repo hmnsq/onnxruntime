@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#సూచన once
 
-#include <atomic>
-#include <fstream>
-#include <initializer_list>
-#include <iostream>
-#include <tuple>
+#అన్తర్భావ <atomic>
+#అన్తర్భావ <fstream>
+#అన్తర్భావ <initializer_list>
+#అన్తర్భావ <iostream>
+#అన్తర్భావ <tuple>
 
-#include "core/common/profiler_common.h"
-#include "core/common/logging/logging.h"
-#include <mutex>
+#అన్తర్భావ "core/common/profiler_common.h"
+#అన్తర్భావ "core/common/logging/logging.h"
+#అన్తర్భావ <mutex>
 
 namespace onnxruntime {
 
@@ -26,7 +26,7 @@ namespace profiling {
  * a corresponding "complete event (X)" in "chrome tracing" format.
  */
 class Profiler {
- public:
+ బహిరంగ:
   /// turned off by default.
   /// Even this function is marked as noexcept, the code inside it may throw exceptions
   Profiler() noexcept {};  // NOLINT
@@ -36,111 +36,111 @@ class Profiler {
   /*
   Initializes Profiler with the session logger to log framework specific messages
   */
-  void Initialize(const logging::Logger* session_logger);
+  శూన్య Initialize(స్థిరరాశి logging::Logger* session_logger);
 
   /*
   Send profiling data to custom logger
   */
-  void StartProfiling(const logging::Logger* custom_logger);
+  శూన్య ప్రారంభం_Profiling(స్థిరరాశి logging::Logger* custom_logger);
 
   /*
   Start profiler and record beginning time.
   */
-  template <typename T>
-  void StartProfiling(const std::basic_string<T>& file_name);
+  మూస <typename T>
+  శూన్య ప్రారంభం_Profiling(స్థిరరాశి std::basic_string<T>& file_name);
 
   /*
   Start profiling and return current time point.
   */
-  TimePoint Start();
+  సమయం_బిందువు_3 ప్రారంభం();
 
   /*
   Whether data collection and output from this profiler is enabled.
   */
-  bool IsEnabled() const {
-    return enabled_;
+  bool IsEnabled() స్థిరరాశి {
+    తిరిగి enabled_;
   }
   /*
   Return the stored start time of profiler.
   On some platforms, this timer may not be as precise as nanoseconds
   For instance, on Windows and MacOS, the precision (high_resolution_clock) will be ~100ns
   */
-  uint64_t GetStartTimeNs() const {
-    return std::chrono::duration_cast<std::chrono::nanoseconds>(
-               profiling_start_time_.time_since_epoch())
-        .count();
+  uint64_t Get_ప్రారంభం_సమయం_Ns() స్థిరరాశి {
+    తిరిగి std::chrono::duration_cast<std::chrono::nanoseconds>(
+               profiling_ప్రారంభం_సమయం.సమయం_since_epoch())
+        .లెక్క();
   }
   /*
   Record a single event. Time is measured till the call of this function from
   the start_time.
   */
-  void EndTimeAndRecordEvent(EventCategory category,
-                             const std::string& event_name,
-                             const TimePoint& start_time,
-                             InlinedHashMap<std::string, std::string> event_args = {},
+  శూన్య చివర_సమయం_And_రికార్డు_Event(EventCategory category,
+                             స్థిరరాశి std::string& event_name,
+                             స్థిరరాశి సమయం_బిందువు_3& ప్రారంభం_సమయం,
+                             InlinedHashMap<std::string, std::string> event_వాదనలు = {},
                              bool sync_gpu = false);
 
-#if !defined(ORT_MINIMAL_BUILD)
-  void EndTimeAndRecordEvent(EventCategory category,
-                             const std::string& event_name,
-                             const TimePoint& start_time,
-                             const TimePoint& end_time,
-                             InlinedHashMap<std::string, std::string> event_args = {},
+#ఒకవేళ !defined(ORT_కనీస_BUILD)
+  శూన్య చివర_సమయం_And_రికార్డు_Event(EventCategory category,
+                             స్థిరరాశి std::string& event_name,
+                             స్థిరరాశి సమయం_బిందువు_3& ప్రారంభం_సమయం,
+                             స్థిరరాశి సమయం_బిందువు_3& చివర_సమయం,
+                             InlinedHashMap<std::string, std::string> event_వాదనలు = {},
                              bool sync_gpu = false);
 
   // Records an event without changing execution-provider correlation state.
-  void RecordEvent(EventCategory category,
-                   const std::string& event_name,
-                   const TimePoint& start_time,
-                   const TimePoint& end_time,
-                   InlinedHashMap<std::string, std::string> event_args = {});
-#endif
+  శూన్య రికార్డు_Event(EventCategory category,
+                   స్థిరరాశి std::string& event_name,
+                   స్థిరరాశి సమయం_బిందువు_3& ప్రారంభం_సమయం,
+                   స్థిరరాశి సమయం_బిందువు_3& చివర_సమయం,
+                   InlinedHashMap<std::string, std::string> event_వాదనలు = {});
+#అయితే_ముగింపు
 
   /*
   Write profile data to the given stream in chrome format defined below.
   https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview#
   */
-  std::string EndProfiling();
+  std::string చివర_Profiling();
 
-  static Profiler& Instance() {
-#ifdef ENABLE_STATIC_PROFILER_INSTANCE
+  స్థిర Profiler& Instance() {
+#నిర్వచితమైతే ENABLE_STATIC_PROFILER_INSTANCE
     ORT_ENFORCE(instance_ != nullptr);
-    return *instance_;
-#else
+    తిరిగి *instance_;
+#లేకపోతే
     ORT_THROW("Static profiler instance is not enabled, please compile with -DENABLE_STATIC_PROFILER_INSTANCE");
-#endif
+#అయితే_ముగింపు
   }
 
   /*
   Gets the maximum event count to set for new profiler instances.
   */
-  static size_t GetGlobalMaxNumEvents() {
-    return global_max_num_events_.load();
+  స్థిర కొలత_t Get_Global_Max_అంకె_Events() {
+    తిరిగి global_max_అంకె_events.ఎక్కించు();
   }
 
   /*
   Sets the maximum event count to set for new profiler instances.
   Existing profiler instances will not be affected.
   */
-  static void SetGlobalMaxNumEvents(size_t new_max_num_events) {
-    global_max_num_events_.store(new_max_num_events);
+  స్థిర శూన్య సమితి_Global_Max_అంకె_Events(కొలత_t new_max_అంకె_events) {
+    global_max_అంకె_events.store(new_max_అంకె_events);
   }
 
-#if !defined(ORT_MINIMAL_BUILD)
+#ఒకవేళ !defined(ORT_కనీస_BUILD)
   // Testing only. Must be called before profiling starts.
-  void SetMaxNumEventsForTest(size_t max_num_events) {
-    ORT_ENFORCE(!enabled_ && events_.empty());
-    max_num_events_ = max_num_events;
+  శూన్య సమితి_Max_అంకె_Events_For_Test(కొలత_t max_అంకె_events_2) {
+    ORT_ENFORCE(!enabled_ && events_.ఖాళీలు());
+    max_అంకె_events = max_అంకె_events_2;
   }
-#endif
+#అయితే_ముగింపు
 
-  void AddEpProfilers(std::unique_ptr<EpProfiler> ep_profiler) {
-    if (ep_profiler) {
-      ep_profilers_.push_back(std::move(ep_profiler));
-      if (enabled_) {
-        auto status = ep_profilers_.back()->StartProfiling(profiling_start_time_);
-        if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
-          ep_start_profiling_status_ = status;
+  శూన్య కూడు_Ep_Profilers(std::unique_ptr<EpProfiler> ep_profiler) {
+    ఒకవేళ (ep_profiler) {
+      ep_profilers_.నెట్టు_వెనుక(std::move(ep_profiler));
+      ఒకవేళ (enabled_) {
+        స్వయంచాలక స్థితి_2 = ep_profilers_.వెనుక()->ప్రారంభం_Profiling(profiling_ప్రారంభం_సమయం);
+        ఒకవేళ (!స్థితి_2.IsOK() && ep_ప్రారంభం_profiling_స్థితి.IsOK()) {
+          ep_ప్రారంభం_profiling_స్థితి = స్థితి_2;
         }
       }
     }
@@ -149,12 +149,12 @@ class Profiler {
   /// Returns the aggregate status from calling StartProfiling on EP profilers.
   /// OK if all EP profilers started successfully (or if none are registered).
   /// Returns the first error status encountered otherwise.
-  const Status& GetEpProfilingStatus() const { return ep_start_profiling_status_; }
+  స్థిరరాశి స్థితి_3& Get_Ep_Profiling_స్థితి() స్థిరరాశి { తిరిగి ep_ప్రారంభం_profiling_స్థితి; }
 
   /// Returns true if at least one EP profiler was registered.
-  bool HasEpProfilers() const { return !ep_profilers_.empty(); }
+  bool HasEpProfilers() స్థిరరాశి { తిరిగి !ep_profilers_.ఖాళీలు(); }
 
- private:
+ అంతరంగ:
   ORT_DISALLOW_COPY_ASSIGNMENT_AND_MOVE(Profiler);
 
   /**
@@ -162,55 +162,55 @@ class Profiler {
    * This value is used to initialize the per-profiler maximum.
    * It can be set, but won't affect existing profilers.
    */
-  static std::atomic<size_t> global_max_num_events_;
+  స్థిర std::atomic<కొలత_t> global_max_అంకె_events;
 
-#if !defined(ORT_MINIMAL_BUILD)
-  void RecordEventImpl(EventCategory category,
-                       const std::string& event_name,
-                       const TimePoint& start_time,
-                       const TimePoint& end_time,
-                       InlinedHashMap<std::string, std::string> event_args,
+#ఒకవేళ !defined(ORT_కనీస_BUILD)
+  శూన్య రికార్డు_Event_Impl(EventCategory category,
+                       స్థిరరాశి std::string& event_name,
+                       స్థిరరాశి సమయం_బిందువు_3& ప్రారంభం_సమయం,
+                       స్థిరరాశి సమయం_బిందువు_3& చివర_సమయం,
+                       InlinedHashMap<std::string, std::string> event_వాదనలు,
                        bool stop_ep_profilers);
-#endif
+#అయితే_ముగింపు
 
   // Mutex controlling access to profiler data
   std::mutex mutex_;
   bool enabled_{false};
-#if defined(__wasm__)
+#ఒకవేళ defined(__wasm__)
   /*
    * The simplest way to emit profiling data in WebAssembly is to print out to console,
    * since browsers can't access to a file system directly.
    * TODO: Consider MEMFS or IndexedDB instead of console.
    */
-  std::ostream& profile_stream_{std::cout};
-#else
-  std::ofstream profile_stream_;
-#endif
-  std::string profile_stream_file_;
-  const logging::Logger* session_logger_{nullptr};
-  const logging::Logger* custom_logger_{nullptr};
-  TimePoint profiling_start_time_;
+  std::ostream& profile_ప్రవాహం{std::cout};
+#లేకపోతే
+  std::ofstream profile_ప్రవాహం;
+#అయితే_ముగింపు
+  std::string profile_ప్రవాహం_file;
+  స్థిరరాశి logging::Logger* session_logger_{nullptr};
+  స్థిరరాశి logging::Logger* custom_logger_{nullptr};
+  సమయం_బిందువు_3 profiling_ప్రారంభం_సమయం;
   Events events_;
   bool max_events_reached{false};
-#if !defined(ORT_MINIMAL_BUILD)
-  size_t dropped_event_count_{0};
-#endif
+#ఒకవేళ !defined(ORT_కనీస_BUILD)
+  కొలత_t dropped_event_లెక్క{0};
+#అయితే_ముగింపు
   bool profile_with_logger_{false};
-#if !defined(ORT_MINIMAL_BUILD)
-  size_t max_num_events_{global_max_num_events_.load()};
-#else
-  const size_t max_num_events_{global_max_num_events_.load()};
-#endif
+#ఒకవేళ !defined(ORT_కనీస_BUILD)
+  కొలత_t max_అంకె_events{global_max_అంకె_events.ఎక్కించు()};
+#లేకపోతే
+  స్థిరరాశి కొలత_t max_అంకె_events{global_max_అంకె_events.ఎక్కించు()};
+#అయితే_ముగింపు
 
-#ifdef ENABLE_STATIC_PROFILER_INSTANCE
-  static Profiler* instance_;
-#endif
+#నిర్వచితమైతే ENABLE_STATIC_PROFILER_INSTANCE
+  స్థిర Profiler* instance_;
+#అయితే_ముగింపు
 
-  std::vector<std::unique_ptr<EpProfiler>> ep_profilers_;
+  std::సదిశ<std::unique_ptr<EpProfiler>> ep_profilers_;
 
   // Aggregate status from EP profiler StartProfiling calls.
   // Stores the first error encountered.
-  Status ep_start_profiling_status_;
+  స్థితి_3 ep_ప్రారంభం_profiling_స్థితి;
 };
 
 }  // namespace profiling

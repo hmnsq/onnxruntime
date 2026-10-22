@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#సూచన once
 
-#include <string>
-#include <vector>
-#include <utility>
-#include <memory>
+#అన్తర్భావ <string>
+#అన్తర్భావ <vector>
+#అన్తర్భావ <utility>
+#అన్తర్భావ <memory>
 
-#include "core/common/logging/isink.h"
-#include "core/common/logging/logging.h"
+#అన్తర్భావ "core/common/logging/isink.h"
+#అన్తర్భావ "core/common/logging/logging.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -17,21 +17,21 @@ namespace logging {
 /// Class that abstracts multiple ISink instances being written to.
 /// </summary>
 /// <seealso cref="ISink" />
-class CompositeSink : public ISink {
- public:
+class సంయుక్త_Sink_2 : బహిరంగ ISink {
+ బహిరంగ:
   /// <summary>
   /// Initializes a new instance of the <see cref="CompositeSink"/> class.
   /// Use AddSink to add sinks.
   /// </summary>
-  CompositeSink() : ISink(SinkType::CompositeSink) {}
+  సంయుక్త_Sink_2() : ISink(SinkType::సంయుక్త_Sink_2) {}
 
   /// <summary>
   /// Check if the composite sink contains a sink of the specified type.
   /// </summary>
-  bool HasType(SinkType sink_type) const {
-    return std::any_of(sinks_with_severity_.begin(), sinks_with_severity_.end(),
-                       [&](const auto& sink_pair) {
-                         return sink_pair.first->GetType() == sink_type;
+  bool HasType(SinkType sink_type) స్థిరరాశి {
+    తిరిగి std::any_యొక్క(sinks_with_severity_.begin(), sinks_with_severity_.చివర(),
+                       [&](స్థిరరాశి స్వయంచాలక& sink_pair) {
+                         తిరిగి sink_pair.మొదటి->GetType() == sink_type;
                        });
   }
 
@@ -41,9 +41,9 @@ class CompositeSink : public ISink {
   /// <param name="sink">The sink.</param>
   /// <param name="severity">The min severity to send a message to that sink</param>
   /// <returns>This instance to allow chaining.</returns>
-  CompositeSink& AddSink(std::unique_ptr<ISink> sink, logging::Severity severity) {
-    sinks_with_severity_.emplace_back(std::move(sink), severity);
-    return *this;
+  సంయుక్త_Sink_2& కూడు_Sink(std::unique_ptr<ISink> sink, logging::Severity severity) {
+    sinks_with_severity_.emplace_వెనుక(std::move(sink), severity);
+    తిరిగి *this;
   }
 
   /// <summary>
@@ -55,27 +55,27 @@ class CompositeSink : public ISink {
     logging::Severity severity = Severity::kFATAL;  // default if we end up with no sinks
 
     // find entries to remove and the minimum severity of the remaining sinks
-    auto entries_to_remove = std::remove_if(sinks_with_severity_.begin(), sinks_with_severity_.end(),
-                                            [&](const auto& entry) {
-                                              if (entry.first->GetType() == sink_type) {
-                                                return true;
-                                              } else {
-                                                severity = std::min(severity, entry.second);
-                                                return false;
+    స్వయంచాలక entries_గమ్యం_remove = std::remove_if(sinks_with_severity_.begin(), sinks_with_severity_.చివర(),
+                                            [&](స్థిరరాశి స్వయంచాలక& నమోదు_2) {
+                                              ఒకవేళ (నమోదు_2.మొదటి->GetType() == sink_type) {
+                                                తిరిగి true;
+                                              } లేకపోతే {
+                                                severity = std::min(severity, నమోదు_2.రెండవ);
+                                                తిరిగి false;
                                               }
                                             });
 
-    sinks_with_severity_.erase(entries_to_remove, sinks_with_severity_.end());
+    sinks_with_severity_.erase(entries_గమ్యం_remove, sinks_with_severity_.చివర());
 
-    return severity;
+    తిరిగి severity;
   }
 
   /// <summary>
   /// Check if there's only one sink left
   /// </summary>
   /// <returns> True if only 1 sink remaining </returns>
-  bool HasOnlyOneSink() const {
-    return sinks_with_severity_.size() == 1;
+  bool HasOnlyOneSink() స్థిరరాశి {
+    తిరిగి sinks_with_severity_.కొలత() == 1;
   }
 
   /// <summary>
@@ -83,24 +83,24 @@ class CompositeSink : public ISink {
   /// </summary>
   /// <returns> If one sink remains then returns the sink, otherwise nullptr </returns>
   std::unique_ptr<ISink> GetRemoveSingleSink() {
-    if (HasOnlyOneSink()) {
-      auto single_sink = std::move(sinks_with_severity_.begin()->first);
+    ఒకవేళ (HasOnlyOneSink()) {
+      స్వయంచాలక single_sink = std::move(sinks_with_severity_.begin()->మొదటి);
       sinks_with_severity_.clear();
-      return single_sink;
+      తిరిగి single_sink;
     }
-    return nullptr;
+    తిరిగి nullptr;
   }
 
- private:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    for (auto& sink_pair : sinks_with_severity_) {
-      if (message.Severity() >= sink_pair.second) {
-        sink_pair.first->Send(timestamp, logger_id, message);
+ అంతరంగ:
+  శూన్య SendImpl(స్థిరరాశి Timestamp& timestamp, స్థిరరాశి std::string& logger_id, స్థిరరాశి Capture& సందేశం) override {
+    కొరకు (స్వయంచాలక& sink_pair : sinks_with_severity_) {
+      ఒకవేళ (సందేశం.Severity() >= sink_pair.రెండవ) {
+        sink_pair.మొదటి->Send(timestamp, logger_id, సందేశం);
       }
     }
   }
 
-  std::vector<std::pair<std::unique_ptr<ISink>, logging::Severity>> sinks_with_severity_;
+  std::సదిశ<std::pair<std::unique_ptr<ISink>, logging::Severity>> sinks_with_severity_;
 };
 }  // namespace logging
 }  // namespace onnxruntime
