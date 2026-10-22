@@ -3,44 +3,44 @@
 
 #pragma once
 
-#include <ostream>
-#include <string_view>
+#ضمن <ostream>
+#ضمن <string_view>
 
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+مضمن فراغ WriteJsonString(std::ostream& stream, std::string_view نيلاي) {
+  ساكن constexpr حرف kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
-    switch (c) {
-      case '"':
+  لكل (ثابت unsigned حرف c : نيلاي) {
+    بدل (c) {
+      حالة '"':
         stream << "\\\"";
-        break;
-      case '\\':
+        اكسر;
+      حالة '\\':
         stream << "\\\\";
-        break;
-      case '\b':
+        اكسر;
+      حالة '\b':
         stream << "\\b";
-        break;
-      case '\f':
+        اكسر;
+      حالة '\f':
         stream << "\\f";
-        break;
-      case '\n':
+        اكسر;
+      حالة '\n':
         stream << "\\n";
-        break;
-      case '\r':
+        اكسر;
+      حالة '\r':
         stream << "\\r";
-        break;
-      case '\t':
+        اكسر;
+      حالة '\t':
         stream << "\\t";
-        break;
-      default:
-        if (c < 0x20) {
+        اكسر;
+      افتراضي:
+        إذا (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+        } وإلا {
+          stream << static_cast<حرف>(c);
         }
     }
   }
