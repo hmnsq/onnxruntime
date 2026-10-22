@@ -18,7 +18,7 @@ class CErrSink : public WOStreamSink {
   CErrSink() : WOStreamSink(std::wcerr, /*flush*/ false) {  // std::cerr isn't buffered so no flush required
   }
 };
-#else
+#དེ་མིན
 class CErrSink : public OStreamSink {
  public:
   CErrSink() : OStreamSink(std::cerr, /*flush*/ false) {  // std::cerr isn't buffered so no flush required
