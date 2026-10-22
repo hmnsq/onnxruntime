@@ -25,7 +25,7 @@ class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
 #define SAFEINT_EXCEPTION_HANDLER_CPP 1
 #define SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
 
-#if defined(__GNUC__)
+#만약 defined(__GNUC__)
 #include "onnxruntime_config.h"
 #pragma GCC diagnostic push
 #ifdef HAS_UNUSED_BUT_SET_PARAMETER
@@ -33,7 +33,7 @@ class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
 #endif
 #endif
 #include "SafeInt.hpp"
-#if defined(__GNUC__)
+#만약 defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
@@ -64,19 +64,19 @@ template <typename R, typename T, typename U, typename... Rest>
   // SafeMultiply(T, U, T&) requires the first argument and result to share
   // the same type. Cast the first operand to R so the result is directly in R.
   R cast_a{};
-  if (!SafeCast(a, cast_a)) {
+  만약 (!SafeCast(a, cast_a)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
   R result{};
-  if (!SafeMultiply(cast_a, b, result)) {
+  만약 (!SafeMultiply(cast_a, b, result)) {
     SafeIntDefaultExceptionHandler::SafeIntOnOverflow();
   }
 
-  if constexpr (sizeof...(rest) > 0) {
-    return SafeMul<R>(result, rest...);
-  } else {
-    return result;
+  만약 constexpr (sizeof...(rest) > 0) {
+    반환 SafeMul<R>(result, rest...);
+  } 아니면 {
+    반환 result;
   }
 }
 

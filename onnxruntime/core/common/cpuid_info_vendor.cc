@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <string_view>
 
-#if defined(CPUINFO_SUPPORTED)
+#만약 defined(CPUINFO_SUPPORTED)
 #include "cpuinfo.h"
 #endif
 
@@ -15,7 +15,7 @@
 
 namespace {
 
-#if !defined(CPUINFO_SUPPORTED)
+#만약 !defined(CPUINFO_SUPPORTED)
 
 // The `cpuinfo_vendor` enum is defined by the cpuinfo library.
 // In case we don't build with cpuinfo, we define our own copy.
@@ -210,14 +210,14 @@ constexpr std::array kCpuVendorInfos{
 const CpuVendorInfo* FindCpuVendorInfo(cpuinfo_vendor vendor) {
   const auto vendor_mapping_it = std::find_if(kCpuVendorInfos.begin(), kCpuVendorInfos.end(),
                                               [vendor](const CpuVendorInfo& entry) {
-                                                return entry.vendor == vendor;
+                                                반환 entry.vendor == vendor;
                                               });
 
-  if (vendor_mapping_it != kCpuVendorInfos.end()) {
-    return &*vendor_mapping_it;
+  만약 (vendor_mapping_it != kCpuVendorInfos.end()) {
+    반환 &*vendor_mapping_it;
   }
 
-  return nullptr;
+  반환 nullptr;
 }
 
 }  // namespace
@@ -225,26 +225,26 @@ const CpuVendorInfo* FindCpuVendorInfo(cpuinfo_vendor vendor) {
 void CPUIDInfo::VendorInfoInit() {
   const cpuinfo_vendor vendor = [&]() {
     cpuinfo_vendor result = cpuinfo_vendor_unknown;
-#if defined(CPUINFO_SUPPORTED)
-    if (pytorch_cpuinfo_init_) {
+#만약 defined(CPUINFO_SUPPORTED)
+    만약 (pytorch_cpuinfo_init_) {
       const auto* processor = cpuinfo_get_processor(0);
-      if (processor && processor->core) {
+      만약 (processor && processor->core) {
         result = processor->core->vendor;
       }
     }
 #endif  // defined(CPUINFO_SUPPORTED)
-#if defined(_AIX)
+#만약 defined(_AIX)
     result = cpuinfo_vendor_ibm;
 #endif
-    return result;
+    반환 result;
   }();
 
   const auto* vendor_info = FindCpuVendorInfo(vendor);
-  if (vendor_info == nullptr) {
+  만약 (vendor_info == nullptr) {
     // On Wasm/Emscripten, cpuinfo cannot detect the CPU vendor, so suppress the
     // unhelpful warning there while still reporting a consistent "unknown" vendor.
-#if !defined(__wasm__)
-    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<int>(vendor)));
+#만약 !defined(__wasm__)
+    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<정수>(vendor)));
 #endif
     vendor_info = &kUnknownCpuVendorInfo;
   }
