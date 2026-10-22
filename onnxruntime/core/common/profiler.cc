@@ -1,280 +1,280 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "profiler.h"
+#ضمن "profiler.h"
 
-#if !defined(ORT_MINIMAL_BUILD)
-#include "core/common/json_utils.h"
-#endif
+#إذا !defined(ORT_کمینه_BUILD)
+#ضمن "core/common/json_utils.h"
+#پایان_اگر
 
-namespace onnxruntime {
-namespace profiling {
-using namespace std::chrono;
+نطاق onnxruntime {
+نطاق profiling {
+استفاده نطاق std::chrono;
 
-std::atomic<size_t> Profiler::global_max_num_events_{1000 * 1000};
+std::atomic<size_t> Profiler::global_max_رقم_events{1000 * 1000};
 
-#ifdef ENABLE_STATIC_PROFILER_INSTANCE
-Profiler* Profiler::instance_ = nullptr;
+#اگر_تعریف_شده ENABLE_STATIC_PROFILER_INSTANCE
+Profiler* Profiler::instance_ = اشاره_تهی;
 
 profiling::Profiler::~Profiler() {
-  instance_ = nullptr;
+  instance_ = اشاره_تهی;
 }
-#else
+#وإلا
 profiling::Profiler::~Profiler() {}
-#endif
+#پایان_اگر
 
-::onnxruntime::TimePoint profiling::Profiler::Start() {
+::onnxruntime::زمان_نقطه_3 profiling::Profiler::شروع() {
   ORT_ENFORCE(enabled_);
-  auto start_time = std::chrono::high_resolution_clock::now();
-  auto ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
-  for (const auto& ep_profiler : ep_profilers_) {
-    ep_profiler->Start(ts);
+  خودکار شروع_زمان = std::chrono::بالا_resolution_clock::now();
+  خودکار ts = زمان_Diff_Micro_Seconds(profiling_شروع_زمان, شروع_زمان);
+  لكل (ثابت خودکار& ep_profiler : ep_profilers_) {
+    ep_profiler->شروع(ts);
   }
-  return start_time;
+  أرجع شروع_زمان;
 }
 
-void Profiler::Initialize(const logging::Logger* session_logger) {
-  ORT_ENFORCE(session_logger != nullptr);
+فراغ Profiler::Initialize(ثابت logging::Logger* session_logger) {
+  ORT_ENFORCE(session_logger != اشاره_تهی);
   session_logger_ = session_logger;
-#ifdef ENABLE_STATIC_PROFILER_INSTANCE
+#اگر_تعریف_شده ENABLE_STATIC_PROFILER_INSTANCE
   // In current design, profiler instance goes with inference session. Since it's possible to have
   // multiple inference sessions, profiler by definition is not singleton. However, in performance
   // debugging, it would be helpful to access profiler in code that have no access to inference session,
   // which is why we have this pseudo-singleton implementation here for debugging in single inference session.
-  ORT_ENFORCE(instance_ == nullptr, "Static profiler instance only works with single session");
-  instance_ = this;
-#endif
+  ORT_ENFORCE(instance_ == اشاره_تهی, "Static profiler instance only works with single session");
+  instance_ = هذا;
+#پایان_اگر
 }
 
-void Profiler::StartProfiling(const logging::Logger* custom_logger) {
-  ORT_ENFORCE(custom_logger != nullptr);
-  enabled_ = true;
-  profile_with_logger_ = true;
+فراغ Profiler::شروع_Profiling(ثابت logging::Logger* custom_logger) {
+  ORT_ENFORCE(custom_logger != اشاره_تهی);
+  enabled_ = درست;
+  profile_with_logger_ = درست;
   custom_logger_ = custom_logger;
-  profiling_start_time_ = std::chrono::high_resolution_clock::now();
-  for (const auto& ep_profiler : ep_profilers_) {
-    auto status = ep_profiler->StartProfiling(profiling_start_time_);
-    if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
-      ep_start_profiling_status_ = status;
+  profiling_شروع_زمان = std::chrono::بالا_resolution_clock::now();
+  لكل (ثابت خودکار& ep_profiler : ep_profilers_) {
+    خودکار وضعیت = ep_profiler->شروع_Profiling(profiling_شروع_زمان);
+    إذا (!وضعیت.IsOK() && ep_شروع_profiling_وضعیت.IsOK()) {
+      ep_شروع_profiling_وضعیت = وضعیت;
     }
   }
 }
 
-template <typename T>
-void Profiler::StartProfiling(const std::basic_string<T>& file_name) {
-  enabled_ = true;
-#if !defined(__wasm__)
-  profile_stream_.open(file_name, std::ios::out | std::ios::trunc);
-#endif
-  profile_stream_file_ = ToUTF8String(file_name);
-  profiling_start_time_ = std::chrono::high_resolution_clock::now();
-  for (const auto& ep_profiler : ep_profilers_) {
-    auto status = ep_profiler->StartProfiling(profiling_start_time_);
-    if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
-      ep_start_profiling_status_ = status;
+قالب <نام_نوع T>
+فراغ Profiler::شروع_Profiling(ثابت std::basic_string<T>& file_name) {
+  enabled_ = درست;
+#إذا !defined(__wasm__)
+  profile_جریان.open(file_name, std::ios::out | std::ios::trunc);
+#پایان_اگر
+  profile_جریان_file = مقصد_UTF8_String(file_name);
+  profiling_شروع_زمان = std::chrono::بالا_resolution_clock::now();
+  لكل (ثابت خودکار& ep_profiler : ep_profilers_) {
+    خودکار وضعیت = ep_profiler->شروع_Profiling(profiling_شروع_زمان);
+    إذا (!وضعیت.IsOK() && ep_شروع_profiling_وضعیت.IsOK()) {
+      ep_شروع_profiling_وضعیت = وضعیت;
     }
   }
 }
 
-template void Profiler::StartProfiling<char>(const std::basic_string<char>& file_name);
-#ifdef _WIN32
-template void Profiler::StartProfiling<wchar_t>(const std::basic_string<wchar_t>& file_name);
-#endif
+قالب فراغ Profiler::شروع_Profiling<حرف>(ثابت std::basic_string<حرف>& file_name);
+#اگر_تعریف_شده _WIN32
+قالب فراغ Profiler::شروع_Profiling<wchar_t>(ثابت std::basic_string<wchar_t>& file_name);
+#پایان_اگر
 
-void Profiler::EndTimeAndRecordEvent(
+فراغ Profiler::انتها_زمان_And_رکورد_Event(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
-    InlinedHashMap<std::string, std::string> event_args,
-    bool sync_gpu) {
-#if !defined(ORT_MINIMAL_BUILD)
-  EndTimeAndRecordEvent(category, event_name, start_time, std::chrono::high_resolution_clock::now(),
-                        std::move(event_args), sync_gpu);
-#else
-  ORT_UNUSED_PARAMETER(sync_gpu);
-  long long dur = TimeDiffMicroSeconds(start_time);
-  long long ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
+    ثابت std::string& event_name,
+    ثابت زمان_نقطه_3& شروع_زمان,
+    InlinedHashMap<std::string, std::string> event_آرگومانها,
+    منطقي sync_gpu) {
+#إذا !defined(ORT_کمینه_BUILD)
+  انتها_زمان_And_رکورد_Event(category, event_name, شروع_زمان, std::chrono::بالا_resolution_clock::now(),
+                        std::move(event_آرگومانها), sync_gpu);
+#وإلا
+  ORT_استفادهنشده_PARAMETER(sync_gpu);
+  دراز دراز dur = زمان_Diff_Micro_Seconds(شروع_زمان);
+  دراز دراز ts = زمان_Diff_Micro_Seconds(profiling_شروع_زمان, شروع_زمان);
 
-  EventRecord event(category, logging::GetProcessId(),
-                    logging::GetThreadId(), event_name, ts, dur, std::move(event_args));
+  Event_رکورد event(category, logging::GetProcessId(),
+                    logging::GetThreadId(), event_name, ts, dur, std::move(event_آرگومانها));
 
-  for (const auto& ep_profiler : ep_profilers_) {
+  لكل (ثابت خودکار& ep_profiler : ep_profilers_) {
     ep_profiler->Stop(ts, event);
   }
 
-  if (profile_with_logger_) {
+  إذا (profile_with_logger_) {
     custom_logger_->SendProfileEvent(event);
-  } else {
+  } وإلا {
     // TODO: sync_gpu if needed.
-    std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
-      events_.emplace_back(std::move(event));
-    } else {
-      if (session_logger_ && !max_events_reached) {
+    std::قفل_guard<std::mutex> lock(mutex_);
+    إذا (events_.size() < max_رقم_events) {
+      events_.emplace_پشت(std::move(event));
+    } وإلا {
+      إذا (session_logger_ && !max_events_reached) {
         LOGS(*session_logger_, ERROR)
             << "Maximum number of events reached, could not record profile event.";
-        max_events_reached = true;
+        max_events_reached = درست;
       }
     }
   }
-#endif
+#پایان_اگر
 }
 
-#if !defined(ORT_MINIMAL_BUILD)
-void Profiler::EndTimeAndRecordEvent(
+#إذا !defined(ORT_کمینه_BUILD)
+فراغ Profiler::انتها_زمان_And_رکورد_Event(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
-    const TimePoint& end_time,
-    InlinedHashMap<std::string, std::string> event_args,
-    bool /*sync_gpu*/) {
-  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), true);
+    ثابت std::string& event_name,
+    ثابت زمان_نقطه_3& شروع_زمان,
+    ثابت زمان_نقطه_3& انتها_زمان,
+    InlinedHashMap<std::string, std::string> event_آرگومانها,
+    منطقي /*sync_gpu*/) {
+  رکورد_Event_Impl(category, event_name, شروع_زمان, انتها_زمان, std::move(event_آرگومانها), درست);
 }
 
-void Profiler::RecordEvent(
+فراغ Profiler::رکورد_Event(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
-    const TimePoint& end_time,
-    InlinedHashMap<std::string, std::string> event_args) {
-  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), false);
+    ثابت std::string& event_name,
+    ثابت زمان_نقطه_3& شروع_زمان,
+    ثابت زمان_نقطه_3& انتها_زمان,
+    InlinedHashMap<std::string, std::string> event_آرگومانها) {
+  رکورد_Event_Impl(category, event_name, شروع_زمان, انتها_زمان, std::move(event_آرگومانها), خطأ);
 }
 
-void Profiler::RecordEventImpl(
+فراغ Profiler::رکورد_Event_Impl(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
-    const TimePoint& end_time,
-    InlinedHashMap<std::string, std::string> event_args,
-    bool stop_ep_profilers) {
-  if (!enabled_) {
-    return;
+    ثابت std::string& event_name,
+    ثابت زمان_نقطه_3& شروع_زمان,
+    ثابت زمان_نقطه_3& انتها_زمان,
+    InlinedHashMap<std::string, std::string> event_آرگومانها,
+    منطقي stop_ep_profilers) {
+  إذا (!enabled_) {
+    أرجع;
   }
 
-  long long dur = TimeDiffMicroSeconds(start_time, end_time);
-  long long ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
+  دراز دراز dur = زمان_Diff_Micro_Seconds(شروع_زمان, انتها_زمان);
+  دراز دراز ts = زمان_Diff_Micro_Seconds(profiling_شروع_زمان, شروع_زمان);
 
-  EventRecord event(category, logging::GetProcessId(),
-                    logging::GetThreadId(), event_name, ts, dur, std::move(event_args));
+  Event_رکورد event(category, logging::GetProcessId(),
+                    logging::GetThreadId(), event_name, ts, dur, std::move(event_آرگومانها));
 
-  if (stop_ep_profilers) {
-    for (const auto& ep_profiler : ep_profilers_) {
+  إذا (stop_ep_profilers) {
+    لكل (ثابت خودکار& ep_profiler : ep_profilers_) {
       ep_profiler->Stop(ts, event);
     }
   }
 
-  if (profile_with_logger_) {
+  إذا (profile_with_logger_) {
     custom_logger_->SendProfileEvent(event);
-  } else {
+  } وإلا {
     // TODO: sync_gpu if needed.
-    std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
-      events_.emplace_back(std::move(event));
-    } else {
-      ++dropped_event_count_;
-      if (session_logger_ && !max_events_reached) {
+    std::قفل_guard<std::mutex> lock(mutex_);
+    إذا (events_.size() < max_رقم_events) {
+      events_.emplace_پشت(std::move(event));
+    } وإلا {
+      ++dropped_event_شمار;
+      إذا (session_logger_ && !max_events_reached) {
         LOGS(*session_logger_, ERROR)
             << "Maximum number of events reached, could not record profile event.";
-        max_events_reached = true;
+        max_events_reached = درست;
       }
     }
   }
 }
-#endif  // !defined(ORT_MINIMAL_BUILD)
+#پایان_اگر  // !defined(ORT_MINIMAL_BUILD)
 
-std::string Profiler::EndProfiling() {
-  if (!enabled_) {
-    return std::string();
+std::string Profiler::انتها_Profiling() {
+  إذا (!enabled_) {
+    أرجع std::string();
   }
-  if (profile_with_logger_) {
-    profile_with_logger_ = false;
-    return std::string();
-  }
-
-  if (session_logger_) {
-    LOGS(*session_logger_, INFO) << "Writing profiler data to file " << profile_stream_file_;
+  إذا (profile_with_logger_) {
+    profile_with_logger_ = خطأ;
+    أرجع std::string();
   }
 
-  std::lock_guard<std::mutex> lock(mutex_);
-  profile_stream_ << "[\n";
-
-  for (const auto& ep_profiler : ep_profilers_) {
-    ep_profiler->EndProfiling(profiling_start_time_, events_);
+  إذا (session_logger_) {
+    LOGS(*session_logger_, INFO) << "Writing profiler data to file " << profile_جریان_file;
   }
 
-#if !defined(ORT_MINIMAL_BUILD)
-  if (dropped_event_count_ != 0) {
-    InlinedHashMap<std::string, std::string> args;
-    args["dropped_event_count"] = std::to_string(dropped_event_count_);
-    args["max_num_events"] = std::to_string(max_num_events_);
-    events_.emplace_back(
+  std::قفل_guard<std::mutex> lock(mutex_);
+  profile_جریان << "[\n";
+
+  لكل (ثابت خودکار& ep_profiler : ep_profilers_) {
+    ep_profiler->انتها_Profiling(profiling_شروع_زمان, events_);
+  }
+
+#إذا !defined(ORT_کمینه_BUILD)
+  إذا (dropped_event_شمار != 0) {
+    InlinedHashMap<std::string, std::string> آرگومانها;
+    آرگومانها["dropped_event_count"] = std::to_string(dropped_event_شمار);
+    آرگومانها["max_num_events"] = std::to_string(max_رقم_events);
+    events_.emplace_پشت(
         SESSION_EVENT, logging::GetProcessId(), logging::GetThreadId(),
-        "profile_truncated", TimeDiffMicroSeconds(profiling_start_time_), 0, std::move(args));
+        "profile_truncated", زمان_Diff_Micro_Seconds(profiling_شروع_زمان), 0, std::move(آرگومانها));
   }
-#endif
+#پایان_اگر
 
-  for (size_t i = 0; i < events_.size(); ++i) {
-    auto& rec = events_[i];
-#if !defined(ORT_MINIMAL_BUILD)
-    profile_stream_ << R"({"cat" : )";
-    common::WriteJsonString(profile_stream_, event_category_names_[rec.cat]);
-    profile_stream_ << ",";
-    profile_stream_ << "\"pid\" :" << rec.pid << ",";
-    profile_stream_ << "\"tid\" :" << rec.tid << ",";
-    profile_stream_ << "\"dur\" :" << rec.dur << ",";
-    profile_stream_ << "\"ts\" :" << rec.ts << ",";
-    profile_stream_ << R"("ph" : "X",)";
-    profile_stream_ << R"("name" :)";
-    common::WriteJsonString(profile_stream_, rec.name);
-    profile_stream_ << ",";
-#else
-    profile_stream_ << R"({"cat" : ")" << event_category_names_[rec.cat] << "\",";
-    profile_stream_ << "\"pid\" :" << rec.pid << ",";
-    profile_stream_ << "\"tid\" :" << rec.tid << ",";
-    profile_stream_ << "\"dur\" :" << rec.dur << ",";
-    profile_stream_ << "\"ts\" :" << rec.ts << ",";
-    profile_stream_ << R"("ph" : "X",)";
-    profile_stream_ << R"("name" :")" << rec.name << "\",";
-#endif
-    profile_stream_ << "\"args\" : {";
-    bool is_first_arg = true;
-#if !defined(ORT_MINIMAL_BUILD)
-    for (const auto& event_arg : rec.args) {
-#else
-    for (std::pair<std::string, std::string> event_arg : rec.args) {
-#endif
-      if (!is_first_arg) profile_stream_ << ",";
-#if !defined(ORT_MINIMAL_BUILD)
-      common::WriteJsonString(profile_stream_, event_arg.first);
-      profile_stream_ << " : ";
-      if (!event_arg.second.empty() &&
+  لكل (size_t i = 0; i < events_.size(); ++i) {
+    خودکار& rec = events_[i];
+#إذا !defined(ORT_کمینه_BUILD)
+    profile_جریان << R"({"cat" : )";
+    common::WriteJsonString(profile_جریان, event_category_نامها[rec.cat]);
+    profile_جریان << ",";
+    profile_جریان << "\"pid\" :" << rec.pid << ",";
+    profile_جریان << "\"tid\" :" << rec.tid << ",";
+    profile_جریان << "\"dur\" :" << rec.dur << ",";
+    profile_جریان << "\"ts\" :" << rec.ts << ",";
+    profile_جریان << R"("ph" : "X",)";
+    profile_جریان << R"("name" :)";
+    common::WriteJsonString(profile_جریان, rec.name);
+    profile_جریان << ",";
+#وإلا
+    profile_جریان << R"({"cat" : ")" << event_category_names_[rec.cat] << "\",";
+    profile_جریان << "\"pid\" :" << rec.pid << ",";
+    profile_جریان << "\"tid\" :" << rec.tid << ",";
+    profile_جریان << "\"dur\" :" << rec.dur << ",";
+    profile_جریان << "\"ts\" :" << rec.ts << ",";
+    profile_جریان << R"("ph" : "X",)";
+    profile_جریان << R"("name" :")" << rec.name << "\",";
+#پایان_اگر
+    profile_جریان << "\"args\" : {";
+    منطقي is_اولی_arg = درست;
+#إذا !defined(ORT_کمینه_BUILD)
+    لكل (ثابت خودکار& event_arg : rec.آرگومانها) {
+#وإلا
+    لكل (std::pair<std::string, std::string> event_arg : rec.آرگومانها) {
+#پایان_اگر
+      إذا (!is_اولی_arg) profile_جریان << ",";
+#إذا !defined(ORT_کمینه_BUILD)
+      common::WriteJsonString(profile_جریان, event_arg.first);
+      profile_جریان << " : ";
+      إذا (!event_arg.second.empty() &&
           (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
-        profile_stream_ << event_arg.second;
-      } else {
-        common::WriteJsonString(profile_stream_, event_arg.second);
+        profile_جریان << event_arg.second;
+      } وإلا {
+        common::WriteJsonString(profile_جریان, event_arg.second);
       }
-#else
-      if (!event_arg.second.empty() && (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
-        profile_stream_ << "\"" << event_arg.first << "\" : " << event_arg.second << "";
-      } else {
-        profile_stream_ << "\"" << event_arg.first << "\" : \"" << event_arg.second << "\"";
+#وإلا
+      إذا (!event_arg.second.empty() && (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
+        profile_جریان << "\"" << event_arg.first << "\" : " << event_arg.second << "";
+      } وإلا {
+        profile_جریان << "\"" << event_arg.first << "\" : \"" << event_arg.second << "\"";
       }
-#endif
-      is_first_arg = false;
+#پایان_اگر
+      is_اولی_arg = خطأ;
     }
-    profile_stream_ << "}";
-    if (i == events_.size() - 1) {
-      profile_stream_ << "}\n";
-    } else {
-      profile_stream_ << "},\n";
+    profile_جریان << "}";
+    إذا (i == events_.size() - 1) {
+      profile_جریان << "}\n";
+    } وإلا {
+      profile_جریان << "},\n";
     }
   }
-  profile_stream_ << "]\n";
-#if !defined(__wasm__)
-  profile_stream_.close();
-#endif
-  enabled_ = false;  // will not collect profile after writing.
-  return profile_stream_file_;
+  profile_جریان << "]\n";
+#إذا !defined(__wasm__)
+  profile_جریان.close();
+#پایان_اگر
+  enabled_ = خطأ;  // will not collect profile after writing.
+  أرجع profile_جریان_file;
 }
 
 }  // namespace profiling

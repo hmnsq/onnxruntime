@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#رهنمود once
 
-#include <string>
-#include <vector>
-#include <utility>
-#include <memory>
+#ضمن <string>
+#ضمن <vector>
+#ضمن <utility>
+#ضمن <memory>
 
-#include "core/common/logging/isink.h"
-#include "core/common/logging/logging.h"
+#ضمن "core/common/logging/isink.h"
+#ضمن "core/common/logging/logging.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -17,21 +17,21 @@ namespace logging {
 /// Class that abstracts multiple ISink instances being written to.
 /// </summary>
 /// <seealso cref="ISink" />
-class CompositeSink : public ISink {
- public:
+class مرکب_Sink_2 : عام ISink {
+ عام:
   /// <summary>
   /// Initializes a new instance of the <see cref="CompositeSink"/> class.
   /// Use AddSink to add sinks.
   /// </summary>
-  CompositeSink() : ISink(SinkType::CompositeSink) {}
+  مرکب_Sink_2() : ISink(SinkType::مرکب_Sink_2) {}
 
   /// <summary>
   /// Check if the composite sink contains a sink of the specified type.
   /// </summary>
-  bool HasType(SinkType sink_type) const {
-    return std::any_of(sinks_with_severity_.begin(), sinks_with_severity_.end(),
-                       [&](const auto& sink_pair) {
-                         return sink_pair.first->GetType() == sink_type;
+  bool HasType(SinkType sink_type) ثابت {
+    أرجع std::any_از(sinks_with_severity_.begin(), sinks_with_severity_.انتها(),
+                       [&](ثابت خودکار& sink_pair) {
+                         أرجع sink_pair.اولی->GetType() == sink_type;
                        });
   }
 
@@ -41,9 +41,9 @@ class CompositeSink : public ISink {
   /// <param name="sink">The sink.</param>
   /// <param name="severity">The min severity to send a message to that sink</param>
   /// <returns>This instance to allow chaining.</returns>
-  CompositeSink& AddSink(std::unique_ptr<ISink> sink, logging::Severity severity) {
-    sinks_with_severity_.emplace_back(std::move(sink), severity);
-    return *this;
+  مرکب_Sink_2& جمع_کن_Sink(std::unique_ptr<ISink> sink, logging::Severity severity) {
+    sinks_with_severity_.emplace_پشت(std::move(sink), severity);
+    أرجع *this;
   }
 
   /// <summary>
@@ -55,27 +55,27 @@ class CompositeSink : public ISink {
     logging::Severity severity = Severity::kFATAL;  // default if we end up with no sinks
 
     // find entries to remove and the minimum severity of the remaining sinks
-    auto entries_to_remove = std::remove_if(sinks_with_severity_.begin(), sinks_with_severity_.end(),
-                                            [&](const auto& entry) {
-                                              if (entry.first->GetType() == sink_type) {
-                                                return true;
-                                              } else {
-                                                severity = std::min(severity, entry.second);
-                                                return false;
+    خودکار entries_مقصد_remove = std::remove_if(sinks_with_severity_.begin(), sinks_with_severity_.انتها(),
+                                            [&](ثابت خودکار& مدخل) {
+                                              إذا (مدخل.اولی->GetType() == sink_type) {
+                                                أرجع true;
+                                              } وإلا {
+                                                severity = std::min(severity, مدخل.دومی);
+                                                أرجع false;
                                               }
                                             });
 
-    sinks_with_severity_.erase(entries_to_remove, sinks_with_severity_.end());
+    sinks_with_severity_.erase(entries_مقصد_remove, sinks_with_severity_.انتها());
 
-    return severity;
+    أرجع severity;
   }
 
   /// <summary>
   /// Check if there's only one sink left
   /// </summary>
   /// <returns> True if only 1 sink remaining </returns>
-  bool HasOnlyOneSink() const {
-    return sinks_with_severity_.size() == 1;
+  bool HasOnlyOneSink() ثابت {
+    أرجع sinks_with_severity_.اندازه() == 1;
   }
 
   /// <summary>
@@ -83,24 +83,24 @@ class CompositeSink : public ISink {
   /// </summary>
   /// <returns> If one sink remains then returns the sink, otherwise nullptr </returns>
   std::unique_ptr<ISink> GetRemoveSingleSink() {
-    if (HasOnlyOneSink()) {
-      auto single_sink = std::move(sinks_with_severity_.begin()->first);
+    إذا (HasOnlyOneSink()) {
+      خودکار single_sink = std::move(sinks_with_severity_.begin()->اولی);
       sinks_with_severity_.clear();
-      return single_sink;
+      أرجع single_sink;
     }
-    return nullptr;
+    أرجع nullptr;
   }
 
- private:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override {
-    for (auto& sink_pair : sinks_with_severity_) {
-      if (message.Severity() >= sink_pair.second) {
-        sink_pair.first->Send(timestamp, logger_id, message);
+ خاص:
+  فراغ SendImpl(ثابت Timestamp& timestamp, ثابت std::string& logger_id, ثابت Capture& پیام) override {
+    لكل (خودکار& sink_pair : sinks_with_severity_) {
+      إذا (پیام.Severity() >= sink_pair.دومی) {
+        sink_pair.اولی->Send(timestamp, logger_id, پیام);
       }
     }
   }
 
-  std::vector<std::pair<std::unique_ptr<ISink>, logging::Severity>> sinks_with_severity_;
+  std::وکتور<std::pair<std::unique_ptr<ISink>, logging::Severity>> sinks_with_severity_;
 };
 }  // namespace logging
 }  // namespace onnxruntime

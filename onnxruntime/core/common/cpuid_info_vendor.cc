@@ -1,21 +1,21 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/cpuid_info.h"
+#ضمن "core/common/cpuid_info.h"
 
-#include <array>
-#include <algorithm>
-#include <string_view>
+#ضمن <array>
+#ضمن <algorithm>
+#ضمن <string_view>
 
-#if defined(CPUINFO_SUPPORTED)
-#include "cpuinfo.h"
-#endif
+#إذا defined(CPUINFO_SUPPORTED)
+#ضمن "cpuinfo.h"
+#پایان_اگر
 
-#include "core/common/pci_vendor_ids.h"
+#ضمن "core/common/pci_vendor_ids.h"
 
-namespace {
+نطاق {
 
-#if !defined(CPUINFO_SUPPORTED)
+#إذا !defined(CPUINFO_SUPPORTED)
 
 // The `cpuinfo_vendor` enum is defined by the cpuinfo library.
 // In case we don't build with cpuinfo, we define our own copy.
@@ -23,7 +23,7 @@ namespace {
 // https://github.com/pytorch/cpuinfo/blob/8a1772a0c5c447df2d18edf33ec4603a8c9c04a6/include/cpuinfo.h#L154-L307
 
 /** Vendor of processor core design */
-enum cpuinfo_vendor {
+تعداد cpuinfo_vendor {
   /** Processor vendor is not known to the library, or the library failed
      to get vendor information from the OS. */
   cpuinfo_vendor_unknown = 0,
@@ -71,7 +71,7 @@ enum cpuinfo_vendor {
    * Processors are designed by Centaur Technology, a subsidiary of VIA
    * Technologies.
    */
-  cpuinfo_vendor_via = 11,
+  cpuinfo_vendor_از_طریق = 11,
   /** Cavium, Inc. Vendor of ARM64 processor microarchitectures. */
   cpuinfo_vendor_cavium = 12,
   /** Broadcom, Inc. Vendor of ARM processor microarchitectures. */
@@ -177,21 +177,21 @@ enum cpuinfo_vendor {
   cpuinfo_vendor_dec = 57,
 };
 
-#endif  // !defined(CPUINFO_SUPPORTED)
+#پایان_اگر  // !defined(CPUINFO_SUPPORTED)
 
 }  // namespace
 
-namespace onnxruntime {
+نطاق onnxruntime {
 
-namespace {
+نطاق {
 
-struct CpuVendorInfo {
+بنية CpuVendorInfo {
   cpuinfo_vendor vendor;
   std::string_view name;
   uint32_t id;
 };
 
-constexpr auto kUnknownCpuVendorInfo = CpuVendorInfo{cpuinfo_vendor_unknown, "unknown", 0x0000};
+constexpr خودکار kUnknownCpuVendorInfo = CpuVendorInfo{cpuinfo_vendor_unknown, "unknown", 0x0000};
 
 constexpr std::array kCpuVendorInfos{
     CpuVendorInfo{cpuinfo_vendor_amd, "AMD", pci_vendor_ids::kAmd},  // AMD CPU/NPU ID. GPUs use kAmdAti.
@@ -207,45 +207,45 @@ constexpr std::array kCpuVendorInfos{
     // TODO add more as needed
 };
 
-const CpuVendorInfo* FindCpuVendorInfo(cpuinfo_vendor vendor) {
-  const auto vendor_mapping_it = std::find_if(kCpuVendorInfos.begin(), kCpuVendorInfos.end(),
-                                              [vendor](const CpuVendorInfo& entry) {
-                                                return entry.vendor == vendor;
+ثابت CpuVendorInfo* پیدا_کن_Cpu_Vendor_Info(cpuinfo_vendor vendor) {
+  ثابت خودکار vendor_mapping_it = std::پیدا_کن_if(kCpuVendorInfos.begin(), kCpuVendorInfos.end(),
+                                              [vendor](ثابت CpuVendorInfo& مدخل) {
+                                                أرجع مدخل.vendor == vendor;
                                               });
 
-  if (vendor_mapping_it != kCpuVendorInfos.end()) {
-    return &*vendor_mapping_it;
+  إذا (vendor_mapping_it != kCpuVendorInfos.end()) {
+    أرجع &*vendor_mapping_it;
   }
 
-  return nullptr;
+  أرجع اشاره_تهی;
 }
 
 }  // namespace
 
-void CPUIDInfo::VendorInfoInit() {
-  const cpuinfo_vendor vendor = [&]() {
+فراغ CPUIDInfo::VendorInfoInit() {
+  ثابت cpuinfo_vendor vendor = [&]() {
     cpuinfo_vendor result = cpuinfo_vendor_unknown;
-#if defined(CPUINFO_SUPPORTED)
-    if (pytorch_cpuinfo_init_) {
-      const auto* processor = cpuinfo_get_processor(0);
-      if (processor && processor->core) {
+#إذا defined(CPUINFO_SUPPORTED)
+    إذا (pytorch_cpuinfo_init_) {
+      ثابت خودکار* processor = cpuinfo_get_processor(0);
+      إذا (processor && processor->core) {
         result = processor->core->vendor;
       }
     }
-#endif  // defined(CPUINFO_SUPPORTED)
-#if defined(_AIX)
+#پایان_اگر  // defined(CPUINFO_SUPPORTED)
+#إذا defined(_AIX)
     result = cpuinfo_vendor_ibm;
-#endif
-    return result;
+#پایان_اگر
+    أرجع result;
   }();
 
-  const auto* vendor_info = FindCpuVendorInfo(vendor);
-  if (vendor_info == nullptr) {
+  ثابت خودکار* vendor_info = پیدا_کن_Cpu_Vendor_Info(vendor);
+  إذا (vendor_info == اشاره_تهی) {
     // On Wasm/Emscripten, cpuinfo cannot detect the CPU vendor, so suppress the
     // unhelpful warning there while still reporting a consistent "unknown" vendor.
-#if !defined(__wasm__)
-    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<int>(vendor)));
-#endif
+#إذا !defined(__wasm__)
+    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<صحيح>(vendor)));
+#پایان_اگر
     vendor_info = &kUnknownCpuVendorInfo;
   }
 
