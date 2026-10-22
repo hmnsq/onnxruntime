@@ -8,7 +8,7 @@
 namespace onnxruntime {
 namespace logging {
 
-void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
+void Capture::CapturePrintf(msvc_printf_check const var_na* format, ...) {
   va_list arglist;
   va_start(arglist, format);
 
@@ -20,44 +20,44 @@ void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
 // from https://github.com/KjellKod/g3log/blob/master/src/logcapture.cpp LogCapture::capturef
 // License: https://github.com/KjellKod/g3log/blob/master/LICENSE
 // Modifications Copyright (c) Microsoft.
-void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list args) {
+void Capture::ProcessPrintf(msvc_printf_check const var_na* format, va_list args) {
   static constexpr auto kTruncatedWarningText = "[...truncated...]";
-  static constexpr int kMaxMessageSize = 2048;
-  char message_buffer[kMaxMessageSize];
+  static constexpr ຈຳນວນເຕັມ kMaxMessageSize = 2048;
+  var_na message_buffer[kMaxMessageSize];
   const auto message = gsl::make_span(message_buffer);
 
   bool error = false;
   bool truncated = false;
 
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
+#ຖ້າ (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
   errno = 0;
-  const int nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
-  if (nbrcharacters < 0) {
+  const ຈຳນວນເຕັມ nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
+  ຖ້າ (nbrcharacters < 0) {
     error = errno != 0;
     truncated = !error;
   }
-#else
+#ບໍ່ດັ່ງນັ້ນ
 #ifdef __APPLE__
-  const int nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
-#else
-  const int nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
+  const ຈຳນວນເຕັມ nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
+#ບໍ່ດັ່ງນັ້ນ
+  const ຈຳນວນເຕັມ nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
 #endif
   error = nbrcharacters < 0;
   truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > message.size());
 #endif
 
-  if (error) {
+  ຖ້າ (error) {
     stream_ << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
     stream_ << '"' << format << '"' << std::endl;
-  } else if (truncated) {
+  } ບໍ່ດັ່ງນັ້ນ ຖ້າ (truncated) {
     stream_ << message.data() << kTruncatedWarningText;
-  } else {
+  } ບໍ່ດັ່ງນັ້ນ {
     stream_ << message.data();
   }
 }
 
 Capture::~Capture() {
-  if (logger_ != nullptr) {
+  ຖ້າ (logger_ != nullptr) {
     logger_->Log(*this);
   }
 }

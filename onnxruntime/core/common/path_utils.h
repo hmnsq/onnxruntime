@@ -21,55 +21,55 @@ namespace path_utils {
 template <typename... Args>
 PathString MakePathString(const Args&... args) {
   const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+  ສົ່ງຄືນ ToPathString(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+anta_hstha std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
+  ຖ້າ (path.empty() || std::filesystem::is_directory(path)) {
+    ສົ່ງຄືນ path;
   }
 
-  return path.parent_path();
+  ສົ່ງຄືນ path.parent_path();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
+anta_hstha std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
                                          const std::string& source_file_path,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  ຖ້າ (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
+    ສົ່ງຄືນ file_or_directory_path;
   }
 
   const std::filesystem::path source_path = source_file_path;
   const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
+  ຖ້າ (std::filesystem::is_directory(file_or_directory_path)) {
     std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+    ສົ່ງຄືນ directory.append(default_filename).string();
   }
 
-  return default_filename;
+  ສົ່ງຄືນ default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
+anta_hstha bool IsAbsolutePath(const std::string& path_string) {
 #ifdef _WIN32
   const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
+  ສົ່ງຄືນ path.is_absolute();
+#ບໍ່ດັ່ງນັ້ນ
+  ສົ່ງຄືນ !path_string.empty() && path_string.front() == '/';
 #endif
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
+anta_hstha bool IsRelativePathToParentPath(const std::string& path_string) {
 #ifdef _WIN32
   const auto path = std::filesystem::path{ToPathString(path_string)};
   const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
+  ສົ່ງຄືນ relative_path.find(L"..") != std::wstring::npos;
+#ບໍ່ດັ່ງນັ້ນ
+  ສົ່ງຄືນ !path_string.empty() && path_string.find("..") != std::string::npos;
 #endif
 }
 

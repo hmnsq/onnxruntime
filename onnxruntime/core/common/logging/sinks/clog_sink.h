@@ -18,7 +18,7 @@ class CLogSink : public WOStreamSink {
   CLogSink() : WOStreamSink(std::wclog, /*flush*/ true) {
   }
 };
-#else
+#ບໍ່ດັ່ງນັ້ນ
 class CLogSink : public OStreamSink {
  public:
   CLogSink() : OStreamSink(std::clog, /*flush*/ true) {
