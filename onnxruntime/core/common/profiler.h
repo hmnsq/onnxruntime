@@ -3,15 +3,15 @@
 
 #pragma once
 
-#include <atomic>
-#include <fstream>
-#include <initializer_list>
-#include <iostream>
-#include <tuple>
+#अन्तर्भाव <atomic>
+#अन्तर्भाव <fstream>
+#अन्तर्भाव <initializer_list>
+#अन्तर्भाव <iostream>
+#अन्तर्भाव <tuple>
 
-#include "core/common/profiler_common.h"
-#include "core/common/logging/logging.h"
-#include <mutex>
+#अन्तर्भाव "core/common/profiler_common.h"
+#अन्तर्भाव "core/common/logging/logging.h"
+#अन्तर्भाव <mutex>
 
 namespace onnxruntime {
 
@@ -26,7 +26,7 @@ namespace profiling {
  * a corresponding "complete event (X)" in "chrome tracing" format.
  */
 class Profiler {
- public:
+ सार्वजनिक:
   /// turned off by default.
   /// Even this function is marked as noexcept, the code inside it may throw exceptions
   Profiler() noexcept {};  // NOLINT
@@ -36,18 +36,18 @@ class Profiler {
   /*
   Initializes Profiler with the session logger to log framework specific messages
   */
-  void Initialize(const logging::Logger* session_logger);
+  शून्य Initialize(स्थिरांक logging::Logger* session_logger);
 
   /*
   Send profiling data to custom logger
   */
-  void StartProfiling(const logging::Logger* custom_logger);
+  शून्य StartProfiling(स्थिरांक logging::Logger* custom_logger);
 
   /*
   Start profiler and record beginning time.
   */
-  template <typename T>
-  void StartProfiling(const std::basic_string<T>& file_name);
+  ढाँचा <typename T>
+  शून्य StartProfiling(स्थिरांक std::basic_string<T>& file_name);
 
   /*
   Start profiling and return current time point.
@@ -57,42 +57,42 @@ class Profiler {
   /*
   Whether data collection and output from this profiler is enabled.
   */
-  bool IsEnabled() const {
-    return enabled_;
+  bool IsEnabled() स्थिरांक {
+    परत enabled_;
   }
   /*
   Return the stored start time of profiler.
   On some platforms, this timer may not be as precise as nanoseconds
   For instance, on Windows and MacOS, the precision (high_resolution_clock) will be ~100ns
   */
-  uint64_t GetStartTimeNs() const {
-    return std::chrono::duration_cast<std::chrono::nanoseconds>(
+  uint64_t GetStartTimeNs() स्थिरांक {
+    परत std::chrono::duration_cast<std::chrono::nanoseconds>(
                profiling_start_time_.time_since_epoch())
-        .count();
+        .मोजणी();
   }
   /*
   Record a single event. Time is measured till the call of this function from
   the start_time.
   */
-  void EndTimeAndRecordEvent(EventCategory category,
-                             const std::string& event_name,
-                             const TimePoint& start_time,
+  शून्य EndTimeAndRecordEvent(EventCategory category,
+                             स्थिरांक std::string& event_name,
+                             स्थिरांक TimePoint& start_time,
                              InlinedHashMap<std::string, std::string> event_args = {},
                              bool sync_gpu = false);
 
-#if !defined(ORT_MINIMAL_BUILD)
-  void EndTimeAndRecordEvent(EventCategory category,
-                             const std::string& event_name,
-                             const TimePoint& start_time,
-                             const TimePoint& end_time,
+#जर !defined(ORT_MINIMAL_BUILD)
+  शून्य EndTimeAndRecordEvent(EventCategory category,
+                             स्थिरांक std::string& event_name,
+                             स्थिरांक TimePoint& start_time,
+                             स्थिरांक TimePoint& end_time,
                              InlinedHashMap<std::string, std::string> event_args = {},
                              bool sync_gpu = false);
 
   // Records an event without changing execution-provider correlation state.
-  void RecordEvent(EventCategory category,
-                   const std::string& event_name,
-                   const TimePoint& start_time,
-                   const TimePoint& end_time,
+  शून्य RecordEvent(EventCategory category,
+                   स्थिरांक std::string& event_name,
+                   स्थिरांक TimePoint& start_time,
+                   स्थिरांक TimePoint& end_time,
                    InlinedHashMap<std::string, std::string> event_args = {});
 #endif
 
@@ -102,11 +102,11 @@ class Profiler {
   */
   std::string EndProfiling();
 
-  static Profiler& Instance() {
+  स्थिर Profiler& Instance() {
 #ifdef ENABLE_STATIC_PROFILER_INSTANCE
     ORT_ENFORCE(instance_ != nullptr);
-    return *instance_;
-#else
+    परत *instance_;
+#अन्यथा
     ORT_THROW("Static profiler instance is not enabled, please compile with -DENABLE_STATIC_PROFILER_INSTANCE");
 #endif
   }
@@ -114,32 +114,32 @@ class Profiler {
   /*
   Gets the maximum event count to set for new profiler instances.
   */
-  static size_t GetGlobalMaxNumEvents() {
-    return global_max_num_events_.load();
+  स्थिर माप_प्रकार Get_Global_Max_अंक_Events() {
+    परत global_max_अंक_events.load();
   }
 
   /*
   Sets the maximum event count to set for new profiler instances.
   Existing profiler instances will not be affected.
   */
-  static void SetGlobalMaxNumEvents(size_t new_max_num_events) {
-    global_max_num_events_.store(new_max_num_events);
+  स्थिर शून्य Set_Global_Max_अंक_Events(माप_प्रकार new_max_अंक_events) {
+    global_max_अंक_events.store(new_max_अंक_events);
   }
 
-#if !defined(ORT_MINIMAL_BUILD)
+#जर !defined(ORT_MINIMAL_BUILD)
   // Testing only. Must be called before profiling starts.
-  void SetMaxNumEventsForTest(size_t max_num_events) {
+  शून्य Set_Max_अंक_Events_For_Test(माप_प्रकार max_अंक_events_2) {
     ORT_ENFORCE(!enabled_ && events_.empty());
-    max_num_events_ = max_num_events;
+    max_अंक_events = max_अंक_events_2;
   }
 #endif
 
-  void AddEpProfilers(std::unique_ptr<EpProfiler> ep_profiler) {
-    if (ep_profiler) {
-      ep_profilers_.push_back(std::move(ep_profiler));
-      if (enabled_) {
-        auto status = ep_profilers_.back()->StartProfiling(profiling_start_time_);
-        if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
+  शून्य AddEpProfilers(std::unique_ptr<EpProfiler> ep_profiler) {
+    जर (ep_profiler) {
+      ep_profilers_.ढकला_back(std::move(ep_profiler));
+      जर (enabled_) {
+        स्वतः status = ep_profilers_.back()->StartProfiling(profiling_start_time_);
+        जर (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
           ep_start_profiling_status_ = status;
         }
       }
@@ -149,12 +149,12 @@ class Profiler {
   /// Returns the aggregate status from calling StartProfiling on EP profilers.
   /// OK if all EP profilers started successfully (or if none are registered).
   /// Returns the first error status encountered otherwise.
-  const Status& GetEpProfilingStatus() const { return ep_start_profiling_status_; }
+  स्थिरांक Status& GetEpProfilingStatus() स्थिरांक { परत ep_start_profiling_status_; }
 
   /// Returns true if at least one EP profiler was registered.
-  bool HasEpProfilers() const { return !ep_profilers_.empty(); }
+  bool HasEpProfilers() स्थिरांक { परत !ep_profilers_.empty(); }
 
- private:
+ खाजगी:
   ORT_DISALLOW_COPY_ASSIGNMENT_AND_MOVE(Profiler);
 
   /**
@@ -162,13 +162,13 @@ class Profiler {
    * This value is used to initialize the per-profiler maximum.
    * It can be set, but won't affect existing profilers.
    */
-  static std::atomic<size_t> global_max_num_events_;
+  स्थिर std::atomic<माप_प्रकार> global_max_अंक_events;
 
-#if !defined(ORT_MINIMAL_BUILD)
-  void RecordEventImpl(EventCategory category,
-                       const std::string& event_name,
-                       const TimePoint& start_time,
-                       const TimePoint& end_time,
+#जर !defined(ORT_MINIMAL_BUILD)
+  शून्य RecordEventImpl(EventCategory category,
+                       स्थिरांक std::string& event_name,
+                       स्थिरांक TimePoint& start_time,
+                       स्थिरांक TimePoint& end_time,
                        InlinedHashMap<std::string, std::string> event_args,
                        bool stop_ep_profilers);
 #endif
@@ -176,34 +176,34 @@ class Profiler {
   // Mutex controlling access to profiler data
   std::mutex mutex_;
   bool enabled_{false};
-#if defined(__wasm__)
+#जर defined(__wasm__)
   /*
    * The simplest way to emit profiling data in WebAssembly is to print out to console,
    * since browsers can't access to a file system directly.
    * TODO: Consider MEMFS or IndexedDB instead of console.
    */
   std::ostream& profile_stream_{std::cout};
-#else
+#अन्यथा
   std::ofstream profile_stream_;
 #endif
   std::string profile_stream_file_;
-  const logging::Logger* session_logger_{nullptr};
-  const logging::Logger* custom_logger_{nullptr};
+  स्थिरांक logging::Logger* session_logger_{nullptr};
+  स्थिरांक logging::Logger* custom_logger_{nullptr};
   TimePoint profiling_start_time_;
   Events events_;
   bool max_events_reached{false};
-#if !defined(ORT_MINIMAL_BUILD)
-  size_t dropped_event_count_{0};
+#जर !defined(ORT_MINIMAL_BUILD)
+  माप_प्रकार dropped_event_मोजणी{0};
 #endif
   bool profile_with_logger_{false};
-#if !defined(ORT_MINIMAL_BUILD)
-  size_t max_num_events_{global_max_num_events_.load()};
-#else
-  const size_t max_num_events_{global_max_num_events_.load()};
+#जर !defined(ORT_MINIMAL_BUILD)
+  माप_प्रकार max_अंक_events{global_max_अंक_events.load()};
+#अन्यथा
+  स्थिरांक माप_प्रकार max_अंक_events{global_max_अंक_events.load()};
 #endif
 
 #ifdef ENABLE_STATIC_PROFILER_INSTANCE
-  static Profiler* instance_;
+  स्थिर Profiler* instance_;
 #endif
 
   std::vector<std::unique_ptr<EpProfiler>> ep_profilers_;
