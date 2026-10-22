@@ -3,16 +3,16 @@
 
 // This file defines the CPUIDINFO_ARCH_* symbols.
 
-#pragma once
+#ہدایت once
 
-#if defined(_M_IX86) || (defined(_M_X64) && !defined(_M_ARM64EC)) || defined(__i386__) || defined(__x86_64__)
-#define CPUIDINFO_ARCH_X86
-#endif
+#اگر defined(_M_IX86) || (defined(_M_X64) && !defined(_M_ARM64EC)) || defined(__i386__) || defined(__x86_64__)
+#تعریف_کرو CPUIDINFO_ARCH_X86
+#اگر_ختم
 
-#if defined(_M_ARM64) || defined(_M_ARM64EC) || defined(__aarch64__) || defined(_M_ARM) || defined(__arm__)
-#define CPUIDINFO_ARCH_ARM
-#endif  // ARM or ARM64
+#اگر defined(_M_ARM64) || defined(_M_ARM64EC) || defined(__aarch64__) || defined(_M_ARM) || defined(__arm__)
+#تعریف_کرو CPUIDINFO_ARCH_ARM
+#اگر_ختم  // ARM or ARM64
 
-#if defined(__riscv) && __riscv_xlen == 64
-#define CPUIDINFO_ARCH_RISCV64
-#endif
+#اگر defined(__riscv) && __riscv_xlen == 64
+#تعریف_کرو CPUIDINFO_ARCH_RISCV64
+#اگر_ختم

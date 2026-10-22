@@ -1,64 +1,64 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/logging.h"
-#include <gsl/gsl>
+#شامل "core/common/logging/capture.h"
+#شامل "core/common/logging/logging.h"
+#شامل <gsl/gsl>
 
-namespace onnxruntime {
-namespace logging {
+نامخلا onnxruntime {
+نامخلا logging {
 
-void Capture::CapturePrintf(msvc_printf_check const char* format, ...) {
+خالی Capture::CapturePrintf(msvc_printf_check ثابت حرف* format, ...) {
   va_list arglist;
-  va_start(arglist, format);
+  va_آغاز(arglist, format);
 
   ProcessPrintf(format, arglist);
 
-  va_end(arglist);
+  va_انتہا(arglist);
 }
 
 // from https://github.com/KjellKod/g3log/blob/master/src/logcapture.cpp LogCapture::capturef
 // License: https://github.com/KjellKod/g3log/blob/master/LICENSE
 // Modifications Copyright (c) Microsoft.
-void Capture::ProcessPrintf(msvc_printf_check const char* format, va_list args) {
-  static constexpr auto kTruncatedWarningText = "[...truncated...]";
-  static constexpr int kMaxMessageSize = 2048;
-  char message_buffer[kMaxMessageSize];
-  const auto message = gsl::make_span(message_buffer);
+خالی Capture::ProcessPrintf(msvc_printf_check ثابت حرف* format, va_list دلائل) {
+  ساکن constexpr خودکار k_Truncated_Warning_متن = "[...truncated...]";
+  ساکن constexpr صحیح k_Max_پیغام_سائز = 2048;
+  حرف پیغام_بفر[k_Max_پیغام_سائز];
+  ثابت خودکار پیغام = gsl::make_وسعت(پیغام_بفر);
 
-  bool error = false;
-  bool truncated = false;
+  منطقی error = جھوٹ;
+  منطقی truncated = جھوٹ;
 
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
+#اگر (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
   errno = 0;
-  const int nbrcharacters = vsnprintf_s(message.data(), message.size(), _TRUNCATE, format, args);
-  if (nbrcharacters < 0) {
+  ثابت صحیح nbrcharacters = vsnprintf_s(پیغام.ڈیٹا(), پیغام.size(), _TRUNCATE, format, دلائل);
+  اگر (nbrcharacters < 0) {
     error = errno != 0;
     truncated = !error;
   }
-#else
-#ifdef __APPLE__
-  const int nbrcharacters = vsnprintf_l(message.data(), message.size(), nullptr, format, args);
-#else
-  const int nbrcharacters = vsnprintf(message.data(), message.size(), format, args);
-#endif
+#ورنہ
+#اگر_تعریف_شدہ __APPLE__
+  ثابت صحیح nbrcharacters = vsnprintf_l(پیغام.ڈیٹا(), پیغام.size(), خالی_اشاریہ, format, دلائل);
+#ورنہ
+  ثابت صحیح nbrcharacters = vsnprintf(پیغام.ڈیٹا(), پیغام.size(), format, دلائل);
+#اگر_ختم
   error = nbrcharacters < 0;
-  truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > message.size());
-#endif
+  truncated = (nbrcharacters >= 0 && static_cast<size_t>(nbrcharacters) > پیغام.size());
+#اگر_ختم
 
-  if (error) {
-    stream_ << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
-    stream_ << '"' << format << '"' << std::endl;
-  } else if (truncated) {
-    stream_ << message.data() << kTruncatedWarningText;
-  } else {
-    stream_ << message.data();
+  اگر (error) {
+    دھارا_2 << "\n\tERROR LOG MSG NOTIFICATION: Failure to successfully parse the message";
+    دھارا_2 << '"' << format << '"' << std::سطر_ختم;
+  } ورنہ اگر (truncated) {
+    دھارا_2 << پیغام.ڈیٹا() << k_Truncated_Warning_متن;
+  } ورنہ {
+    دھارا_2 << پیغام.ڈیٹا();
   }
 }
 
 Capture::~Capture() {
-  if (logger_ != nullptr) {
-    logger_->Log(*this);
+  اگر (logger_ != خالی_اشاریہ) {
+    logger_->Log(*یہ);
   }
 }
 }  // namespace logging

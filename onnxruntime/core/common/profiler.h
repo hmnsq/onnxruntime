@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ہدایت once
 
-#include <atomic>
-#include <fstream>
-#include <initializer_list>
-#include <iostream>
-#include <tuple>
+#شامل <atomic>
+#شامل <fstream>
+#شامل <initializer_list>
+#شامل <iostream>
+#شامل <tuple>
 
-#include "core/common/profiler_common.h"
-#include "core/common/logging/logging.h"
-#include <mutex>
+#شامل "core/common/profiler_common.h"
+#شامل "core/common/logging/logging.h"
+#شامل <mutex>
 
 namespace onnxruntime {
 
@@ -26,7 +26,7 @@ namespace profiling {
  * a corresponding "complete event (X)" in "chrome tracing" format.
  */
 class Profiler {
- public:
+ عوامی:
   /// turned off by default.
   /// Even this function is marked as noexcept, the code inside it may throw exceptions
   Profiler() noexcept {};  // NOLINT
@@ -36,111 +36,111 @@ class Profiler {
   /*
   Initializes Profiler with the session logger to log framework specific messages
   */
-  void Initialize(const logging::Logger* session_logger);
+  خالی Initialize(ثابت logging::Logger* session_logger);
 
   /*
   Send profiling data to custom logger
   */
-  void StartProfiling(const logging::Logger* custom_logger);
+  خالی آغاز_Profiling(ثابت logging::Logger* custom_logger);
 
   /*
   Start profiler and record beginning time.
   */
-  template <typename T>
-  void StartProfiling(const std::basic_string<T>& file_name);
+  سانچہ <typename T>
+  خالی آغاز_Profiling(ثابت std::basic_string<T>& file_name);
 
   /*
   Start profiling and return current time point.
   */
-  TimePoint Start();
+  وقت_نقطہ_3 آغاز();
 
   /*
   Whether data collection and output from this profiler is enabled.
   */
-  bool IsEnabled() const {
-    return enabled_;
+  bool IsEnabled() ثابت {
+    واپس enabled_;
   }
   /*
   Return the stored start time of profiler.
   On some platforms, this timer may not be as precise as nanoseconds
   For instance, on Windows and MacOS, the precision (high_resolution_clock) will be ~100ns
   */
-  uint64_t GetStartTimeNs() const {
-    return std::chrono::duration_cast<std::chrono::nanoseconds>(
-               profiling_start_time_.time_since_epoch())
-        .count();
+  uint64_t Get_آغاز_وقت_Ns() ثابت {
+    واپس std::chrono::duration_cast<std::chrono::nanoseconds>(
+               profiling_آغاز_وقت.وقت_since_epoch())
+        .گنتی();
   }
   /*
   Record a single event. Time is measured till the call of this function from
   the start_time.
   */
-  void EndTimeAndRecordEvent(EventCategory category,
-                             const std::string& event_name,
-                             const TimePoint& start_time,
-                             InlinedHashMap<std::string, std::string> event_args = {},
+  خالی انتہا_وقت_And_ریکارڈ_Event(EventCategory category,
+                             ثابت std::string& event_name,
+                             ثابت وقت_نقطہ_3& آغاز_وقت,
+                             InlinedHashMap<std::string, std::string> event_دلائل = {},
                              bool sync_gpu = false);
 
-#if !defined(ORT_MINIMAL_BUILD)
-  void EndTimeAndRecordEvent(EventCategory category,
-                             const std::string& event_name,
-                             const TimePoint& start_time,
-                             const TimePoint& end_time,
-                             InlinedHashMap<std::string, std::string> event_args = {},
+#اگر !defined(ORT_اقل_BUILD)
+  خالی انتہا_وقت_And_ریکارڈ_Event(EventCategory category,
+                             ثابت std::string& event_name,
+                             ثابت وقت_نقطہ_3& آغاز_وقت,
+                             ثابت وقت_نقطہ_3& انتہا_وقت,
+                             InlinedHashMap<std::string, std::string> event_دلائل = {},
                              bool sync_gpu = false);
 
   // Records an event without changing execution-provider correlation state.
-  void RecordEvent(EventCategory category,
-                   const std::string& event_name,
-                   const TimePoint& start_time,
-                   const TimePoint& end_time,
-                   InlinedHashMap<std::string, std::string> event_args = {});
-#endif
+  خالی ریکارڈ_Event(EventCategory category,
+                   ثابت std::string& event_name,
+                   ثابت وقت_نقطہ_3& آغاز_وقت,
+                   ثابت وقت_نقطہ_3& انتہا_وقت,
+                   InlinedHashMap<std::string, std::string> event_دلائل = {});
+#اگر_ختم
 
   /*
   Write profile data to the given stream in chrome format defined below.
   https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview#
   */
-  std::string EndProfiling();
+  std::string انتہا_Profiling();
 
-  static Profiler& Instance() {
-#ifdef ENABLE_STATIC_PROFILER_INSTANCE
+  ساکن Profiler& Instance() {
+#اگر_تعریف_شدہ ENABLE_STATIC_PROFILER_INSTANCE
     ORT_ENFORCE(instance_ != nullptr);
-    return *instance_;
-#else
+    واپس *instance_;
+#ورنہ
     ORT_THROW("Static profiler instance is not enabled, please compile with -DENABLE_STATIC_PROFILER_INSTANCE");
-#endif
+#اگر_ختم
   }
 
   /*
   Gets the maximum event count to set for new profiler instances.
   */
-  static size_t GetGlobalMaxNumEvents() {
-    return global_max_num_events_.load();
+  ساکن سائز_t Get_Global_Max_عدد_Events() {
+    واپس global_max_عدد_events.بھرو();
   }
 
   /*
   Sets the maximum event count to set for new profiler instances.
   Existing profiler instances will not be affected.
   */
-  static void SetGlobalMaxNumEvents(size_t new_max_num_events) {
-    global_max_num_events_.store(new_max_num_events);
+  ساکن خالی سیٹ_Global_Max_عدد_Events(سائز_t new_max_عدد_events) {
+    global_max_عدد_events.store(new_max_عدد_events);
   }
 
-#if !defined(ORT_MINIMAL_BUILD)
+#اگر !defined(ORT_اقل_BUILD)
   // Testing only. Must be called before profiling starts.
-  void SetMaxNumEventsForTest(size_t max_num_events) {
-    ORT_ENFORCE(!enabled_ && events_.empty());
-    max_num_events_ = max_num_events;
+  خالی سیٹ_Max_عدد_Events_For_Test(سائز_t max_عدد_events_2) {
+    ORT_ENFORCE(!enabled_ && events_.خالی_خانے());
+    max_عدد_events = max_عدد_events_2;
   }
-#endif
+#اگر_ختم
 
-  void AddEpProfilers(std::unique_ptr<EpProfiler> ep_profiler) {
-    if (ep_profiler) {
-      ep_profilers_.push_back(std::move(ep_profiler));
-      if (enabled_) {
-        auto status = ep_profilers_.back()->StartProfiling(profiling_start_time_);
-        if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
-          ep_start_profiling_status_ = status;
+  خالی جوڑو_Ep_Profilers(std::unique_ptr<EpProfiler> ep_profiler) {
+    اگر (ep_profiler) {
+      ep_profilers_.ڈالو_عقب(std::move(ep_profiler));
+      اگر (enabled_) {
+        خودکار حالت_2 = ep_profilers_.عقب()->آغاز_Profiling(profiling_آغاز_وقت);
+        اگر (!حالت_2.IsOK() && ep_آغاز_profiling_حالت.IsOK()) {
+          ep_آغاز_profiling_حالت = حالت_2;
         }
       }
     }
@@ -149,12 +149,12 @@ class Profiler {
   /// Returns the aggregate status from calling StartProfiling on EP profilers.
   /// OK if all EP profilers started successfully (or if none are registered).
   /// Returns the first error status encountered otherwise.
-  const Status& GetEpProfilingStatus() const { return ep_start_profiling_status_; }
+  ثابت حالت_3& Get_Ep_Profiling_حالت() ثابت { واپس ep_آغاز_profiling_حالت; }
 
   /// Returns true if at least one EP profiler was registered.
-  bool HasEpProfilers() const { return !ep_profilers_.empty(); }
+  bool HasEpProfilers() ثابت { واپس !ep_profilers_.خالی_خانے(); }
 
- private:
+ نجی:
   ORT_DISALLOW_COPY_ASSIGNMENT_AND_MOVE(Profiler);
 
   /**
@@ -162,55 +162,55 @@ class Profiler {
    * This value is used to initialize the per-profiler maximum.
    * It can be set, but won't affect existing profilers.
    */
-  static std::atomic<size_t> global_max_num_events_;
+  ساکن std::atomic<سائز_t> global_max_عدد_events;
 
-#if !defined(ORT_MINIMAL_BUILD)
-  void RecordEventImpl(EventCategory category,
-                       const std::string& event_name,
-                       const TimePoint& start_time,
-                       const TimePoint& end_time,
-                       InlinedHashMap<std::string, std::string> event_args,
+#اگر !defined(ORT_اقل_BUILD)
+  خالی ریکارڈ_Event_Impl(EventCategory category,
+                       ثابت std::string& event_name,
+                       ثابت وقت_نقطہ_3& آغاز_وقت,
+                       ثابت وقت_نقطہ_3& انتہا_وقت,
+                       InlinedHashMap<std::string, std::string> event_دلائل,
                        bool stop_ep_profilers);
-#endif
+#اگر_ختم
 
   // Mutex controlling access to profiler data
   std::mutex mutex_;
   bool enabled_{false};
-#if defined(__wasm__)
+#اگر defined(__wasm__)
   /*
    * The simplest way to emit profiling data in WebAssembly is to print out to console,
    * since browsers can't access to a file system directly.
    * TODO: Consider MEMFS or IndexedDB instead of console.
    */
-  std::ostream& profile_stream_{std::cout};
-#else
-  std::ofstream profile_stream_;
-#endif
-  std::string profile_stream_file_;
-  const logging::Logger* session_logger_{nullptr};
-  const logging::Logger* custom_logger_{nullptr};
-  TimePoint profiling_start_time_;
+  std::ostream& profile_دھارا{std::cout};
+#ورنہ
+  std::ofstream profile_دھارا;
+#اگر_ختم
+  std::string profile_دھارا_file;
+  ثابت logging::Logger* session_logger_{nullptr};
+  ثابت logging::Logger* custom_logger_{nullptr};
+  وقت_نقطہ_3 profiling_آغاز_وقت;
   Events events_;
   bool max_events_reached{false};
-#if !defined(ORT_MINIMAL_BUILD)
-  size_t dropped_event_count_{0};
-#endif
+#اگر !defined(ORT_اقل_BUILD)
+  سائز_t dropped_event_گنتی{0};
+#اگر_ختم
   bool profile_with_logger_{false};
-#if !defined(ORT_MINIMAL_BUILD)
-  size_t max_num_events_{global_max_num_events_.load()};
-#else
-  const size_t max_num_events_{global_max_num_events_.load()};
-#endif
+#اگر !defined(ORT_اقل_BUILD)
+  سائز_t max_عدد_events{global_max_عدد_events.بھرو()};
+#ورنہ
+  ثابت سائز_t max_عدد_events{global_max_عدد_events.بھرو()};
+#اگر_ختم
 
-#ifdef ENABLE_STATIC_PROFILER_INSTANCE
-  static Profiler* instance_;
-#endif
+#اگر_تعریف_شدہ ENABLE_STATIC_PROFILER_INSTANCE
+  ساکن Profiler* instance_;
+#اگر_ختم
 
-  std::vector<std::unique_ptr<EpProfiler>> ep_profilers_;
+  std::سمتیہ<std::unique_ptr<EpProfiler>> ep_profilers_;
 
   // Aggregate status from EP profiler StartProfiling calls.
   // Stores the first error encountered.
-  Status ep_start_profiling_status_;
+  حالت_3 ep_آغاز_profiling_حالت;
 };
 
 }  // namespace profiling

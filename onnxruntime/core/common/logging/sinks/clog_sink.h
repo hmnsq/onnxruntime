@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ہدایت once
 
-#include <iostream>
-#include "core/common/logging/sinks/ostream_sink.h"
+#شامل <iostream>
+#شامل "core/common/logging/sinks/ostream_sink.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -12,18 +12,18 @@ namespace logging {
 /// A std::clog based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-#ifdef _WIN32
-class CLogSink : public WOStreamSink {
- public:
+#اگر_تعریف_شدہ _WIN32
+class CLogSink : عوامی WOStreamSink {
+ عوامی:
   CLogSink() : WOStreamSink(std::wclog, /*flush*/ true) {
   }
 };
-#else
-class CLogSink : public OStreamSink {
- public:
+#ورنہ
+class CLogSink : عوامی OStreamSink {
+ عوامی:
   CLogSink() : OStreamSink(std::clog, /*flush*/ true) {
   }
 };
-#endif
+#اگر_ختم
 }  // namespace logging
 }  // namespace onnxruntime

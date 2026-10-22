@@ -1,45 +1,45 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
-#define PLATFORM_X86
-#endif
+#اگر defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
+#تعریف_کرو PLATFORM_X86
+#اگر_ختم
 
-#if defined(PLATFORM_X86)
-#if defined(_MSC_VER)
-#include <intrin.h>
-#define DENORMAL_INTRINC
+#اگر defined(PLATFORM_X86)
+#اگر defined(_MSC_VER)
+#شامل <intrin.h>
+#تعریف_کرو DENORMAL_INTRINC
 // intrins headers at gcc 4.8 and older are not usable without compiler flags.
 // clang claims gnuc 4.2, but it has a proper intrin header.
-#elif defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ >= 5) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 8))))
-#include <cpuid.h>
-#include <x86intrin.h>
-#define DENORMAL_INTRINC
-#endif
-#endif
+#وگرنہ_اگر defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ >= 5) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 8))))
+#شامل <cpuid.h>
+#شامل <x86intrin.h>
+#تعریف_کرو DENORMAL_INTRINC
+#اگر_ختم
+#اگر_ختم
 
-#include "core/common/common.h"
-#include "core/common/cpuid_info.h"
-#include "core/common/denormal.h"
+#شامل "core/common/common.h"
+#شامل "core/common/cpuid_info.h"
+#شامل "core/common/denormal.h"
 
-namespace onnxruntime {
+نامخلا onnxruntime {
 
-bool SetDenormalAsZero(bool on) {
-#ifdef DENORMAL_INTRINC
-  if (CPUIDInfo::GetCPUIDInfo().HasSSE3()) {
-    if (on) {
-      _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+منطقی سیٹ_Denormal_As_Zero(منطقی on) {
+#اگر_تعریف_شدہ DENORMAL_INTRINC
+  اگر (CPUIDInfo::GetCPUIDInfo().HasSSE3()) {
+    اگر (on) {
+      MM_سیٹ_DENORMALS_ZERO_منوال(_MM_DENORMALS_ZERO_ON);
       _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-    } else {
-      _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_OFF);
+    } ورنہ {
+      MM_سیٹ_DENORMALS_ZERO_منوال(_MM_DENORMALS_ZERO_OFF);
       _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_OFF);
     }
-    return true;
+    واپس سچ;
   }
-#else
-  ORT_UNUSED_PARAMETER(on);
-#endif
-  return false;
+#ورنہ
+  ORT_غیر_مستعمل_PARAMETER(on);
+#اگر_ختم
+  واپس جھوٹ;
 }
 
 }  // namespace onnxruntime

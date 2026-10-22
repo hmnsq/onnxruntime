@@ -1,28 +1,28 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/logging/sinks/ostream_sink.h"
+#شامل "core/common/logging/sinks/ostream_sink.h"
 
-namespace onnxruntime {
-namespace logging {
+نامخلا onnxruntime {
+نامخلا logging {
 
-#ifndef ORT_MINIMAL_BUILD
-struct Color {
-  constexpr static const char* kWarn = "\033[0;93m";      // yellow
-  constexpr static const char* kError = "\033[1;31m";     // bold red
-  constexpr static const char* kFatal = "\033[1;37;41m";  // bold white on red background
-  constexpr static const char* kEnd = "\033[m";
-#ifdef _WIN32
-  constexpr static const wchar_t* kLWarn = L"\033[0;93m";      // yellow
-  constexpr static const wchar_t* kLError = L"\033[1;31m";     // bold red
-  constexpr static const wchar_t* kLFatal = L"\033[1;37;41m";  // bold white on red background
-  constexpr static const wchar_t* kLEnd = L"\033[m";
-#endif
+#اگر_غیر_تعریف_شدہ ORT_اقل_BUILD
+ساخت Color {
+  constexpr ساکن ثابت حرف* kWarn = "\033[0;93m";      // yellow
+  constexpr ساکن ثابت حرف* kError = "\033[1;31m";     // bold red
+  constexpr ساکن ثابت حرف* kFatal = "\033[1;37;41m";  // bold white on red background
+  constexpr ساکن ثابت حرف* k_انتہا = "\033[m";
+#اگر_تعریف_شدہ _WIN32
+  constexpr ساکن ثابت wchar_t* kLWarn = L"\033[0;93m";      // yellow
+  constexpr ساکن ثابت wchar_t* kLError = L"\033[1;31m";     // bold red
+  constexpr ساکن ثابت wchar_t* kLFatal = L"\033[1;37;41m";  // bold white on red background
+  constexpr ساکن ثابت wchar_t* kLEnd = L"\033[m";
+#اگر_ختم
 };
-#endif
+#اگر_ختم
 
-#ifndef _WIN32
-void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) {
+#اگر_غیر_تعریف_شدہ _WIN32
+خالی OStreamSink::SendImpl(ثابت Timestamp& timestamp, ثابت std::string& logger_id, ثابت Capture& پیغام) {
   // Two options as there may be multiple calls attempting to write to the same sink at once:
   // 1) Use mutex to synchronize access to the stream.
   // 2) Create the message in an ostringstream and output in one call.
@@ -30,38 +30,38 @@ void OStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger
   // Going with #2 as it should scale better at the cost of creating the message in memory first
   // before sending to the stream.
 
-  std::ostringstream msg;
+  std::ostringstream پیغام_2;
 
-#ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING) {
-    msg << Color::kWarn;
-  } else if (message.Severity() == Severity::kERROR) {
-    msg << Color::kError;
-  } else if (message.Severity() == Severity::kFATAL) {
-    msg << Color::kFatal;
+#اگر_غیر_تعریف_شدہ ORT_اقل_BUILD
+  اگر (پیغام.Severity() == Severity::kWARNING) {
+    پیغام_2 << Color::kWarn;
+  } ورنہ اگر (پیغام.Severity() == Severity::kERROR) {
+    پیغام_2 << Color::kError;
+  } ورنہ اگر (پیغام.Severity() == Severity::kFATAL) {
+    پیغام_2 << Color::kFatal;
   }
-#endif
+#اگر_ختم
 
-  msg << timestamp << " [" << message.SeverityPrefix() << ":" << message.Category() << ":" << logger_id << ", "
-      << message.Location().ToString() << "] " << message.Message();
+  پیغام_2 << timestamp << " [" << پیغام.Severity_سابقہ() << ":" << پیغام.Category() << ":" << logger_id << ", "
+      << پیغام.Location().مقصد_String() << "] " << پیغام.پیغام_3();
 
-#ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING ||
-      message.Severity() == Severity::kERROR ||
-      message.Severity() == Severity::kFATAL) {
-    msg << Color::kEnd;
+#اگر_غیر_تعریف_شدہ ORT_اقل_BUILD
+  اگر (پیغام.Severity() == Severity::kWARNING ||
+      پیغام.Severity() == Severity::kERROR ||
+      پیغام.Severity() == Severity::kFATAL) {
+    پیغام_2 << Color::k_انتہا;
   }
-#endif
-  msg << "\n";
+#اگر_ختم
+  پیغام_2 << "\n";
 
-  (*stream_) << msg.str();
+  (*دھارا_2) << پیغام_2.str();
 
-  if (flush_) {
-    stream_->flush();
+  اگر (flush_) {
+    دھارا_2->flush();
   }
 }
-#else
-void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) {
+#ورنہ
+خالی WOStreamSink::SendImpl(ثابت Timestamp& timestamp, ثابت std::string& logger_id, ثابت Capture& پیغام) {
   // Two options as there may be multiple calls attempting to write to the same sink at once:
   // 1) Use mutex to synchronize access to the stream.
   // 2) Create the message in an ostringstream and output in one call.
@@ -69,36 +69,36 @@ void WOStreamSink::SendImpl(const Timestamp& timestamp, const std::string& logge
   // Going with #2 as it should scale better at the cost of creating the message in memory first
   // before sending to the stream.
 
-  std::wostringstream msg;
+  std::wostringstream پیغام_2;
 
-#ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING) {
-    msg << Color::kLWarn;
-  } else if (message.Severity() == Severity::kERROR) {
-    msg << Color::kLError;
-  } else if (message.Severity() == Severity::kFATAL) {
-    msg << Color::kLFatal;
+#اگر_غیر_تعریف_شدہ ORT_اقل_BUILD
+  اگر (پیغام.Severity() == Severity::kWARNING) {
+    پیغام_2 << Color::kLWarn;
+  } ورنہ اگر (پیغام.Severity() == Severity::kERROR) {
+    پیغام_2 << Color::kLError;
+  } ورنہ اگر (پیغام.Severity() == Severity::kFATAL) {
+    پیغام_2 << Color::kLFatal;
   }
-#endif
+#اگر_ختم
 
-  msg << timestamp << L" [" << message.SeverityPrefix() << L":" << message.Category() << L":" << ToWideString(logger_id) << L", "
-      << ToWideString(message.Location().ToString()) << L"] " << ToWideString(message.Message());
+  پیغام_2 << timestamp << L" [" << پیغام.Severity_سابقہ() << L":" << پیغام.Category() << L":" << مقصد_Wide_String(logger_id) << L", "
+      << مقصد_Wide_String(پیغام.Location().مقصد_String()) << L"] " << مقصد_Wide_String(پیغام.پیغام_3());
 
-#ifndef ORT_MINIMAL_BUILD
-  if (message.Severity() == Severity::kWARNING ||
-      message.Severity() == Severity::kERROR ||
-      message.Severity() == Severity::kFATAL) {
-    msg << Color::kLEnd;
+#اگر_غیر_تعریف_شدہ ORT_اقل_BUILD
+  اگر (پیغام.Severity() == Severity::kWARNING ||
+      پیغام.Severity() == Severity::kERROR ||
+      پیغام.Severity() == Severity::kFATAL) {
+    پیغام_2 << Color::kLEnd;
   }
-#endif
-  msg << L"\n";
+#اگر_ختم
+  پیغام_2 << L"\n";
 
-  (*stream_) << msg.str();
+  (*دھارا_2) << پیغام_2.str();
 
-  if (flush_) {
-    stream_->flush();
+  اگر (flush_) {
+    دھارا_2->flush();
   }
 }
-#endif
+#اگر_ختم
 }  // namespace logging
 }  // namespace onnxruntime
