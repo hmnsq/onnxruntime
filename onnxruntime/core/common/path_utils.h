@@ -1,76 +1,76 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ہدایت once
 
-#include <filesystem>
-#include <string>
-#include <string_view>
+#ضمن <filesystem>
+#ضمن <string>
+#ضمن <string_view>
 
-#include "core/common/common.h"
-#include "core/common/path_string.h"
+#ضمن "core/common/common.h"
+#ضمن "core/common/path_string.h"
 
 namespace onnxruntime {
 
-namespace path_utils {
+namespace رستہ_utils {
 
 /** Return a PathString with concatenated args.
  *  TODO: add support for arguments of type std::wstring. Currently it is not supported as the underneath
  *  MakeString doesn't support this type.
  */
-template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+سانچا <typename... دلیلاں_2>
+رستہ_String Make_رستہ_String(ثابت دلیلاں_2&... دلیلاں) {
+  ثابت std::string str = onnxruntime::MakeString(دلیلاں...);
+  أرجع منزل_رستہ_String(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+مضمن std::filesystem::رستہ Get_Dir_Or_ماپا_رستہ(ثابت std::filesystem::رستہ& رستہ) {
+  إذا (رستہ.خالی_تھاواں() || std::filesystem::is_directory(رستہ)) {
+    أرجع رستہ;
   }
 
-  return path.parent_path();
+  أرجع رستہ.ماپا_رستہ();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
-                                         const std::string& source_file_path,
+مضمن std::string Get_رستہ_With_Stem_Suffix(ثابت std::string& file_or_directory_رستہ,
+                                         ثابت std::string& سروت_file_رستہ,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  إذا (!file_or_directory_رستہ.خالی_تھاواں() && !std::filesystem::is_directory(file_or_directory_رستہ)) {
+    أرجع file_or_directory_رستہ;
   }
 
-  const std::filesystem::path source_path = source_file_path;
-  const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
-    std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+  ثابت std::filesystem::رستہ سروت_رستہ = سروت_file_رستہ;
+  ثابت std::string default_filename = سروت_رستہ.stem().string() + std::string{suffix};
+  إذا (std::filesystem::is_directory(file_or_directory_رستہ)) {
+    std::filesystem::رستہ directory = file_or_directory_رستہ;
+    أرجع directory.append(default_filename).string();
   }
 
-  return default_filename;
+  أرجع default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
-#ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
-#endif
+مضمن bool Is_Absolute_رستہ(ثابت std::string& رستہ_string) {
+#جے_تعریف_شدہ _WIN32
+  ثابت خودکار رستہ = std::filesystem::رستہ{منزل_رستہ_String(رستہ_string)};
+  أرجع رستہ.is_absolute();
+#وإلا
+  أرجع !رستہ_string.خالی_تھاواں() && رستہ_string.front() == '/';
+#جے_انت
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
-#ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
-#endif
+مضمن bool Is_Relative_رستہ_منزل_ماپا_رستہ(ثابت std::string& رستہ_string) {
+#جے_تعریف_شدہ _WIN32
+  ثابت خودکار رستہ = std::filesystem::رستہ{منزل_رستہ_String(رستہ_string)};
+  ثابت خودکار relative_رستہ = رستہ.lexically_عام().make_preferred().wstring();
+  أرجع relative_رستہ.لبھو(L"..") != std::wstring::npos;
+#وإلا
+  أرجع !رستہ_string.خالی_تھاواں() && رستہ_string.لبھو("..") != std::string::npos;
+#جے_انت
 }
 
 }  // namespace path_utils
