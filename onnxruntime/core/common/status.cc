@@ -11,81 +11,81 @@ limitations under the License.
 ==============================================================================*/
 // Modifications Copyright (c) Microsoft.
 
-#include "core/common/status.h"
-#include "core/common/common.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "core/common/status.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "core/common/common.h"
 
-namespace onnxruntime {
-namespace common {
-Status::Status(StatusCategory category, int code, const std::string& msg) {
+ਨਾਮਾਕਾਸ਼ onnxruntime {
+ਨਾਮਾਕਾਸ਼ common {
+ਸਥਿਤੀ_2::ਸਥਿਤੀ_2(ਸਥਿਤੀ_Category category, ਪੂਰਨ code, ਅਚਲ std::string& ਸੁਨੇਹਾ_2) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<ਪੂਰਨ>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, ਸੁਨੇਹਾ_2);
 }
 
-Status::Status(StatusCategory category, int code, const char* msg) {
+ਸਥਿਤੀ_2::ਸਥਿਤੀ_2(ਸਥਿਤੀ_Category category, ਪੂਰਨ code, ਅਚਲ ਅੱਖਰ* ਸੁਨੇਹਾ_2) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<ਪੂਰਨ>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, ਸੁਨੇਹਾ_2);
 }
 
-Status::Status(StatusCategory category, int code)
-    : Status(category, code, "") {
+ਸਥਿਤੀ_2::ਸਥਿਤੀ_2(ਸਥਿਤੀ_Category category, ਪੂਰਨ code)
+    : ਸਥਿਤੀ_2(category, code, "") {
 }
 
-StatusCategory Status::Category() const noexcept {
-  return IsOK() ? common::NONE : state_->category;
+ਸਥਿਤੀ_Category ਸਥਿਤੀ_2::Category() ਅਚਲ noexcept {
+  ਵਾਪਸ IsOK() ? common::NONE : state_->category;
 }
 
-int Status::Code() const noexcept {
-  return IsOK() ? static_cast<int>(common::OK) : state_->code;
+ਪੂਰਨ ਸਥਿਤੀ_2::ਕੋਡ() ਅਚਲ noexcept {
+  ਵਾਪਸ IsOK() ? static_cast<ਪੂਰਨ>(common::OK) : state_->code;
 }
 
-const std::string& Status::ErrorMessage() const noexcept {
-  return IsOK() ? EmptyString() : state_->msg;
+ਅਚਲ std::string& ਸਥਿਤੀ_2::Error_ਸੁਨੇਹਾ() ਅਚਲ noexcept {
+  ਵਾਪਸ IsOK() ? ਖਾਲੀ_ਥਾਵਾਂ_String() : state_->ਸੁਨੇਹਾ_2;
 }
 
-std::string Status::ToString() const {
-  if (state_ == nullptr) {
-    return std::string("OK");
+std::string ਸਥਿਤੀ_2::ਮੰਜ਼ਿਲ_String() ਅਚਲ {
+  ਜੇ (state_ == ਖਾਲੀ_ਸੂਚਕ) {
+    ਵਾਪਸ std::string("OK");
   }
 
   std::string result;
 
-  if (common::SYSTEM == state_->category) {
+  ਜੇ (common::SYSTEM == state_->category) {
     result += "SystemError";
     result += " : ";
     result += std::to_string(errno);
-  } else if (common::ONNXRUNTIME == state_->category) {
+  } ਨਹੀਂਤਾਂ ਜੇ (common::ONNXRUNTIME == state_->category) {
     result += "[ONNXRuntimeError]";
     result += " : ";
-    result += std::to_string(Code());
+    result += std::to_string(ਕੋਡ());
     result += " : ";
-    result += StatusCodeToString(static_cast<StatusCode>(Code()));
+    result += ਸਥਿਤੀ_ਕੋਡ_ਮੰਜ਼ਿਲ_String(static_cast<ਸਥਿਤੀ_ਕੋਡ>(ਕੋਡ()));
     result += " : ";
-    result += state_->msg;
+    result += state_->ਸੁਨੇਹਾ_2;
   }
 
-  return result;
+  ਵਾਪਸ result;
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
 // and should not have any destruction order issues via pragmas instead.
 // https://developercommunity.visualstudio.com/content/problem/249706/gslsuppress-does-not-work-for-i22-c-core-guideline.html
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 26426)
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ _MSC_VER
+#ਹਦਾਇਤ warning(push)
+#ਹਦਾਇਤ warning(disable : 26426)
+#ਜੇ_ਅੰਤ
 
-const std::string& Status::EmptyString() noexcept {
-  static std::string s_empty;
-  return s_empty;
+ਅਚਲ std::string& ਸਥਿਤੀ_2::ਖਾਲੀ_ਥਾਵਾਂ_String() noexcept {
+  ਸਥਿਰ std::string s_ਖਾਲੀ_ਥਾਵਾਂ;
+  ਵਾਪਸ s_ਖਾਲੀ_ਥਾਵਾਂ;
 }
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ _MSC_VER
+#ਹਦਾਇਤ warning(pop)
+#ਜੇ_ਅੰਤ
 
 }  // namespace common
 }  // namespace onnxruntime

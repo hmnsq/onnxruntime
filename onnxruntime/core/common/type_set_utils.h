@@ -1,36 +1,36 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ਹਦਾਇਤ once
 
-#include "boost/mp11.hpp"
+#ਅਨ੍ਤਰ੍ਭਾਵ "boost/mp11.hpp"
 
 namespace onnxruntime {
 namespace utils {
-namespace type_set {
+namespace type_ਸੈੱਟ {
 
 // Given type sets A and B, IsSubset<A, B>::value is true when each element in A is also in B.
-template <typename A, typename B>
-struct IsSubset {
-  static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
+ਸਾਂਚਾ <typename A, typename B>
+ਬਣਤਰ IsSubset {
+  static_assert(boost::mp11::mp_is_ਸੈੱਟ<A>::ਮੁੱਲ && boost::mp11::mp_is_ਸੈੱਟ<B>::ਮੁੱਲ,
                 "A and B must be type sets.");
 
-  static constexpr bool value =
+  ਸਥਿਰ constexpr bool ਮੁੱਲ =
       // each element of A is contained in B
-      boost::mp11::mp_all_of_q<
+      boost::mp11::mp_all_ਦਾ_q<
           A,
-          boost::mp11::mp_bind_front<boost::mp11::mp_set_contains, B>>::value;
+          boost::mp11::mp_bind_front<boost::mp11::mp_ਸੈੱਟ_ਸ਼ਾਮਲ_ਹੈ, B>>::ਮੁੱਲ;
 };
 
 // Given type sets A and B, IsEqual<A, B>::value is true when A contains the same elements as B.
-template <typename A, typename B>
-struct IsEqual {
-  static_assert(boost::mp11::mp_is_set<A>::value && boost::mp11::mp_is_set<B>::value,
+ਸਾਂਚਾ <typename A, typename B>
+ਬਣਤਰ IsEqual {
+  static_assert(boost::mp11::mp_is_ਸੈੱਟ<A>::ਮੁੱਲ && boost::mp11::mp_is_ਸੈੱਟ<B>::ਮੁੱਲ,
                 "A and B must be type sets.");
 
-  static constexpr bool value =
-      boost::mp11::mp_size<A>::value == boost::mp11::mp_size<B>::value &&
-      IsSubset<A, B>::value;
+  ਸਥਿਰ constexpr bool ਮੁੱਲ =
+      boost::mp11::mp_ਮਾਪ<A>::ਮੁੱਲ == boost::mp11::mp_ਮਾਪ<B>::ਮੁੱਲ &&
+      IsSubset<A, B>::ਮੁੱਲ;
 };
 
 }  // namespace type_set

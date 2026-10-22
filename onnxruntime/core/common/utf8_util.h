@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ਹਦਾਇਤ once
 
-#include "core/common/common.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "core/common/common.h"
 
-#include <string>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string>
 
 namespace onnxruntime {
 namespace utf8_util {
@@ -18,140 +18,140 @@ namespace utf8_util {
 /// <param name="ch">lead byte candidate</param>
 /// <param name="len">decoded byte length</param>
 /// <returns>false if the byte does not match any 1-4 byte UTF-8 lead-byte prefix</returns>
-inline bool utf8_bytes(unsigned char ch, size_t& len) {
-  if ((ch & 0x80) == 0) {
+ਸਤਰਅੰਦਰ bool utf8_ਬਾਈਟਾਂ(ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ ch, ਮਾਪ_t& len) {
+  ਜੇ ((ch & 0x80) == 0) {
     len = 1;
-    return true;
+    ਵਾਪਸ true;
   }
-  if ((ch & 0xE0) == 0xC0) {
+  ਜੇ ((ch & 0xE0) == 0xC0) {
     len = 2;
-    return true;
+    ਵਾਪਸ true;
   }
-  if ((ch & 0xF0) == 0xE0) {
+  ਜੇ ((ch & 0xF0) == 0xE0) {
     len = 3;
-    return true;
+    ਵਾਪਸ true;
   }
-  if ((ch & 0xF8) == 0xF0) {
+  ਜੇ ((ch & 0xF8) == 0xF0) {
     len = 4;
-    return true;
+    ਵਾਪਸ true;
   }
-  return false;
+  ਵਾਪਸ false;
 }
 
 // Computes length of the utf8 string in characters
-inline bool utf8_len(const unsigned char* s, size_t bytes, size_t& len) {
-  size_t result = 0;
-  while (bytes > 0) {
-    size_t char_bytes = 0;
-    bool valid = utf8_bytes(*s, char_bytes);
-    if (!valid || bytes < char_bytes) {
-      return false;
+ਸਤਰਅੰਦਰ bool utf8_len(ਅਚਲ ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ* s, ਮਾਪ_t ਬਾਈਟਾਂ, ਮਾਪ_t& len) {
+  ਮਾਪ_t ਨਤੀਜਾ = 0;
+  ਜਦੋਂ (ਬਾਈਟਾਂ > 0) {
+    ਮਾਪ_t char_ਬਾਈਟਾਂ = 0;
+    bool valid = utf8_ਬਾਈਟਾਂ(*s, char_ਬਾਈਟਾਂ);
+    ਜੇ (!valid || ਬਾਈਟਾਂ < char_ਬਾਈਟਾਂ) {
+      ਵਾਪਸ false;
     }
-    bytes -= char_bytes;
-    s += char_bytes;
-    ++result;
+    ਬਾਈਟਾਂ -= char_ਬਾਈਟਾਂ;
+    s += char_ਬਾਈਟਾਂ;
+    ++ਨਤੀਜਾ;
   }
-  len = result;
-  return true;
+  len = ਨਤੀਜਾ;
+  ਵਾਪਸ true;
 }
 
-inline bool utf8_validate(const unsigned char* s, size_t len, size_t& utf8_chars) {
-  size_t utf8_len = 0;
-  size_t idx = 0;
-  while (idx < len) {
-    size_t bytes = 0;
-    auto ch = s[idx];
-    if (utf8_bytes(ch, bytes)) {
-      switch (bytes) {
-        case 1:
-          break;
-        case 2: {
+ਸਤਰਅੰਦਰ bool utf8_validate(ਅਚਲ ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ* s, ਮਾਪ_t len, ਮਾਪ_t& utf8_chars) {
+  ਮਾਪ_t utf8_len = 0;
+  ਮਾਪ_t idx = 0;
+  ਜਦੋਂ (idx < len) {
+    ਮਾਪ_t ਬਾਈਟਾਂ = 0;
+    ਸਵੈਚਾਲਿਤ ch = s[idx];
+    ਜੇ (utf8_ਬਾਈਟਾਂ(ch, ਬਾਈਟਾਂ)) {
+      ਚੋਣ (ਬਾਈਟਾਂ) {
+        ਹਾਲਤ 1:
+          ਰੋਕੋ;
+        ਹਾਲਤ 2: {
           // Reject overlong 2-byte sequences. Valid Unicode 2-byte encodings
           // start at U+0080, so lead bytes 0xC0 and 0xC1 are invalid.
-          if (ch < 0xC2u) {
-            return false;
+          ਜੇ (ch < 0xC2u) {
+            ਵਾਪਸ false;
           }
-          if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-            return false;
+          ਜੇ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+            ਵਾਪਸ false;
           }
-        } break;  // 2
-        case 3: {
-          auto ch1 = s[idx];
-          switch (ch1) {
-            case 0xE0u:
-              if (++idx >= len || s[idx] < 0xA0u || s[idx] > 0xBFu) {
-                return false;
+        } ਰੋਕੋ;  // 2
+        ਹਾਲਤ 3: {
+          ਸਵੈਚਾਲਿਤ ch1 = s[idx];
+          ਚੋਣ (ch1) {
+            ਹਾਲਤ 0xE0u:
+              ਜੇ (++idx >= len || s[idx] < 0xA0u || s[idx] > 0xBFu) {
+                ਵਾਪਸ false;
               }
-              break;
-            case 0xEDu:
-              if (++idx >= len || s[idx] < 0x80u || s[idx] > 0x9Fu) {
-                return false;
+              ਰੋਕੋ;
+            ਹਾਲਤ 0xEDu:
+              ਜੇ (++idx >= len || s[idx] < 0x80u || s[idx] > 0x9Fu) {
+                ਵਾਪਸ false;
               }
-              break;
-            default: {
-              if ((ch1 >= 0xE1u && ch1 <= 0xECu) ||
+              ਰੋਕੋ;
+            ਮੂਲ: {
+              ਜੇ ((ch1 >= 0xE1u && ch1 <= 0xECu) ||
                   (ch1 >= 0xEEu && ch1 <= 0xEFu)) {
-                if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-                  return false;
+                ਜੇ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+                  ਵਾਪਸ false;
                 }
-              } else {
-                return false;
+              } ਨਹੀਂਤਾਂ {
+                ਵਾਪਸ false;
               }
-            } break;
+            } ਰੋਕੋ;
           }
           // validate byte 3
-          if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-            return false;
+          ਜੇ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+            ਵਾਪਸ false;
           }
-        } break;  // 3
-        case 4: {
-          auto ch1 = s[idx];
-          switch (ch1) {
-            case 0xF0u: {
-              if (++idx >= len || s[idx] < 0x90u || s[idx] > 0xBFu) {
-                return false;
+        } ਰੋਕੋ;  // 3
+        ਹਾਲਤ 4: {
+          ਸਵੈਚਾਲਿਤ ch1 = s[idx];
+          ਚੋਣ (ch1) {
+            ਹਾਲਤ 0xF0u: {
+              ਜੇ (++idx >= len || s[idx] < 0x90u || s[idx] > 0xBFu) {
+                ਵਾਪਸ false;
               }
-            } break;
-            case 0xF4u: {
-              if (++idx >= len || s[idx] < 0x80u || s[idx] > 0x8Fu) {
-                return false;
+            } ਰੋਕੋ;
+            ਹਾਲਤ 0xF4u: {
+              ਜੇ (++idx >= len || s[idx] < 0x80u || s[idx] > 0x8Fu) {
+                ਵਾਪਸ false;
               }
-            } break;
-            default: {
-              if (ch1 >= 0xF1u && ch1 <= 0xF3u) {
-                if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-                  return false;
+            } ਰੋਕੋ;
+            ਮੂਲ: {
+              ਜੇ (ch1 >= 0xF1u && ch1 <= 0xF3u) {
+                ਜੇ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+                  ਵਾਪਸ false;
                 }
-              } else {
-                return false;
+              } ਨਹੀਂਤਾਂ {
+                ਵਾਪਸ false;
               }
-            } break;
+            } ਰੋਕੋ;
           }
           // validate bytes 3 and 4
-          size_t stop = idx + 2;
-          while (idx < stop) {
-            if (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
-              return false;
+          ਮਾਪ_t stop = idx + 2;
+          ਜਦੋਂ (idx < stop) {
+            ਜੇ (++idx >= len || s[idx] < 0x80u || s[idx] > 0xBFu) {
+              ਵਾਪਸ false;
             }
           }
-        } break;  // 4
-        default:
+        } ਰੋਕੋ;  // 4
+        ਮੂਲ:
           // no chars longer than 4
-          return false;
+          ਵਾਪਸ false;
       }  // switch bytes
       ++idx;
       ++utf8_len;
-    } else {
-      return false;
+    } ਨਹੀਂਤਾਂ {
+      ਵਾਪਸ false;
     }
   }
   // End index must match
   // the end of the last byte sequence.
-  if (idx != len) {
-    return false;
+  ਜੇ (idx != len) {
+    ਵਾਪਸ false;
   }
   utf8_chars = utf8_len;
-  return true;
+  ਵਾਪਸ true;
 }
 
 // UTF-8 <-> wchar_t conversion utilities for non-Windows builds.
@@ -163,190 +163,190 @@ inline bool utf8_validate(const unsigned char* s, size_t len, size_t& utf8_chars
 // with 16-bit wchar_t cannot represent supplementary-plane characters correctly
 // via these helpers.
 // On Windows, use the Win32 MultiByteToWideChar/WideCharToMultiByte APIs instead.
-#ifndef _WIN32
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ _WIN32
 
-static_assert(sizeof(wchar_t) >= 4,
+static_assert(ਆਕਾਰ(wchar_t) >= 4,
               "Non-Windows UTF-8/wchar_t conversion helpers require wchar_t to be at least 32 bits.");
 
 /// Compute the number of UTF-8 bytes required to encode a wide string.
-inline size_t WideToUtf8RequiredSize(const std::wstring& wstr) {
-  size_t result = 0;
-  for (wchar_t wc : wstr) {
+ਸਤਰਅੰਦਰ ਮਾਪ_t Wide_ਮੰਜ਼ਿਲ_Utf8_Required_ਮਾਪ(ਅਚਲ std::wstring& wstr) {
+  ਮਾਪ_t ਨਤੀਜਾ = 0;
+  ਲਈ (wchar_t wc : wstr) {
     char32_t cp = static_cast<char32_t>(wc);
-    if (cp >= 0xD800 && cp <= 0xDFFF) {
+    ਜੇ (cp >= 0xD800 && cp <= 0xDFFF) {
       ORT_THROW("Invalid Unicode surrogate codepoint U+", std::hex, static_cast<uint32_t>(cp));
     }
-    if (cp <= 0x7F) {
-      result += 1;
-    } else if (cp <= 0x7FF) {
-      result += 2;
-    } else if (cp <= 0xFFFF) {
-      result += 3;
-    } else if (cp <= 0x10FFFF) {
-      result += 4;
-    } else {
+    ਜੇ (cp <= 0x7F) {
+      ਨਤੀਜਾ += 1;
+    } ਨਹੀਂਤਾਂ ਜੇ (cp <= 0x7FF) {
+      ਨਤੀਜਾ += 2;
+    } ਨਹੀਂਤਾਂ ਜੇ (cp <= 0xFFFF) {
+      ਨਤੀਜਾ += 3;
+    } ਨਹੀਂਤਾਂ ਜੇ (cp <= 0x10FFFF) {
+      ਨਤੀਜਾ += 4;
+    } ਨਹੀਂਤਾਂ {
       ORT_THROW("Invalid Unicode codepoint U+", std::hex, static_cast<uint32_t>(cp));
     }
   }
-  return result;
+  ਵਾਪਸ ਨਤੀਜਾ;
 }
 
 /// Convert a wide string to UTF-8, writing into a pre-allocated std::string.
 /// The string is resized to the actual number of bytes written.
-inline Status WideToUtf8(const std::wstring& wstr, std::string& str) {
-  if (wstr.empty()) {
+ਸਤਰਅੰਦਰ ਸਥਿਤੀ_2 Wide_ਮੰਜ਼ਿਲ_Utf8(ਅਚਲ std::wstring& wstr, std::string& str) {
+  ਜੇ (wstr.ਖਾਲੀ_ਥਾਵਾਂ()) {
     str.clear();
-    return Status::OK();
+    ਵਾਪਸ ਸਥਿਤੀ_2::OK();
   }
 
-  char* dest = str.data();
-  char* dest_end = dest + str.size();
+  ਅੱਖਰ* dest = str.ਅੰਕੜੇ();
+  ਅੱਖਰ* dest_ਸਿਰਾ = dest + str.ਮਾਪ();
 
-  for (wchar_t wc : wstr) {
+  ਲਈ (wchar_t wc : wstr) {
     char32_t cp = static_cast<char32_t>(wc);
-    if (cp >= 0xD800 && cp <= 0xDFFF) {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL,
+    ਜੇ (cp >= 0xD800 && cp <= 0xDFFF) {
+      ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL,
                              "Invalid Unicode surrogate codepoint during UTF-8 conversion");
     }
-    if (cp <= 0x7F) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 1) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+    ਜੇ (cp <= 0x7F) {
+      ਅਚਲ ਮਾਪ_t ਬਚਿਆ = static_cast<ਮਾਪ_t>(dest_ਸਿਰਾ - dest);
+      ਜੇ (ਬਚਿਆ < 1) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(cp);
-    } else if (cp <= 0x7FF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 2) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<ਅੱਖਰ>(cp);
+    } ਨਹੀਂਤਾਂ ਜੇ (cp <= 0x7FF) {
+      ਅਚਲ ਮਾਪ_t ਬਚਿਆ = static_cast<ਮਾਪ_t>(dest_ਸਿਰਾ - dest);
+      ਜੇ (ਬਚਿਆ < 2) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xC0 | (cp >> 6));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else if (cp <= 0xFFFF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 3) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<ਅੱਖਰ>(0xC0 | (cp >> 6));
+      *dest++ = static_cast<ਅੱਖਰ>(0x80 | (cp & 0x3F));
+    } ਨਹੀਂਤਾਂ ਜੇ (cp <= 0xFFFF) {
+      ਅਚਲ ਮਾਪ_t ਬਚਿਆ = static_cast<ਮਾਪ_t>(dest_ਸਿਰਾ - dest);
+      ਜੇ (ਬਚਿਆ < 3) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xE0 | (cp >> 12));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else if (cp <= 0x10FFFF) {
-      const size_t remaining = static_cast<size_t>(dest_end - dest);
-      if (remaining < 4) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
+      *dest++ = static_cast<ਅੱਖਰ>(0xE0 | (cp >> 12));
+      *dest++ = static_cast<ਅੱਖਰ>(0x80 | ((cp >> 6) & 0x3F));
+      *dest++ = static_cast<ਅੱਖਰ>(0x80 | (cp & 0x3F));
+    } ਨਹੀਂਤਾਂ ਜੇ (cp <= 0x10FFFF) {
+      ਅਚਲ ਮਾਪ_t ਬਚਿਆ = static_cast<ਮਾਪ_t>(dest_ਸਿਰਾ - dest);
+      ਜੇ (ਬਚਿਆ < 4) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Destination buffer too small for UTF-8 conversion");
       }
-      *dest++ = static_cast<char>(0xF0 | (cp >> 18));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 12) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
-      *dest++ = static_cast<char>(0x80 | (cp & 0x3F));
-    } else {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL,
+      *dest++ = static_cast<ਅੱਖਰ>(0xF0 | (cp >> 18));
+      *dest++ = static_cast<ਅੱਖਰ>(0x80 | ((cp >> 12) & 0x3F));
+      *dest++ = static_cast<ਅੱਖਰ>(0x80 | ((cp >> 6) & 0x3F));
+      *dest++ = static_cast<ਅੱਖਰ>(0x80 | (cp & 0x3F));
+    } ਨਹੀਂਤਾਂ {
+      ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL,
                              "Invalid Unicode codepoint during UTF-8 conversion");
     }
   }
 
-  str.resize(static_cast<size_t>(dest - str.data()));
-  return Status::OK();
+  str.resize(static_cast<ਮਾਪ_t>(dest - str.ਅੰਕੜੇ()));
+  ਵਾਪਸ ਸਥਿਤੀ_2::OK();
 }
 
 /// Convert a UTF-8 string to a wide string, writing into a pre-allocated std::wstring.
 /// The wstring is resized to the actual number of characters written.
 /// Validates continuation bytes and rejects overlong encodings and surrogates.
-inline Status Utf8ToWide(const std::string& str, std::wstring& wstr) {
-  if (str.empty()) {
+ਸਤਰਅੰਦਰ ਸਥਿਤੀ_2 Utf8_ਮੰਜ਼ਿਲ_Wide(ਅਚਲ std::string& str, std::wstring& wstr) {
+  ਜੇ (str.ਖਾਲੀ_ਥਾਵਾਂ()) {
     wstr.clear();
-    return Status::OK();
+    ਵਾਪਸ ਸਥਿਤੀ_2::OK();
   }
 
-  if (wstr.size() < str.size()) {
-    wstr.resize(str.size());
+  ਜੇ (wstr.ਮਾਪ() < str.ਮਾਪ()) {
+    wstr.resize(str.ਮਾਪ());
   }
 
-  const auto* src = reinterpret_cast<const unsigned char*>(str.data());
-  const auto* src_end = src + str.size();
-  wchar_t* dest = wstr.data();
+  ਅਚਲ ਸਵੈਚਾਲਿਤ* src = reinterpret_cast<ਅਚਲ ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ*>(str.ਅੰਕੜੇ());
+  ਅਚਲ ਸਵੈਚਾਲਿਤ* src_ਸਿਰਾ = src + str.ਮਾਪ();
+  wchar_t* dest = wstr.ਅੰਕੜੇ();
 
-  while (src < src_end) {
+  ਜਦੋਂ (src < src_ਸਿਰਾ) {
     char32_t cp = 0;
-    size_t byte_len = 0;
+    ਮਾਪ_t byte_len = 0;
 
-    if ((*src & 0x80) == 0) {
+    ਜੇ ((*src & 0x80) == 0) {
       cp = *src;
       byte_len = 1;
-    } else if ((*src & 0xE0) == 0xC0) {
+    } ਨਹੀਂਤਾਂ ਜੇ ((*src & 0xE0) == 0xC0) {
       byte_len = 2;
-      if (static_cast<size_t>(src_end - src) < 2) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      ਜੇ (static_cast<ਮਾਪ_t>(src_ਸਿਰਾ - src) < 2) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      ਜੇ ((src[1] & 0xC0) != 0x80) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x1F) << 6) |
            static_cast<char32_t>(src[1] & 0x3F);
       // Reject overlong encoding (must be >= 0x80 for 2-byte)
-      if (cp < 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      ਜੇ (cp < 0x80) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
-    } else if ((*src & 0xF0) == 0xE0) {
+    } ਨਹੀਂਤਾਂ ਜੇ ((*src & 0xF0) == 0xE0) {
       byte_len = 3;
-      if (static_cast<size_t>(src_end - src) < 3) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      ਜੇ (static_cast<ਮਾਪ_t>(src_ਸਿਰਾ - src) < 3) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      ਜੇ ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x0F) << 12) |
            (static_cast<char32_t>(src[1] & 0x3F) << 6) |
            static_cast<char32_t>(src[2] & 0x3F);
       // Reject overlong encoding (must be >= 0x800 for 3-byte)
-      if (cp < 0x800) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      ਜੇ (cp < 0x800) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
       // Reject UTF-16 surrogates (U+D800..U+DFFF)
-      if (cp >= 0xD800 && cp <= 0xDFFF) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8: surrogate codepoint");
+      ਜੇ (cp >= 0xD800 && cp <= 0xDFFF) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Invalid UTF-8: surrogate codepoint");
       }
-    } else if ((*src & 0xF8) == 0xF0) {
+    } ਨਹੀਂਤਾਂ ਜੇ ((*src & 0xF8) == 0xF0) {
       byte_len = 4;
-      if (static_cast<size_t>(src_end - src) < 4) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
+      ਜੇ (static_cast<ਮਾਪ_t>(src_ਸਿਰਾ - src) < 4) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Truncated UTF-8 sequence");
       }
-      if ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80 || (src[3] & 0xC0) != 0x80) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
+      ਜੇ ((src[1] & 0xC0) != 0x80 || (src[2] & 0xC0) != 0x80 || (src[3] & 0xC0) != 0x80) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Invalid UTF-8 continuation byte");
       }
       cp = (static_cast<char32_t>(src[0] & 0x07) << 18) |
            (static_cast<char32_t>(src[1] & 0x3F) << 12) |
            (static_cast<char32_t>(src[2] & 0x3F) << 6) |
            static_cast<char32_t>(src[3] & 0x3F);
       // Reject overlong encoding (must be >= 0x10000 for 4-byte)
-      if (cp < 0x10000) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
+      ਜੇ (cp < 0x10000) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Overlong UTF-8 encoding");
       }
       // Reject codepoints beyond Unicode range
-      if (cp > 0x10FFFF) {
-        return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8: codepoint beyond U+10FFFF");
+      ਜੇ (cp > 0x10FFFF) {
+        ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Invalid UTF-8: codepoint beyond U+10FFFF");
       }
-    } else {
-      return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "Invalid UTF-8 lead byte");
+    } ਨਹੀਂਤਾਂ {
+      ਵਾਪਸ ORT_MAKE_ਸਥਿਤੀ(ONNXRUNTIME, FAIL, "Invalid UTF-8 lead byte");
     }
 
     *dest++ = static_cast<wchar_t>(cp);
     src += byte_len;
   }
 
-  wstr.resize(static_cast<size_t>(dest - wstr.data()));
-  return Status::OK();
+  wstr.resize(static_cast<ਮਾਪ_t>(dest - wstr.ਅੰਕੜੇ()));
+  ਵਾਪਸ ਸਥਿਤੀ_2::OK();
 }
 
 /// Convenience: convert UTF-8 string to wstring (throws on error).
-inline std::wstring Utf8ToWideString(const std::string& s) {
+ਸਤਰਅੰਦਰ std::wstring Utf8_ਮੰਜ਼ਿਲ_Wide_String(ਅਚਲ std::string& s) {
   // UTF-8 byte count is an upper bound on wchar_t count
-  std::wstring result;
-  result.resize(s.size());
-  ORT_THROW_IF_ERROR(Utf8ToWide(s, result));
-  return result;
+  std::wstring ਨਤੀਜਾ;
+  ਨਤੀਜਾ.resize(s.ਮਾਪ());
+  ORT_THROW_IF_ERROR(Utf8_ਮੰਜ਼ਿਲ_Wide(s, ਨਤੀਜਾ));
+  ਵਾਪਸ ਨਤੀਜਾ;
 }
 
-#endif  // !_WIN32
+#ਜੇ_ਅੰਤ  // !_WIN32
 
 }  // namespace utf8_util
 }  // namespace onnxruntime

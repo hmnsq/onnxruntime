@@ -1,83 +1,83 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ਹਦਾਇਤ once
 
-#include <string>
-#include <type_traits>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string>
+#ਅਨ੍ਤਰ੍ਭਾਵ <type_traits>
 
 // for std::tolower or std::towlower
-#ifdef _WIN32
-#include <cwctype>
-#else
-#include <cctype>
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ _WIN32
+#ਅਨ੍ਤਰ੍ਭਾਵ <cwctype>
+#ਨਹੀਂਤਾਂ
+#ਅਨ੍ਤਰ੍ਭਾਵ <cctype>
+#ਜੇ_ਅੰਤ
 
 // for converting / printing ORT_TSTR path strings to std::string
-#ifdef _WIN32
-#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
-#define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
-#define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
-#define ORT_TSTR_CONVERT_FROM_STRING(X) X
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ _WIN32
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ORT_TSTR_CONVERT_ਮੰਜ਼ਿਲ_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().ਮੰਜ਼ਿਲ_ਬਾਈਟਾਂ(X)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_ਬਾਈਟਾਂ(X);
+#ਨਹੀਂਤਾਂ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ORT_TSTR_CONVERT_ਮੰਜ਼ਿਲ_PRINTABLE_STRING(X) X
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ORT_TSTR_CONVERT_FROM_STRING(X) X
+#ਜੇ_ਅੰਤ
 
-#include "core/common/common.h"
-#include "core/session/onnxruntime_c_api.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "core/common/common.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "core/session/onnxruntime_c_api.h"
 
 namespace onnxruntime {
 
 // char type for filesystem paths
-using PathChar = ORTCHAR_T;
+using ਰਸਤਾ_Char = ORTCHAR_T;
 // string type for filesystem paths
-using PathString = std::basic_string<PathChar>;
+using ਰਸਤਾ_String = std::basic_string<ਰਸਤਾ_Char>;
 
-inline PathString ToPathString(const PathString& s) {
-  return s;
+ਸਤਰਅੰਦਰ ਰਸਤਾ_String ਮੰਜ਼ਿਲ_ਰਸਤਾ_String(ਅਚਲ ਰਸਤਾ_String& s) {
+  ਵਾਪਸ s;
 }
 
-#ifdef _WIN32
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ _WIN32
 
-static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
+static_assert(std::is_same<ਰਸਤਾ_String, std::wstring>::ਮੁੱਲ, "PathString is not std::wstring!");
 
-inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+ਸਤਰਅੰਦਰ ਰਸਤਾ_String ਮੰਜ਼ਿਲ_ਰਸਤਾ_String(std::string_view s) {
+  ਵਾਪਸ ਮੰਜ਼ਿਲ_Wide_String(s);
 }
-inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+ਸਤਰਅੰਦਰ ਰਸਤਾ_String ਮੰਜ਼ਿਲ_ਰਸਤਾ_String(ਅਚਲ ਅੱਖਰ* s) {
+  ਵਾਪਸ ਮੰਜ਼ਿਲ_Wide_String(s);
 }
-inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
-}
-
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+ਸਤਰਅੰਦਰ ਰਸਤਾ_String ਮੰਜ਼ਿਲ_ਰਸਤਾ_String(ਅਚਲ std::string& s) {
+  ਵਾਪਸ ਮੰਜ਼ਿਲ_Wide_String(s);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+ਸਤਰਅੰਦਰ ਰਸਤਾ_Char ਮੰਜ਼ਿਲ_ਹੇਠਲਾ_ਰਸਤਾ_Char(ਰਸਤਾ_Char c) {
+  ਵਾਪਸ std::towlower(c);
 }
 
-#else
-
-static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
-
-inline PathString ToPathString(const char* s) {
-  return s;
+ਸਤਰਅੰਦਰ std::string ਰਸਤਾ_ਮੰਜ਼ਿਲ_UTF8_String(ਅਚਲ ਰਸਤਾ_String& s) {
+  ਵਾਪਸ ਮੰਜ਼ਿਲ_UTF8_String(s);
 }
 
-inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+#ਨਹੀਂਤਾਂ
+
+static_assert(std::is_same<ਰਸਤਾ_String, std::string>::ਮੁੱਲ, "PathString is not std::string!");
+
+ਸਤਰਅੰਦਰ ਰਸਤਾ_String ਮੰਜ਼ਿਲ_ਰਸਤਾ_String(ਅਚਲ ਅੱਖਰ* s) {
+  ਵਾਪਸ s;
 }
 
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+ਸਤਰਅੰਦਰ ਰਸਤਾ_String ਮੰਜ਼ਿਲ_ਰਸਤਾ_String(std::string_view s) {
+  ਵਾਪਸ ਰਸਤਾ_String{s};
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+ਸਤਰਅੰਦਰ ਰਸਤਾ_Char ਮੰਜ਼ਿਲ_ਹੇਠਲਾ_ਰਸਤਾ_Char(ਰਸਤਾ_Char c) {
+  ਵਾਪਸ std::tolower(c);
 }
 
-#endif
+ਸਤਰਅੰਦਰ std::string ਰਸਤਾ_ਮੰਜ਼ਿਲ_UTF8_String(ਅਚਲ ਰਸਤਾ_String& s) {
+  ਵਾਪਸ s;
+}
+
+#ਜੇ_ਅੰਤ
 
 }  // namespace onnxruntime

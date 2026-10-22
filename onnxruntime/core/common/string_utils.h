@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#ਹਦਾਇਤ once
 
-#include <algorithm>
-#include <cctype>
-#include <string>
-#include <string_view>
-#include <vector>
+#ਅਨ੍ਤਰ੍ਭਾਵ <algorithm>
+#ਅਨ੍ਤਰ੍ਭਾਵ <cctype>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string_view>
+#ਅਨ੍ਤਰ੍ਭਾਵ <vector>
 
-#include "core/common/common.h"
-#include "core/common/inlined_containers.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "core/common/common.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "core/common/inlined_containers.h"
 
 namespace onnxruntime {
 namespace utils {
@@ -22,38 +22,38 @@ namespace utils {
  * @param keep_empty Whether to keep empty substrings.
  * @return The split substrings.
  */
-inline InlinedVector<std::string_view> SplitString(std::string_view string_to_split, std::string_view delimiter,
-                                                   bool keep_empty = false) {
-  ORT_ENFORCE(!delimiter.empty(), "delimiter must not be empty");
-  InlinedVector<std::string_view> result{};
-  std::string_view::size_type segment_begin_pos = 0;
-  while (segment_begin_pos != std::string_view::npos) {
-    const std::string_view::size_type segment_end_pos = string_to_split.find(delimiter, segment_begin_pos);
-    const bool is_segment_empty = segment_begin_pos == segment_end_pos || segment_begin_pos == string_to_split.size();
-    if (!is_segment_empty || keep_empty) {
-      result.push_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
+ਸਤਰਅੰਦਰ Inlined_ਸਦਿਸ਼<std::string_view> ਵੰਡੋ_String(std::string_view string_ਮੰਜ਼ਿਲ_ਵੰਡੋ, std::string_view delimiter,
+                                                   bool keep_ਖਾਲੀ_ਥਾਵਾਂ = false) {
+  ORT_ENFORCE(!delimiter.ਖਾਲੀ_ਥਾਵਾਂ(), "delimiter must not be empty");
+  Inlined_ਸਦਿਸ਼<std::string_view> ਨਤੀਜਾ{};
+  std::string_view::ਮਾਪ_type segment_begin_pos = 0;
+  ਜਦੋਂ (segment_begin_pos != std::string_view::npos) {
+    ਅਚਲ std::string_view::ਮਾਪ_type segment_ਸਿਰਾ_pos = string_ਮੰਜ਼ਿਲ_ਵੰਡੋ.ਲੱਭੋ(delimiter, segment_begin_pos);
+    ਅਚਲ bool is_segment_ਖਾਲੀ_ਥਾਵਾਂ = segment_begin_pos == segment_ਸਿਰਾ_pos || segment_begin_pos == string_ਮੰਜ਼ਿਲ_ਵੰਡੋ.ਮਾਪ();
+    ਜੇ (!is_segment_ਖਾਲੀ_ਥਾਵਾਂ || keep_ਖਾਲੀ_ਥਾਵਾਂ) {
+      ਨਤੀਜਾ.ਧੱਕੋ_ਪਿੱਠ(string_ਮੰਜ਼ਿਲ_ਵੰਡੋ.substr(segment_begin_pos, segment_ਸਿਰਾ_pos - segment_begin_pos));
     }
-    segment_begin_pos = (segment_end_pos == std::string_view::npos)
-                            ? segment_end_pos
-                            : segment_end_pos + delimiter.size();
+    segment_begin_pos = (segment_ਸਿਰਾ_pos == std::string_view::npos)
+                            ? segment_ਸਿਰਾ_pos
+                            : segment_ਸਿਰਾ_pos + delimiter.ਮਾਪ();
   }
-  return result;
+  ਵਾਪਸ ਨਤੀਜਾ;
 }
 
 /**
  * Trim a string from start inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromLeft(std::string& s) {
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+ਸਤਰਅੰਦਰ ਖਾਲੀ Trim_String_From_ਖੱਬਾ(std::string& s) {
+  s.erase(s.begin(), std::ਲੱਭੋ_if(s.begin(), s.ਸਿਰਾ(), [](ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ ch) { ਵਾਪਸ !std::ਖਾਲੀ_ਥਾਂ_ਹੈ(ch); }));
 }
 
 /**
  * Trim a string from end inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromRight(std::string& s) {
-  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+ਸਤਰਅੰਦਰ ਖਾਲੀ Trim_String_From_ਸੱਜਾ(std::string& s) {
+  s.erase(std::ਲੱਭੋ_if(s.rbegin(), s.rend(), [](ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ ch) { ਵਾਪਸ !std::ਖਾਲੀ_ਥਾਂ_ਹੈ(ch); }).ਅਧਾਰ(), s.ਸਿਰਾ());
 }
 
 /**
@@ -61,30 +61,30 @@ inline void TrimStringFromRight(std::string& s) {
  * @param s The string to trim.
  * @return The trimmed string.
  */
-inline std::string TrimString(std::string_view s) {
+ਸਤਰਅੰਦਰ std::string TrimString(std::string_view s) {
   std::string s_trimmed{s};
-  TrimStringFromRight(s_trimmed);
-  TrimStringFromLeft(s_trimmed);
-  return s_trimmed;
+  Trim_String_From_ਸੱਜਾ(s_trimmed);
+  Trim_String_From_ਖੱਬਾ(s_trimmed);
+  ਵਾਪਸ s_trimmed;
 }
 
 /**
  * @brief A consistent way to construct the full qualified op name.
  */
-inline std::string GetFullQualifiedOpName(const std::string& op_type, const std::string& domain) {
-  return MakeString(domain, "::", op_type);
+ਸਤਰਅੰਦਰ std::string Get_ਭਰਿਆ_Qualified_Op_Name(ਅਚਲ std::string& op_type, ਅਚਲ std::string& domain) {
+  ਵਾਪਸ MakeString(domain, "::", op_type);
 }
 
 /**
  * Use this simple hash to generate unique int by given string input.
  */
-inline uint32_t GetHashFromString(const std::string& str_value) {
+ਸਤਰਅੰਦਰ uint32_t GetHashFromString(ਅਚਲ std::string& str_ਮੁੱਲ) {
   uint32_t hash = 0;
-  for (char const& c : str_value) {
+  ਲਈ (ਅੱਖਰ ਅਚਲ& c : str_ਮੁੱਲ) {
     hash = hash * 101 + c;
   }
 
-  return hash;
+  ਵਾਪਸ hash;
 }
 
 /**
@@ -92,15 +92,15 @@ inline uint32_t GetHashFromString(const std::string& str_value) {
  * @param str The string to lowercase.
  * @return The lowercased string.
  */
-inline std::string GetLowercaseString(std::string str) {
+ਸਤਰਅੰਦਰ std::string GetLowercaseString(std::string str) {
   // https://en.cppreference.com/w/cpp/string/byte/tolower
   // The behavior of tolower from <cctype> is undefined if the argument is neither representable as unsigned char
   // nor equal to EOF. To use tolower safely with a plain char (or signed char), the argument must be converted to
   // unsigned char.
-  std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
-    return static_cast<char>(std::tolower(c));
+  std::transform(str.begin(), str.ਸਿਰਾ(), str.begin(), [](ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ c) {
+    ਵਾਪਸ static_cast<ਅੱਖਰ>(std::tolower(c));
   });
-  return str;
+  ਵਾਪਸ str;
 }
 
 }  // namespace utils
