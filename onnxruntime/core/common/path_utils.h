@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <filesystem>
-#include <string>
-#include <string_view>
+#অন্তর্ভাব <filesystem>
+#অন্তর্ভাব <string>
+#অন্তর্ভাব <string_view>
 
-#include "core/common/common.h"
-#include "core/common/path_string.h"
+#অন্তর্ভাব "core/common/common.h"
+#অন্তর্ভাব "core/common/path_string.h"
 
 namespace onnxruntime {
 
@@ -19,57 +19,57 @@ namespace path_utils {
  *  MakeString doesn't support this type.
  */
 template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+PathString MakePathString(ধ্রুবক Args&... args) {
+  ধ্রুবক std::string str = onnxruntime::MakeString(args...);
+  ফেরত ToPathString(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+অন্তঃরেখ std::filesystem::path GetDirOrParentPath(ধ্রুবক std::filesystem::path& path) {
+  যদি (path.empty() || std::filesystem::is_directory(path)) {
+    ফেরত path;
   }
 
-  return path.parent_path();
+  ফেরত path.parent_path();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
-                                         const std::string& source_file_path,
+অন্তঃরেখ std::string GetPathWithStemSuffix(ধ্রুবক std::string& file_or_directory_path,
+                                         ধ্রুবক std::string& source_file_path,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  যদি (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
+    ফেরত file_or_directory_path;
   }
 
-  const std::filesystem::path source_path = source_file_path;
-  const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
+  ধ্রুবক std::filesystem::path source_path = source_file_path;
+  ধ্রুবক std::string default_filename = source_path.stem().string() + std::string{suffix};
+  যদি (std::filesystem::is_directory(file_or_directory_path)) {
     std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+    ফেরত directory.append(default_filename).string();
   }
 
-  return default_filename;
+  ফেরত default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
+অন্তঃরেখ bool IsAbsolutePath(ধ্রুবক std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
+  ধ্রুবক auto path = std::filesystem::path{ToPathString(path_string)};
+  ফেরত path.is_absolute();
+#অন্যথা
+  ফেরত !path_string.empty() && path_string.front() == '/';
 #endif
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
+অন্তঃরেখ bool IsRelativePathToParentPath(ধ্রুবক std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
+  ধ্রুবক auto path = std::filesystem::path{ToPathString(path_string)};
+  ধ্রুবক auto relative_path = path.lexically_normal().make_preferred().wstring();
+  ফেরত relative_path.find(L"..") != std::wstring::npos;
+#অন্যথা
+  ফেরত !path_string.empty() && path_string.find("..") != std::string::npos;
 #endif
 }
 

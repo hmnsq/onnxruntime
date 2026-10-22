@@ -3,44 +3,44 @@
 
 #pragma once
 
-#include <ostream>
-#include <string_view>
+#অন্তর্ভাব <ostream>
+#অন্তর্ভাব <string_view>
 
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+অন্তঃরেখ শূন্য WriteJsonString(std::ostream& stream, std::string_view মান) {
+  স্থির constexpr অক্ষর kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
-    switch (c) {
-      case '"':
+  জন্য (ধ্রুবক unsigned অক্ষর c : মান) {
+    নির্বাচন (c) {
+      ক্ষেত্র '"':
         stream << "\\\"";
-        break;
-      case '\\':
+        বিরতি;
+      ক্ষেত্র '\\':
         stream << "\\\\";
-        break;
-      case '\b':
+        বিরতি;
+      ক্ষেত্র '\b':
         stream << "\\b";
-        break;
-      case '\f':
+        বিরতি;
+      ক্ষেত্র '\f':
         stream << "\\f";
-        break;
-      case '\n':
+        বিরতি;
+      ক্ষেত্র '\n':
         stream << "\\n";
-        break;
-      case '\r':
+        বিরতি;
+      ক্ষেত্র '\r':
         stream << "\\r";
-        break;
-      case '\t':
+        বিরতি;
+      ক্ষেত্র '\t':
         stream << "\\t";
-        break;
-      default:
-        if (c < 0x20) {
+        বিরতি;
+      পূর্বনির্ধারিত:
+        যদি (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+        } অন্যথা {
+          stream << static_cast<অক্ষর>(c);
         }
     }
   }

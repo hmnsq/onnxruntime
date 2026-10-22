@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <iostream>
-#include "core/common/logging/sinks/ostream_sink.h"
+#অন্তর্ভাব <iostream>
+#অন্তর্ভাব "core/common/logging/sinks/ostream_sink.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -13,14 +13,14 @@ namespace logging {
 /// </summary>
 /// <seealso cref="ISink" />
 #ifdef _WIN32
-class CErrSink : public WOStreamSink {
- public:
+class CErrSink : সর্বজনীন WOStreamSink {
+ সর্বজনীন:
   CErrSink() : WOStreamSink(std::wcerr, /*flush*/ false) {  // std::cerr isn't buffered so no flush required
   }
 };
-#else
-class CErrSink : public OStreamSink {
- public:
+#অন্যথা
+class CErrSink : সর্বজনীন OStreamSink {
+ সর্বজনীন:
   CErrSink() : OStreamSink(std::cerr, /*flush*/ false) {  // std::cerr isn't buffered so no flush required
   }
 };
