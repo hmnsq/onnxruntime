@@ -30,7 +30,7 @@ class OStreamSink : public ISink {
   std::ostream* stream_;
   const bool flush_;
 };
-#else
+#инако
 /// <summary>
 /// A std::wostream based ISink
 /// </summary>

@@ -58,7 +58,7 @@ class Profiler {
   Whether data collection and output from this profiler is enabled.
   */
   bool IsEnabled() const {
-    return enabled_;
+    врати enabled_;
   }
   /*
   Return the stored start time of profiler.
@@ -66,7 +66,7 @@ class Profiler {
   For instance, on Windows and MacOS, the precision (high_resolution_clock) will be ~100ns
   */
   uint64_t GetStartTimeNs() const {
-    return std::chrono::duration_cast<std::chrono::nanoseconds>(
+    врати std::chrono::duration_cast<std::chrono::nanoseconds>(
                profiling_start_time_.time_since_epoch())
         .count();
   }
@@ -80,7 +80,7 @@ class Profiler {
                              InlinedHashMap<std::string, std::string> event_args = {},
                              bool sync_gpu = false);
 
-#if !defined(ORT_MINIMAL_BUILD)
+#ако !defined(ORT_MINIMAL_BUILD)
   void EndTimeAndRecordEvent(EventCategory category,
                              const std::string& event_name,
                              const TimePoint& start_time,
@@ -105,8 +105,8 @@ class Profiler {
   static Profiler& Instance() {
 #ifdef ENABLE_STATIC_PROFILER_INSTANCE
     ORT_ENFORCE(instance_ != nullptr);
-    return *instance_;
-#else
+    врати *instance_;
+#инако
     ORT_THROW("Static profiler instance is not enabled, please compile with -DENABLE_STATIC_PROFILER_INSTANCE");
 #endif
   }
@@ -115,7 +115,7 @@ class Profiler {
   Gets the maximum event count to set for new profiler instances.
   */
   static size_t GetGlobalMaxNumEvents() {
-    return global_max_num_events_.load();
+    врати global_max_num_events_.load();
   }
 
   /*
@@ -126,7 +126,7 @@ class Profiler {
     global_max_num_events_.store(new_max_num_events);
   }
 
-#if !defined(ORT_MINIMAL_BUILD)
+#ако !defined(ORT_MINIMAL_BUILD)
   // Testing only. Must be called before profiling starts.
   void SetMaxNumEventsForTest(size_t max_num_events) {
     ORT_ENFORCE(!enabled_ && events_.empty());
@@ -135,11 +135,11 @@ class Profiler {
 #endif
 
   void AddEpProfilers(std::unique_ptr<EpProfiler> ep_profiler) {
-    if (ep_profiler) {
+    ако (ep_profiler) {
       ep_profilers_.push_back(std::move(ep_profiler));
-      if (enabled_) {
+      ако (enabled_) {
         auto status = ep_profilers_.back()->StartProfiling(profiling_start_time_);
-        if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
+        ако (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
           ep_start_profiling_status_ = status;
         }
       }
@@ -149,10 +149,10 @@ class Profiler {
   /// Returns the aggregate status from calling StartProfiling on EP profilers.
   /// OK if all EP profilers started successfully (or if none are registered).
   /// Returns the first error status encountered otherwise.
-  const Status& GetEpProfilingStatus() const { return ep_start_profiling_status_; }
+  const Status& GetEpProfilingStatus() const { врати ep_start_profiling_status_; }
 
   /// Returns true if at least one EP profiler was registered.
-  bool HasEpProfilers() const { return !ep_profilers_.empty(); }
+  bool HasEpProfilers() const { врати !ep_profilers_.empty(); }
 
  private:
   ORT_DISALLOW_COPY_ASSIGNMENT_AND_MOVE(Profiler);
@@ -164,7 +164,7 @@ class Profiler {
    */
   static std::atomic<size_t> global_max_num_events_;
 
-#if !defined(ORT_MINIMAL_BUILD)
+#ако !defined(ORT_MINIMAL_BUILD)
   void RecordEventImpl(EventCategory category,
                        const std::string& event_name,
                        const TimePoint& start_time,
@@ -176,14 +176,14 @@ class Profiler {
   // Mutex controlling access to profiler data
   std::mutex mutex_;
   bool enabled_{false};
-#if defined(__wasm__)
+#ако defined(__wasm__)
   /*
    * The simplest way to emit profiling data in WebAssembly is to print out to console,
    * since browsers can't access to a file system directly.
    * TODO: Consider MEMFS or IndexedDB instead of console.
    */
   std::ostream& profile_stream_{std::cout};
-#else
+#инако
   std::ofstream profile_stream_;
 #endif
   std::string profile_stream_file_;
@@ -192,13 +192,13 @@ class Profiler {
   TimePoint profiling_start_time_;
   Events events_;
   bool max_events_reached{false};
-#if !defined(ORT_MINIMAL_BUILD)
+#ако !defined(ORT_MINIMAL_BUILD)
   size_t dropped_event_count_{0};
 #endif
   bool profile_with_logger_{false};
-#if !defined(ORT_MINIMAL_BUILD)
+#ако !defined(ORT_MINIMAL_BUILD)
   size_t max_num_events_{global_max_num_events_.load()};
-#else
+#инако
   const size_t max_num_events_{global_max_num_events_.load()};
 #endif
 
