@@ -3,27 +3,27 @@
 
 #pragma once
 
-#include <string>
-#include <type_traits>
+#ಅನ್ತರ್ಭಾವ <string>
+#ಅನ್ತರ್ಭಾವ <type_traits>
 
 // for std::tolower or std::towlower
 #ifdef _WIN32
-#include <cwctype>
-#else
-#include <cctype>
+#ಅನ್ತರ್ಭಾವ <cwctype>
+#ಅನ್ಯಥಾ
+#ಅನ್ತರ್ಭಾವ <cctype>
 #endif
 
 // for converting / printing ORT_TSTR path strings to std::string
 #ifdef _WIN32
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(X)
 #define ORT_TSTR_CONVERT_FROM_STRING(X) std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(X);
-#else
+#ಅನ್ಯಥಾ
 #define ORT_TSTR_CONVERT_TO_PRINTABLE_STRING(X) X
 #define ORT_TSTR_CONVERT_FROM_STRING(X) X
 #endif
 
-#include "core/common/common.h"
-#include "core/session/onnxruntime_c_api.h"
+#ಅನ್ತರ್ಭಾವ "core/common/common.h"
+#ಅನ್ತರ್ಭಾವ "core/session/onnxruntime_c_api.h"
 
 namespace onnxruntime {
 
@@ -32,50 +32,50 @@ using PathChar = ORTCHAR_T;
 // string type for filesystem paths
 using PathString = std::basic_string<PathChar>;
 
-inline PathString ToPathString(const PathString& s) {
-  return s;
+ಅನ್ತಃಸ್ಥ PathString ToPathString(ಧ್ರುವ PathString& s) {
+  ಪ್ರತ್ಯಾಗಮ s;
 }
 
 #ifdef _WIN32
 
-static_assert(std::is_same<PathString, std::wstring>::value, "PathString is not std::wstring!");
+static_assert(std::is_same<PathString, std::wstring>::ಮೌಲ್ಯ, "PathString is not std::wstring!");
 
-inline PathString ToPathString(std::string_view s) {
-  return ToWideString(s);
+ಅನ್ತಃಸ್ಥ PathString ToPathString(std::string_view s) {
+  ಪ್ರತ್ಯಾಗಮ ToWideString(s);
 }
-inline PathString ToPathString(const char* s) {
-  return ToWideString(s);
+ಅನ್ತಃಸ್ಥ PathString ToPathString(ಧ್ರುವ ವರ್ಣ* s) {
+  ಪ್ರತ್ಯಾಗಮ ToWideString(s);
 }
-inline PathString ToPathString(const std::string& s) {
-  return ToWideString(s);
-}
-
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::towlower(c);
+ಅನ್ತಃಸ್ಥ PathString ToPathString(ಧ್ರುವ std::string& s) {
+  ಪ್ರತ್ಯಾಗಮ ToWideString(s);
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return ToUTF8String(s);
+ಅನ್ತಃಸ್ಥ PathChar ToLowerPathChar(PathChar c) {
+  ಪ್ರತ್ಯಾಗಮ std::towlower(c);
 }
 
-#else
-
-static_assert(std::is_same<PathString, std::string>::value, "PathString is not std::string!");
-
-inline PathString ToPathString(const char* s) {
-  return s;
+ಅನ್ತಃಸ್ಥ std::string PathToUTF8String(ಧ್ರುವ PathString& s) {
+  ಪ್ರತ್ಯಾಗಮ ToUTF8String(s);
 }
 
-inline PathString ToPathString(std::string_view s) {
-  return PathString{s};
+#ಅನ್ಯಥಾ
+
+static_assert(std::is_same<PathString, std::string>::ಮೌಲ್ಯ, "PathString is not std::string!");
+
+ಅನ್ತಃಸ್ಥ PathString ToPathString(ಧ್ರುವ ವರ್ಣ* s) {
+  ಪ್ರತ್ಯಾಗಮ s;
 }
 
-inline PathChar ToLowerPathChar(PathChar c) {
-  return std::tolower(c);
+ಅನ್ತಃಸ್ಥ PathString ToPathString(std::string_view s) {
+  ಪ್ರತ್ಯಾಗಮ PathString{s};
 }
 
-inline std::string PathToUTF8String(const PathString& s) {
-  return s;
+ಅನ್ತಃಸ್ಥ PathChar ToLowerPathChar(PathChar c) {
+  ಪ್ರತ್ಯಾಗಮ std::tolower(c);
+}
+
+ಅನ್ತಃಸ್ಥ std::string PathToUTF8String(ಧ್ರುವ PathString& s) {
+  ಪ್ರತ್ಯಾಗಮ s;
 }
 
 #endif

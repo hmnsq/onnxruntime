@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <filesystem>
-#include <string>
-#include <string_view>
+#ಅನ್ತರ್ಭಾವ <filesystem>
+#ಅನ್ತರ್ಭಾವ <string>
+#ಅನ್ತರ್ಭಾವ <string_view>
 
-#include "core/common/common.h"
-#include "core/common/path_string.h"
+#ಅನ್ತರ್ಭಾವ "core/common/common.h"
+#ಅನ್ತರ್ಭಾವ "core/common/path_string.h"
 
 namespace onnxruntime {
 
@@ -19,57 +19,57 @@ namespace path_utils {
  *  MakeString doesn't support this type.
  */
 template <typename... Args>
-PathString MakePathString(const Args&... args) {
-  const std::string str = onnxruntime::MakeString(args...);
-  return ToPathString(str);
+PathString MakePathString(ಧ್ರುವ Args&... args) {
+  ಧ್ರುವ std::string str = onnxruntime::MakeString(args...);
+  ಪ್ರತ್ಯಾಗಮ ToPathString(str);
 }
 
 /** Return a directory path unchanged, or the parent path if the input is a file path. */
-inline std::filesystem::path GetDirOrParentPath(const std::filesystem::path& path) {
-  if (path.empty() || std::filesystem::is_directory(path)) {
-    return path;
+ಅನ್ತಃಸ್ಥ std::filesystem::path GetDirOrParentPath(ಧ್ರುವ std::filesystem::path& path) {
+  ಯದಿ (path.empty() || std::filesystem::is_directory(path)) {
+    ಪ್ರತ್ಯಾಗಮ path;
   }
 
-  return path.parent_path();
+  ಪ್ರತ್ಯಾಗಮ path.parent_path();
 }
 
 /**
  * Return file_or_directory_path if it names a file. Otherwise, generate a filename from source_file_path's stem and
  * suffix, optionally under file_or_directory_path when it names a directory.
  */
-inline std::string GetPathWithStemSuffix(const std::string& file_or_directory_path,
-                                         const std::string& source_file_path,
+ಅನ್ತಃಸ್ಥ std::string GetPathWithStemSuffix(ಧ್ರುವ std::string& file_or_directory_path,
+                                         ಧ್ರುವ std::string& source_file_path,
                                          std::string_view suffix) {
-  if (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
-    return file_or_directory_path;
+  ಯದಿ (!file_or_directory_path.empty() && !std::filesystem::is_directory(file_or_directory_path)) {
+    ಪ್ರತ್ಯಾಗಮ file_or_directory_path;
   }
 
-  const std::filesystem::path source_path = source_file_path;
-  const std::string default_filename = source_path.stem().string() + std::string{suffix};
-  if (std::filesystem::is_directory(file_or_directory_path)) {
+  ಧ್ರುವ std::filesystem::path source_path = source_file_path;
+  ಧ್ರುವ std::string default_filename = source_path.stem().string() + std::string{suffix};
+  ಯದಿ (std::filesystem::is_directory(file_or_directory_path)) {
     std::filesystem::path directory = file_or_directory_path;
-    return directory.append(default_filename).string();
+    ಪ್ರತ್ಯಾಗಮ directory.append(default_filename).string();
   }
 
-  return default_filename;
+  ಪ್ರತ್ಯಾಗಮ default_filename;
 }
 
-inline bool IsAbsolutePath(const std::string& path_string) {
+ಅನ್ತಃಸ್ಥ bool IsAbsolutePath(ಧ್ರುವ std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  return path.is_absolute();
-#else
-  return !path_string.empty() && path_string.front() == '/';
+  ಧ್ರುವ auto path = std::filesystem::path{ToPathString(path_string)};
+  ಪ್ರತ್ಯಾಗಮ path.is_absolute();
+#ಅನ್ಯಥಾ
+  ಪ್ರತ್ಯಾಗಮ !path_string.empty() && path_string.front() == '/';
 #endif
 }
 
-inline bool IsRelativePathToParentPath(const std::string& path_string) {
+ಅನ್ತಃಸ್ಥ bool IsRelativePathToParentPath(ಧ್ರುವ std::string& path_string) {
 #ifdef _WIN32
-  const auto path = std::filesystem::path{ToPathString(path_string)};
-  const auto relative_path = path.lexically_normal().make_preferred().wstring();
-  return relative_path.find(L"..") != std::wstring::npos;
-#else
-  return !path_string.empty() && path_string.find("..") != std::string::npos;
+  ಧ್ರುವ auto path = std::filesystem::path{ToPathString(path_string)};
+  ಧ್ರುವ auto relative_path = path.lexically_normal().make_preferred().wstring();
+  ಪ್ರತ್ಯಾಗಮ relative_path.find(L"..") != std::wstring::npos;
+#ಅನ್ಯಥಾ
+  ಪ್ರತ್ಯಾಗಮ !path_string.empty() && path_string.find("..") != std::string::npos;
 #endif
 }
 

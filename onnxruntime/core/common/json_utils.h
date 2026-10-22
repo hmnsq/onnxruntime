@@ -3,44 +3,44 @@
 
 #pragma once
 
-#include <ostream>
-#include <string_view>
+#ಅನ್ತರ್ಭಾವ <ostream>
+#ಅನ್ತರ್ಭಾವ <string_view>
 
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+ಅನ್ತಃಸ್ಥ ಶೂನ್ಯ WriteJsonString(std::ostream& stream, std::string_view ಮೌಲ್ಯ) {
+  ಸ್ಥಿರ constexpr ವರ್ಣ kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
-    switch (c) {
-      case '"':
+  ಪ್ರತಿ (ಧ್ರುವ unsigned ವರ್ಣ c : ಮೌಲ್ಯ) {
+    ವಿಕಲ್ಪ (c) {
+      ಪಕ್ಷ '"':
         stream << "\\\"";
-        break;
-      case '\\':
+        ಭಙ್ಗ;
+      ಪಕ್ಷ '\\':
         stream << "\\\\";
-        break;
-      case '\b':
+        ಭಙ್ಗ;
+      ಪಕ್ಷ '\b':
         stream << "\\b";
-        break;
-      case '\f':
+        ಭಙ್ಗ;
+      ಪಕ್ಷ '\f':
         stream << "\\f";
-        break;
-      case '\n':
+        ಭಙ್ಗ;
+      ಪಕ್ಷ '\n':
         stream << "\\n";
-        break;
-      case '\r':
+        ಭಙ್ಗ;
+      ಪಕ್ಷ '\r':
         stream << "\\r";
-        break;
-      case '\t':
+        ಭಙ್ಗ;
+      ಪಕ್ಷ '\t':
         stream << "\\t";
-        break;
-      default:
-        if (c < 0x20) {
+        ಭಙ್ಗ;
+      ಸ್ವಭಾವ:
+        ಯದಿ (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+        } ಅನ್ಯಥಾ {
+          stream << static_cast<ವರ್ಣ>(c);
         }
     }
   }
