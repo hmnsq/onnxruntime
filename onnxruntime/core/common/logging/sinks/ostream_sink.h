@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <ostream>
-#include <sstream>
-#include <string>
+#অন্তর্ভাব <ostream>
+#অন্তর্ভাব <sstream>
+#অন্তর্ভাব <string>
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/isink.h"
+#অন্তর্ভাব "core/common/logging/capture.h"
+#অন্তর্ভাব "core/common/logging/isink.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -17,36 +17,36 @@ namespace logging {
 /// A std::ostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class OStreamSink : public ISink {
- protected:
+class OStreamSink : সার্বজনিক ISink {
+ রক্ষিত:
   OStreamSink(std::ostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ সার্বজনিক:
+  শূন্য SendImpl(ধ্রুব Timestamp& timestamp, ধ্রুব std::string& logger_id, ধ্রুব Capture& message) override;
 
- private:
+ গুপ্ত:
   std::ostream* stream_;
-  const bool flush_;
+  ধ্রুব bool flush_;
 };
-#else
+#অন্যথা
 /// <summary>
 /// A std::wostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class WOStreamSink : public ISink {
- protected:
+class WOStreamSink : সার্বজনিক ISink {
+ রক্ষিত:
   WOStreamSink(std::wostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ সার্বজনিক:
+  শূন্য SendImpl(ধ্রুব Timestamp& timestamp, ধ্রুব std::string& logger_id, ধ্রুব Capture& message) override;
 
- private:
+ গুপ্ত:
   std::wostream* stream_;
-  const bool flush_;
+  ধ্রুব bool flush_;
 };
 #endif
 }  // namespace logging

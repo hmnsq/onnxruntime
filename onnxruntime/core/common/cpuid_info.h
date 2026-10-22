@@ -4,73 +4,73 @@
 
 #pragma once
 
-#include "core/common/common.h"
-#include "core/common/cpuid_arch_definition.h"
+#অন্তর্ভাব "core/common/common.h"
+#অন্তর্ভাব "core/common/cpuid_arch_definition.h"
 
 namespace onnxruntime {
 
 class CPUIDInfo {
- public:
-  static const CPUIDInfo& GetCPUIDInfo() {
-    static CPUIDInfo cpuid_info;
-    return cpuid_info;
+ সার্বজনিক:
+  স্থির ধ্রুব CPUIDInfo& GetCPUIDInfo() {
+    স্থির CPUIDInfo cpuid_info;
+    প্রত্যাগম cpuid_info;
   }
 
-  std::string_view GetCPUVendor() const {
-    return vendor_;
+  std::string_view GetCPUVendor() ধ্রুব {
+    প্রত্যাগম vendor_;
   }
 
-  uint32_t GetCPUVendorId() const {
-    return vendor_id_;
+  uint32_t GetCPUVendorId() ধ্রুব {
+    প্রত্যাগম vendor_id_;
   }
 
-  bool HasAMX_BF16() const { return has_amx_bf16_; }
-  bool HasAVX() const { return has_avx_; }
-  bool HasAVX2() const { return has_avx2_; }
-  bool HasAVX512f() const { return has_avx512f_; }
-  bool HasAVX512_BF16() const { return has_avx512_bf16_; }
-  bool HasAVX512Skylake() const { return has_avx512_skylake_; }
-  bool HasF16C() const { return has_f16c_; } /*fp16 conversion inst*/
-  bool HasSSE3() const { return has_sse3_; }
-  bool HasSSE4_1() const { return has_sse4_1_; }
-  bool IsHybrid() const { return is_hybrid_; }
-  bool HasTPAUSE() const { return has_tpause_; }
+  bool HasAMX_BF16() ধ্রুব { প্রত্যাগম has_amx_bf16_; }
+  bool HasAVX() ধ্রুব { প্রত্যাগম has_avx_; }
+  bool HasAVX2() ধ্রুব { প্রত্যাগম has_avx2_; }
+  bool HasAVX512f() ধ্রুব { প্রত্যাগম has_avx512f_; }
+  bool HasAVX512_BF16() ধ্রুব { প্রত্যাগম has_avx512_bf16_; }
+  bool HasAVX512Skylake() ধ্রুব { প্রত্যাগম has_avx512_skylake_; }
+  bool HasF16C() ধ্রুব { প্রত্যাগম has_f16c_; } /*fp16 conversion inst*/
+  bool HasSSE3() ধ্রুব { প্রত্যাগম has_sse3_; }
+  bool HasSSE4_1() ধ্রুব { প্রত্যাগম has_sse4_1_; }
+  bool IsHybrid() ধ্রুব { প্রত্যাগম is_hybrid_; }
+  bool HasTPAUSE() ধ্রুব { প্রত্যাগম has_tpause_; }
 
   // ARM
-  bool HasArmNeonDot() const { return has_arm_neon_dot_; }
-  bool HasArmNeon_I8MM() const { return has_arm_neon_i8mm_; }
-  bool HasArmSve() const { return has_arm_sve_; }
-  bool HasArmSVE2p1() const { return has_arm_sve2p1_; }
-  bool HasArmSVE_I8MM() const { return has_arm_sve_i8mm_; }
-  bool HasArmNeon_BF16() const { return has_arm_neon_bf16_; }
-  bool HasArm_SME() const { return has_arm_sme_; }
-  bool HasArm_SME2() const { return has_arm_sme2_; }
+  bool HasArmNeonDot() ধ্রুব { প্রত্যাগম has_arm_neon_dot_; }
+  bool HasArmNeon_I8MM() ধ্রুব { প্রত্যাগম has_arm_neon_i8mm_; }
+  bool HasArmSve() ধ্রুব { প্রত্যাগম has_arm_sve_; }
+  bool HasArmSVE2p1() ধ্রুব { প্রত্যাগম has_arm_sve2p1_; }
+  bool HasArmSVE_I8MM() ধ্রুব { প্রত্যাগম has_arm_sve_i8mm_; }
+  bool HasArmNeon_BF16() ধ্রুব { প্রত্যাগম has_arm_neon_bf16_; }
+  bool HasArm_SME() ধ্রুব { প্রত্যাগম has_arm_sme_; }
+  bool HasArm_SME2() ধ্রুব { প্রত্যাগম has_arm_sme2_; }
 
-  uint32_t GetCurrentCoreIdx() const;
+  uint32_t GetCurrentCoreIdx() ধ্রুব;
 
   /**
    * @return CPU core micro-architecture running the current thread
    */
-  int32_t GetCurrentUarch() const {
-    if (core_uarchs_.empty()) {
-      return -1;
+  int32_t GetCurrentUarch() ধ্রুব {
+    যদি (core_uarchs_.empty()) {
+      প্রত্যাগম -1;
     }
 
     uint32_t coreIdx = GetCurrentCoreIdx();
-    if (coreIdx >= core_uarchs_.size()) {
-      return -1;
+    যদি (coreIdx >= core_uarchs_.size()) {
+      প্রত্যাগম -1;
     }
-    return core_uarchs_[coreIdx];
+    প্রত্যাগম core_uarchs_[coreIdx];
   }
 
   /**
    * @return CPU core micro-architecture
    */
-  int32_t GetCoreUarch(uint32_t coreId) const {
-    if (coreId >= core_uarchs_.size()) {
-      return -1;
+  int32_t GetCoreUarch(uint32_t coreId) ধ্রুব {
+    যদি (coreId >= core_uarchs_.size()) {
+      প্রত্যাগম -1;
     }
-    return core_uarchs_[coreId];
+    প্রত্যাগম core_uarchs_[coreId];
   }
 
   /**
@@ -78,11 +78,11 @@ class CPUIDInfo {
    *        that needs specialized optimization in kernels
    * @return whether the indicated core has narrower load/store device
    */
-  bool IsCoreArmv8NarrowLd(uint32_t coreId) const {
-    if (coreId >= is_armv8_narrow_ld_.size()) {
-      return false;
+  bool IsCoreArmv8NarrowLd(uint32_t coreId) ধ্রুব {
+    যদি (coreId >= is_armv8_narrow_ld_.size()) {
+      প্রত্যাগম false;
     }
-    return is_armv8_narrow_ld_[coreId];
+    প্রত্যাগম is_armv8_narrow_ld_[coreId];
   }
 
   /**
@@ -90,61 +90,61 @@ class CPUIDInfo {
    *        that needs specialized optimization in kernels
    * @return whether the current core has narrower load/store device
    */
-  bool IsCurrentCoreArmv8NarrowLd() const {
-    if (is_armv8_narrow_ld_.empty()) {
-      return false;
+  bool IsCurrentCoreArmv8NarrowLd() ধ্রুব {
+    যদি (is_armv8_narrow_ld_.empty()) {
+      প্রত্যাগম false;
     }
 
     uint32_t coreIdx = GetCurrentCoreIdx();
-    if (coreIdx >= is_armv8_narrow_ld_.size()) {
-      return false;
+    যদি (coreIdx >= is_armv8_narrow_ld_.size()) {
+      প্রত্যাগম false;
     }
-    return is_armv8_narrow_ld_[coreIdx];
+    প্রত্যাগম is_armv8_narrow_ld_[coreIdx];
   }
 
-  bool HasFp16VectorAcceleration() const {
-    return has_fp16_;
+  bool HasFp16VectorAcceleration() ধ্রুব {
+    প্রত্যাগম has_fp16_;
   }
 
- private:
+ গুপ্ত:
   // Log function that uses ORT logging if available or writes to stderr.
   // This enables us to log even before ORT logging has been initialized.
-  static void LogEarlyWarning(std::string_view message);
+  স্থির শূন্য LogEarlyWarning(std::string_view message);
 
   CPUIDInfo();
   ~CPUIDInfo();
 
-  void VendorInfoInit();
+  শূন্য VendorInfoInit();
 
-#if defined(CPUIDINFO_ARCH_X86)
+#যদি defined(CPUIDINFO_ARCH_X86)
 
-  void X86Init();
+  শূন্য X86Init();
 
-#elif defined(CPUIDINFO_ARCH_ARM)
+#নোচেদ্যদি defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(__linux__)
+#যদি defined(__linux__)
 
-  void ArmLinuxInit();
+  শূন্য ArmLinuxInit();
 
-#elif defined(_WIN32)
+#নোচেদ্যদি defined(_WIN32)
 
-  void ArmWindowsInit();
+  শূন্য ArmWindowsInit();
 
-#elif defined(__APPLE__)
+#নোচেদ্যদি defined(__APPLE__)
 
-  void ArmAppleInit();
+  শূন্য ArmAppleInit();
 
 #endif
 
 #endif  // defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(CPUIDINFO_ARCH_RISCV64)
-#if defined(__linux__)
-  void RiscvLinuxInit();
+#যদি defined(CPUIDINFO_ARCH_RISCV64)
+#যদি defined(__linux__)
+  শূন্য RiscvLinuxInit();
 #endif
 #endif  // defined(CPUIDINFO_ARCH_RISCV64)
 
-#if defined(CPUINFO_SUPPORTED)
+#যদি defined(CPUINFO_SUPPORTED)
   bool pytorch_cpuinfo_init_{false};
 #endif  // defined(CPUINFO_SUPPORTED)
 

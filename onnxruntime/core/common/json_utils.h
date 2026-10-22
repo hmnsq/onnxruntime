@@ -3,44 +3,44 @@
 
 #pragma once
 
-#include <ostream>
-#include <string_view>
+#অন্তর্ভাব <ostream>
+#অন্তর্ভাব <string_view>
 
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+অন্তঃস্থ শূন্য WriteJsonString(std::ostream& stream, std::string_view মান) {
+  স্থির constexpr বর্ণ kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
-    switch (c) {
-      case '"':
+  প্রতি (ধ্রুব unsigned বর্ণ c : মান) {
+    বিকল্প (c) {
+      পক্ষ '"':
         stream << "\\\"";
-        break;
-      case '\\':
+        ভঙ্গ;
+      পক্ষ '\\':
         stream << "\\\\";
-        break;
-      case '\b':
+        ভঙ্গ;
+      পক্ষ '\b':
         stream << "\\b";
-        break;
-      case '\f':
+        ভঙ্গ;
+      পক্ষ '\f':
         stream << "\\f";
-        break;
-      case '\n':
+        ভঙ্গ;
+      পক্ষ '\n':
         stream << "\\n";
-        break;
-      case '\r':
+        ভঙ্গ;
+      পক্ষ '\r':
         stream << "\\r";
-        break;
-      case '\t':
+        ভঙ্গ;
+      পক্ষ '\t':
         stream << "\\t";
-        break;
-      default:
-        if (c < 0x20) {
+        ভঙ্গ;
+      স্বভাব:
+        যদি (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+        } অন্যথা {
+          stream << static_cast<বর্ণ>(c);
         }
     }
   }
