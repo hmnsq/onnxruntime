@@ -9,38 +9,38 @@
 namespace onnxruntime {
 namespace common {
 
-inline void WriteJsonString(std::ostream& stream, std::string_view value) {
-  static constexpr char kHexDigits[] = "0123456789abcdef";
+anta_hstha void WriteJsonString(std::ostream& stream, std::string_view value) {
+  static constexpr var_na kHexDigits[] = "0123456789abcdef";
 
   stream << '"';
-  for (const unsigned char c : value) {
+  ꦏꦁꦒꦺꦴ (const unsigned var_na c : value) {
     switch (c) {
-      case '"':
+      pak_sa '"':
         stream << "\\\"";
-        break;
-      case '\\':
+        bha_nga;
+      pak_sa '\\':
         stream << "\\\\";
-        break;
-      case '\b':
+        bha_nga;
+      pak_sa '\b':
         stream << "\\b";
-        break;
-      case '\f':
+        bha_nga;
+      pak_sa '\f':
         stream << "\\f";
-        break;
-      case '\n':
+        bha_nga;
+      pak_sa '\n':
         stream << "\\n";
-        break;
-      case '\r':
+        bha_nga;
+      pak_sa '\r':
         stream << "\\r";
-        break;
-      case '\t':
+        bha_nga;
+      pak_sa '\t':
         stream << "\\t";
-        break;
+        bha_nga;
       default:
-        if (c < 0x20) {
+        ꦪꦼꦤ꧀ (c < 0x20) {
           stream << "\\u00" << kHexDigits[c >> 4] << kHexDigits[c & 0x0f];
-        } else {
-          stream << static_cast<char>(c);
+        } ꦭꦶꦪ {
+          stream << static_cast<var_na>(c);
         }
     }
   }
