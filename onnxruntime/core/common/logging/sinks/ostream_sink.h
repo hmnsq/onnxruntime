@@ -1,53 +1,53 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#pragma once
+#لارښوونه once
 
-#include <ostream>
-#include <sstream>
-#include <string>
+#ضمن <ostream>
+#ضمن <sstream>
+#ضمن <string>
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/isink.h"
+#ضمن "core/common/logging/capture.h"
+#ضمن "core/common/logging/isink.h"
 
 namespace onnxruntime {
 namespace logging {
-#ifndef _WIN32
+#که_نه_تعریف_شوی _WIN32
 /// <summary>
 /// A std::ostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class OStreamSink : public ISink {
- protected:
-  OStreamSink(std::ostream& stream, bool flush)
-      : stream_{&stream}, flush_{flush} {
+class OStreamSink : عام ISink {
+ محمي:
+  OStreamSink(std::ostream& بهیر, bool flush)
+      : بهیر_2{&بهیر}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ عام:
+  فراغ SendImpl(ثابت Timestamp& timestamp, ثابت std::string& logger_id, ثابت Capture& پیغام) override;
 
- private:
-  std::ostream* stream_;
-  const bool flush_;
+ خاص:
+  std::ostream* بهیر_2;
+  ثابت bool flush_;
 };
-#else
+#وإلا
 /// <summary>
 /// A std::wostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class WOStreamSink : public ISink {
- protected:
-  WOStreamSink(std::wostream& stream, bool flush)
-      : stream_{&stream}, flush_{flush} {
+class WOStreamSink : عام ISink {
+ محمي:
+  WOStreamSink(std::wostream& بهیر, bool flush)
+      : بهیر_2{&بهیر}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ عام:
+  فراغ SendImpl(ثابت Timestamp& timestamp, ثابت std::string& logger_id, ثابت Capture& پیغام) override;
 
- private:
-  std::wostream* stream_;
-  const bool flush_;
+ خاص:
+  std::wostream* بهیر_2;
+  ثابت bool flush_;
 };
-#endif
+#د_که_پای
 }  // namespace logging
 }  // namespace onnxruntime
