@@ -6,8 +6,8 @@
 namespace onnxruntime {
 
 // this type represents a compile-time list of types
-template <typename... T>
-struct TypeList {};
+ढाँचा <typename... T>
+संरचना TypeList {};
 
 }  // namespace onnxruntime
 
