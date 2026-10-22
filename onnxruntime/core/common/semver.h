@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include <cstdint>
-#include <optional>
-#include <string_view>
+#અન્તર્ભાવ <cstdint>
+#અન્તર્ભાવ <optional>
+#અન્તર્ભાવ <string_view>
 
-#include "core/common/status.h"
+#અન્તર્ભાવ "core/common/status.h"
 
 namespace onnxruntime {
 
@@ -15,7 +15,7 @@ namespace onnxruntime {
 // See https://github.com/semver/semver/blob/v2.0.0/semver.md.
 
 // Semantic Versioning version components.
-struct SemVerVersion {
+સંરચના SemVerVersion {
   uint32_t major{};
   uint32_t minor{};
   uint32_t patch{};

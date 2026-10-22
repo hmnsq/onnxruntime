@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "profiler.h"
+#અન્તર્ભાવ "profiler.h"
 
-#if !defined(ORT_MINIMAL_BUILD)
-#include "core/common/json_utils.h"
+#જો !defined(ORT_MINIMAL_BUILD)
+#અન્તર્ભાવ "core/common/json_utils.h"
 #endif
 
-namespace onnxruntime {
-namespace profiling {
-using namespace std::chrono;
+નામાકાશ onnxruntime {
+નામાકાશ profiling {
+using નામાકાશ std::chrono;
 
-std::atomic<size_t> Profiler::global_max_num_events_{1000 * 1000};
+std::atomic<size_t> Profiler::global_max_અંક_events{1000 * 1000};
 
 #ifdef ENABLE_STATIC_PROFILER_INSTANCE
 Profiler* Profiler::instance_ = nullptr;
@@ -19,21 +19,21 @@ Profiler* Profiler::instance_ = nullptr;
 profiling::Profiler::~Profiler() {
   instance_ = nullptr;
 }
-#else
+#નહીંતર
 profiling::Profiler::~Profiler() {}
 #endif
 
 ::onnxruntime::TimePoint profiling::Profiler::Start() {
   ORT_ENFORCE(enabled_);
-  auto start_time = std::chrono::high_resolution_clock::now();
+  auto start_time = std::chrono::ઉપલું_resolution_clock::now();
   auto ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
-  for (const auto& ep_profiler : ep_profilers_) {
+  માટે (અચલ auto& ep_profiler : ep_profilers_) {
     ep_profiler->Start(ts);
   }
-  return start_time;
+  પાછા start_time;
 }
 
-void Profiler::Initialize(const logging::Logger* session_logger) {
+શૂન્ય Profiler::Initialize(અચલ logging::Logger* session_logger) {
   ORT_ENFORCE(session_logger != nullptr);
   session_logger_ = session_logger;
 #ifdef ENABLE_STATIC_PROFILER_INSTANCE
@@ -42,55 +42,55 @@ void Profiler::Initialize(const logging::Logger* session_logger) {
   // debugging, it would be helpful to access profiler in code that have no access to inference session,
   // which is why we have this pseudo-singleton implementation here for debugging in single inference session.
   ORT_ENFORCE(instance_ == nullptr, "Static profiler instance only works with single session");
-  instance_ = this;
+  instance_ = આ;
 #endif
 }
 
-void Profiler::StartProfiling(const logging::Logger* custom_logger) {
+શૂન્ય Profiler::StartProfiling(અચલ logging::Logger* custom_logger) {
   ORT_ENFORCE(custom_logger != nullptr);
-  enabled_ = true;
-  profile_with_logger_ = true;
+  enabled_ = સાચું;
+  profile_with_logger_ = સાચું;
   custom_logger_ = custom_logger;
-  profiling_start_time_ = std::chrono::high_resolution_clock::now();
-  for (const auto& ep_profiler : ep_profilers_) {
+  profiling_start_time_ = std::chrono::ઉપલું_resolution_clock::now();
+  માટે (અચલ auto& ep_profiler : ep_profilers_) {
     auto status = ep_profiler->StartProfiling(profiling_start_time_);
-    if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
+    જો (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
       ep_start_profiling_status_ = status;
     }
   }
 }
 
 template <typename T>
-void Profiler::StartProfiling(const std::basic_string<T>& file_name) {
-  enabled_ = true;
-#if !defined(__wasm__)
+શૂન્ય Profiler::StartProfiling(અચલ std::basic_string<T>& file_name) {
+  enabled_ = સાચું;
+#જો !defined(__wasm__)
   profile_stream_.open(file_name, std::ios::out | std::ios::trunc);
 #endif
   profile_stream_file_ = ToUTF8String(file_name);
-  profiling_start_time_ = std::chrono::high_resolution_clock::now();
-  for (const auto& ep_profiler : ep_profilers_) {
+  profiling_start_time_ = std::chrono::ઉપલું_resolution_clock::now();
+  માટે (અચલ auto& ep_profiler : ep_profilers_) {
     auto status = ep_profiler->StartProfiling(profiling_start_time_);
-    if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
+    જો (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
       ep_start_profiling_status_ = status;
     }
   }
 }
 
-template void Profiler::StartProfiling<char>(const std::basic_string<char>& file_name);
+template શૂન્ય Profiler::StartProfiling<અક્ષર>(અચલ std::basic_string<અક્ષર>& file_name);
 #ifdef _WIN32
-template void Profiler::StartProfiling<wchar_t>(const std::basic_string<wchar_t>& file_name);
+template શૂન્ય Profiler::StartProfiling<wchar_t>(અચલ std::basic_string<wchar_t>& file_name);
 #endif
 
-void Profiler::EndTimeAndRecordEvent(
+શૂન્ય Profiler::EndTimeAndRecordEvent(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
+    અચલ std::string& event_name,
+    અચલ TimePoint& start_time,
     InlinedHashMap<std::string, std::string> event_args,
-    bool sync_gpu) {
-#if !defined(ORT_MINIMAL_BUILD)
-  EndTimeAndRecordEvent(category, event_name, start_time, std::chrono::high_resolution_clock::now(),
+    તાર્કિક sync_gpu) {
+#જો !defined(ORT_MINIMAL_BUILD)
+  EndTimeAndRecordEvent(category, event_name, start_time, std::chrono::ઉપલું_resolution_clock::now(),
                         std::move(event_args), sync_gpu);
-#else
+#નહીંતર
   ORT_UNUSED_PARAMETER(sync_gpu);
   long long dur = TimeDiffMicroSeconds(start_time);
   long long ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
@@ -98,57 +98,57 @@ void Profiler::EndTimeAndRecordEvent(
   EventRecord event(category, logging::GetProcessId(),
                     logging::GetThreadId(), event_name, ts, dur, std::move(event_args));
 
-  for (const auto& ep_profiler : ep_profilers_) {
+  માટે (અચલ auto& ep_profiler : ep_profilers_) {
     ep_profiler->Stop(ts, event);
   }
 
-  if (profile_with_logger_) {
+  જો (profile_with_logger_) {
     custom_logger_->SendProfileEvent(event);
-  } else {
+  } નહીંતર {
     // TODO: sync_gpu if needed.
     std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
+    જો (events_.size() < max_અંક_events) {
       events_.emplace_back(std::move(event));
-    } else {
-      if (session_logger_ && !max_events_reached) {
+    } નહીંતર {
+      જો (session_logger_ && !max_events_reached) {
         LOGS(*session_logger_, ERROR)
             << "Maximum number of events reached, could not record profile event.";
-        max_events_reached = true;
+        max_events_reached = સાચું;
       }
     }
   }
 #endif
 }
 
-#if !defined(ORT_MINIMAL_BUILD)
-void Profiler::EndTimeAndRecordEvent(
+#જો !defined(ORT_MINIMAL_BUILD)
+શૂન્ય Profiler::EndTimeAndRecordEvent(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
-    const TimePoint& end_time,
+    અચલ std::string& event_name,
+    અચલ TimePoint& start_time,
+    અચલ TimePoint& end_time,
     InlinedHashMap<std::string, std::string> event_args,
-    bool /*sync_gpu*/) {
-  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), true);
+    તાર્કિક /*sync_gpu*/) {
+  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), સાચું);
 }
 
-void Profiler::RecordEvent(
+શૂન્ય Profiler::RecordEvent(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
-    const TimePoint& end_time,
+    અચલ std::string& event_name,
+    અચલ TimePoint& start_time,
+    અચલ TimePoint& end_time,
     InlinedHashMap<std::string, std::string> event_args) {
-  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), false);
+  RecordEventImpl(category, event_name, start_time, end_time, std::move(event_args), ખોટું);
 }
 
-void Profiler::RecordEventImpl(
+શૂન્ય Profiler::RecordEventImpl(
     EventCategory category,
-    const std::string& event_name,
-    const TimePoint& start_time,
-    const TimePoint& end_time,
+    અચલ std::string& event_name,
+    અચલ TimePoint& start_time,
+    અચલ TimePoint& end_time,
     InlinedHashMap<std::string, std::string> event_args,
-    bool stop_ep_profilers) {
-  if (!enabled_) {
-    return;
+    તાર્કિક stop_ep_profilers) {
+  જો (!enabled_) {
+    પાછા;
   }
 
   long long dur = TimeDiffMicroSeconds(start_time, end_time);
@@ -157,25 +157,25 @@ void Profiler::RecordEventImpl(
   EventRecord event(category, logging::GetProcessId(),
                     logging::GetThreadId(), event_name, ts, dur, std::move(event_args));
 
-  if (stop_ep_profilers) {
-    for (const auto& ep_profiler : ep_profilers_) {
+  જો (stop_ep_profilers) {
+    માટે (અચલ auto& ep_profiler : ep_profilers_) {
       ep_profiler->Stop(ts, event);
     }
   }
 
-  if (profile_with_logger_) {
+  જો (profile_with_logger_) {
     custom_logger_->SendProfileEvent(event);
-  } else {
+  } નહીંતર {
     // TODO: sync_gpu if needed.
     std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
+    જો (events_.size() < max_અંક_events) {
       events_.emplace_back(std::move(event));
-    } else {
-      ++dropped_event_count_;
-      if (session_logger_ && !max_events_reached) {
+    } નહીંતર {
+      ++dropped_event_ગણતરી;
+      જો (session_logger_ && !max_events_reached) {
         LOGS(*session_logger_, ERROR)
             << "Maximum number of events reached, could not record profile event.";
-        max_events_reached = true;
+        max_events_reached = સાચું;
       }
     }
   }
@@ -183,39 +183,39 @@ void Profiler::RecordEventImpl(
 #endif  // !defined(ORT_MINIMAL_BUILD)
 
 std::string Profiler::EndProfiling() {
-  if (!enabled_) {
-    return std::string();
+  જો (!enabled_) {
+    પાછા std::string();
   }
-  if (profile_with_logger_) {
-    profile_with_logger_ = false;
-    return std::string();
+  જો (profile_with_logger_) {
+    profile_with_logger_ = ખોટું;
+    પાછા std::string();
   }
 
-  if (session_logger_) {
+  જો (session_logger_) {
     LOGS(*session_logger_, INFO) << "Writing profiler data to file " << profile_stream_file_;
   }
 
   std::lock_guard<std::mutex> lock(mutex_);
   profile_stream_ << "[\n";
 
-  for (const auto& ep_profiler : ep_profilers_) {
+  માટે (અચલ auto& ep_profiler : ep_profilers_) {
     ep_profiler->EndProfiling(profiling_start_time_, events_);
   }
 
-#if !defined(ORT_MINIMAL_BUILD)
-  if (dropped_event_count_ != 0) {
+#જો !defined(ORT_MINIMAL_BUILD)
+  જો (dropped_event_ગણતરી != 0) {
     InlinedHashMap<std::string, std::string> args;
-    args["dropped_event_count"] = std::to_string(dropped_event_count_);
-    args["max_num_events"] = std::to_string(max_num_events_);
+    args["dropped_event_count"] = std::to_string(dropped_event_ગણતરી);
+    args["max_num_events"] = std::to_string(max_અંક_events);
     events_.emplace_back(
         SESSION_EVENT, logging::GetProcessId(), logging::GetThreadId(),
         "profile_truncated", TimeDiffMicroSeconds(profiling_start_time_), 0, std::move(args));
   }
 #endif
 
-  for (size_t i = 0; i < events_.size(); ++i) {
+  માટે (size_t i = 0; i < events_.size(); ++i) {
     auto& rec = events_[i];
-#if !defined(ORT_MINIMAL_BUILD)
+#જો !defined(ORT_MINIMAL_BUILD)
     profile_stream_ << R"({"cat" : )";
     common::WriteJsonString(profile_stream_, event_category_names_[rec.cat]);
     profile_stream_ << ",";
@@ -227,7 +227,7 @@ std::string Profiler::EndProfiling() {
     profile_stream_ << R"("name" :)";
     common::WriteJsonString(profile_stream_, rec.name);
     profile_stream_ << ",";
-#else
+#નહીંતર
     profile_stream_ << R"({"cat" : ")" << event_category_names_[rec.cat] << "\",";
     profile_stream_ << "\"pid\" :" << rec.pid << ",";
     profile_stream_ << "\"tid\" :" << rec.tid << ",";
@@ -237,44 +237,44 @@ std::string Profiler::EndProfiling() {
     profile_stream_ << R"("name" :")" << rec.name << "\",";
 #endif
     profile_stream_ << "\"args\" : {";
-    bool is_first_arg = true;
-#if !defined(ORT_MINIMAL_BUILD)
-    for (const auto& event_arg : rec.args) {
-#else
-    for (std::pair<std::string, std::string> event_arg : rec.args) {
+    તાર્કિક is_first_arg = સાચું;
+#જો !defined(ORT_MINIMAL_BUILD)
+    માટે (અચલ auto& event_arg : rec.args) {
+#નહીંતર
+    માટે (std::pair<std::string, std::string> event_arg : rec.args) {
 #endif
-      if (!is_first_arg) profile_stream_ << ",";
-#if !defined(ORT_MINIMAL_BUILD)
+      જો (!is_first_arg) profile_stream_ << ",";
+#જો !defined(ORT_MINIMAL_BUILD)
       common::WriteJsonString(profile_stream_, event_arg.first);
       profile_stream_ << " : ";
-      if (!event_arg.second.empty() &&
+      જો (!event_arg.second.empty() &&
           (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
         profile_stream_ << event_arg.second;
-      } else {
+      } નહીંતર {
         common::WriteJsonString(profile_stream_, event_arg.second);
       }
-#else
-      if (!event_arg.second.empty() && (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
+#નહીંતર
+      જો (!event_arg.second.empty() && (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
         profile_stream_ << "\"" << event_arg.first << "\" : " << event_arg.second << "";
-      } else {
+      } નહીંતર {
         profile_stream_ << "\"" << event_arg.first << "\" : \"" << event_arg.second << "\"";
       }
 #endif
-      is_first_arg = false;
+      is_first_arg = ખોટું;
     }
     profile_stream_ << "}";
-    if (i == events_.size() - 1) {
+    જો (i == events_.size() - 1) {
       profile_stream_ << "}\n";
-    } else {
+    } નહીંતર {
       profile_stream_ << "},\n";
     }
   }
   profile_stream_ << "]\n";
-#if !defined(__wasm__)
+#જો !defined(__wasm__)
   profile_stream_.close();
 #endif
-  enabled_ = false;  // will not collect profile after writing.
-  return profile_stream_file_;
+  enabled_ = ખોટું;  // will not collect profile after writing.
+  પાછા profile_stream_file_;
 }
 
 }  // namespace profiling

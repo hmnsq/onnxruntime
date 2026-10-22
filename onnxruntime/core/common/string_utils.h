@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include <algorithm>
-#include <cctype>
-#include <string>
-#include <string_view>
-#include <vector>
+#અન્તર્ભાવ <algorithm>
+#અન્તર્ભાવ <cctype>
+#અન્તર્ભાવ <string>
+#અન્તર્ભાવ <string_view>
+#અન્તર્ભાવ <vector>
 
-#include "core/common/common.h"
-#include "core/common/inlined_containers.h"
+#અન્તર્ભાવ "core/common/common.h"
+#અન્તર્ભાવ "core/common/inlined_containers.h"
 
 namespace onnxruntime {
 namespace utils {
@@ -22,38 +22,38 @@ namespace utils {
  * @param keep_empty Whether to keep empty substrings.
  * @return The split substrings.
  */
-inline InlinedVector<std::string_view> SplitString(std::string_view string_to_split, std::string_view delimiter,
+અંતઃરેખ InlinedVector<std::string_view> SplitString(std::string_view string_to_split, std::string_view delimiter,
                                                    bool keep_empty = false) {
   ORT_ENFORCE(!delimiter.empty(), "delimiter must not be empty");
   InlinedVector<std::string_view> result{};
   std::string_view::size_type segment_begin_pos = 0;
-  while (segment_begin_pos != std::string_view::npos) {
-    const std::string_view::size_type segment_end_pos = string_to_split.find(delimiter, segment_begin_pos);
-    const bool is_segment_empty = segment_begin_pos == segment_end_pos || segment_begin_pos == string_to_split.size();
-    if (!is_segment_empty || keep_empty) {
-      result.push_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
+  જ્યારે (segment_begin_pos != std::string_view::npos) {
+    અચલ std::string_view::size_type segment_end_pos = string_to_split.find(delimiter, segment_begin_pos);
+    અચલ bool is_segment_empty = segment_begin_pos == segment_end_pos || segment_begin_pos == string_to_split.size();
+    જો (!is_segment_empty || keep_empty) {
+      result.ધકેલો_back(string_to_split.substr(segment_begin_pos, segment_end_pos - segment_begin_pos));
     }
     segment_begin_pos = (segment_end_pos == std::string_view::npos)
                             ? segment_end_pos
                             : segment_end_pos + delimiter.size();
   }
-  return result;
+  પાછા result;
 }
 
 /**
  * Trim a string from start inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromLeft(std::string& s) {
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+અંતઃરેખ શૂન્ય Trim_String_From_ડાબું(std::string& s) {
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned અક્ષર ch) { પાછા !std::isspace(ch); }));
 }
 
 /**
  * Trim a string from end inplace.
  * @param s The string to trim.
  */
-inline void TrimStringFromRight(std::string& s) {
-  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+અંતઃરેખ શૂન્ય Trim_String_From_જમણું(std::string& s) {
+  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned અક્ષર ch) { પાછા !std::isspace(ch); }).base(), s.end());
 }
 
 /**
@@ -61,30 +61,30 @@ inline void TrimStringFromRight(std::string& s) {
  * @param s The string to trim.
  * @return The trimmed string.
  */
-inline std::string TrimString(std::string_view s) {
+અંતઃરેખ std::string TrimString(std::string_view s) {
   std::string s_trimmed{s};
-  TrimStringFromRight(s_trimmed);
-  TrimStringFromLeft(s_trimmed);
-  return s_trimmed;
+  Trim_String_From_જમણું(s_trimmed);
+  Trim_String_From_ડાબું(s_trimmed);
+  પાછા s_trimmed;
 }
 
 /**
  * @brief A consistent way to construct the full qualified op name.
  */
-inline std::string GetFullQualifiedOpName(const std::string& op_type, const std::string& domain) {
-  return MakeString(domain, "::", op_type);
+અંતઃરેખ std::string GetFullQualifiedOpName(અચલ std::string& op_type, અચલ std::string& domain) {
+  પાછા MakeString(domain, "::", op_type);
 }
 
 /**
  * Use this simple hash to generate unique int by given string input.
  */
-inline uint32_t GetHashFromString(const std::string& str_value) {
+અંતઃરેખ uint32_t GetHashFromString(અચલ std::string& str_કિંમત) {
   uint32_t hash = 0;
-  for (char const& c : str_value) {
+  માટે (અક્ષર અચલ& c : str_કિંમત) {
     hash = hash * 101 + c;
   }
 
-  return hash;
+  પાછા hash;
 }
 
 /**
@@ -92,15 +92,15 @@ inline uint32_t GetHashFromString(const std::string& str_value) {
  * @param str The string to lowercase.
  * @return The lowercased string.
  */
-inline std::string GetLowercaseString(std::string str) {
+અંતઃરેખ std::string GetLowercaseString(std::string str) {
   // https://en.cppreference.com/w/cpp/string/byte/tolower
   // The behavior of tolower from <cctype> is undefined if the argument is neither representable as unsigned char
   // nor equal to EOF. To use tolower safely with a plain char (or signed char), the argument must be converted to
   // unsigned char.
-  std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
-    return static_cast<char>(std::tolower(c));
+  std::transform(str.begin(), str.end(), str.begin(), [](unsigned અક્ષર c) {
+    પાછા static_cast<અક્ષર>(std::tolower(c));
   });
-  return str;
+  પાછા str;
 }
 
 }  // namespace utils

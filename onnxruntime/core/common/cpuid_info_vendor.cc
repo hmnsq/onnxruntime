@@ -1,21 +1,21 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/cpuid_info.h"
+#અન્તર્ભાવ "core/common/cpuid_info.h"
 
-#include <array>
-#include <algorithm>
-#include <string_view>
+#અન્તર્ભાવ <array>
+#અન્તર્ભાવ <algorithm>
+#અન્તર્ભાવ <string_view>
 
-#if defined(CPUINFO_SUPPORTED)
-#include "cpuinfo.h"
+#જો defined(CPUINFO_SUPPORTED)
+#અન્તર્ભાવ "cpuinfo.h"
 #endif
 
-#include "core/common/pci_vendor_ids.h"
+#અન્તર્ભાવ "core/common/pci_vendor_ids.h"
 
-namespace {
+નામાકાશ {
 
-#if !defined(CPUINFO_SUPPORTED)
+#જો !defined(CPUINFO_SUPPORTED)
 
 // The `cpuinfo_vendor` enum is defined by the cpuinfo library.
 // In case we don't build with cpuinfo, we define our own copy.
@@ -23,7 +23,7 @@ namespace {
 // https://github.com/pytorch/cpuinfo/blob/8a1772a0c5c447df2d18edf33ec4603a8c9c04a6/include/cpuinfo.h#L154-L307
 
 /** Vendor of processor core design */
-enum cpuinfo_vendor {
+ગણના cpuinfo_vendor {
   /** Processor vendor is not known to the library, or the library failed
      to get vendor information from the OS. */
   cpuinfo_vendor_unknown = 0,
@@ -181,11 +181,11 @@ enum cpuinfo_vendor {
 
 }  // namespace
 
-namespace onnxruntime {
+નામાકાશ onnxruntime {
 
-namespace {
+નામાકાશ {
 
-struct CpuVendorInfo {
+સંરચના CpuVendorInfo {
   cpuinfo_vendor vendor;
   std::string_view name;
   uint32_t id;
@@ -207,44 +207,44 @@ constexpr std::array kCpuVendorInfos{
     // TODO add more as needed
 };
 
-const CpuVendorInfo* FindCpuVendorInfo(cpuinfo_vendor vendor) {
-  const auto vendor_mapping_it = std::find_if(kCpuVendorInfos.begin(), kCpuVendorInfos.end(),
-                                              [vendor](const CpuVendorInfo& entry) {
-                                                return entry.vendor == vendor;
+અચલ CpuVendorInfo* FindCpuVendorInfo(cpuinfo_vendor vendor) {
+  અચલ auto vendor_mapping_it = std::find_if(kCpuVendorInfos.begin(), kCpuVendorInfos.end(),
+                                              [vendor](અચલ CpuVendorInfo& entry) {
+                                                પાછા entry.vendor == vendor;
                                               });
 
-  if (vendor_mapping_it != kCpuVendorInfos.end()) {
-    return &*vendor_mapping_it;
+  જો (vendor_mapping_it != kCpuVendorInfos.end()) {
+    પાછા &*vendor_mapping_it;
   }
 
-  return nullptr;
+  પાછા nullptr;
 }
 
 }  // namespace
 
-void CPUIDInfo::VendorInfoInit() {
-  const cpuinfo_vendor vendor = [&]() {
+શૂન્ય CPUIDInfo::VendorInfoInit() {
+  અચલ cpuinfo_vendor vendor = [&]() {
     cpuinfo_vendor result = cpuinfo_vendor_unknown;
-#if defined(CPUINFO_SUPPORTED)
-    if (pytorch_cpuinfo_init_) {
-      const auto* processor = cpuinfo_get_processor(0);
-      if (processor && processor->core) {
+#જો defined(CPUINFO_SUPPORTED)
+    જો (pytorch_cpuinfo_init_) {
+      અચલ auto* processor = cpuinfo_get_processor(0);
+      જો (processor && processor->core) {
         result = processor->core->vendor;
       }
     }
 #endif  // defined(CPUINFO_SUPPORTED)
-#if defined(_AIX)
+#જો defined(_AIX)
     result = cpuinfo_vendor_ibm;
 #endif
-    return result;
+    પાછા result;
   }();
 
-  const auto* vendor_info = FindCpuVendorInfo(vendor);
-  if (vendor_info == nullptr) {
+  અચલ auto* vendor_info = FindCpuVendorInfo(vendor);
+  જો (vendor_info == nullptr) {
     // On Wasm/Emscripten, cpuinfo cannot detect the CPU vendor, so suppress the
     // unhelpful warning there while still reporting a consistent "unknown" vendor.
-#if !defined(__wasm__)
-    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<int>(vendor)));
+#જો !defined(__wasm__)
+    LogEarlyWarning(MakeString("Unknown CPU vendor. cpuinfo_vendor value: ", static_cast<પૂર્ણાંક>(vendor)));
 #endif
     vendor_info = &kUnknownCpuVendorInfo;
   }

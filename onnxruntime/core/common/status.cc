@@ -11,63 +11,63 @@ limitations under the License.
 ==============================================================================*/
 // Modifications Copyright (c) Microsoft.
 
-#include "core/common/status.h"
-#include "core/common/common.h"
+#અન્તર્ભાવ "core/common/status.h"
+#અન્તર્ભાવ "core/common/common.h"
 
-namespace onnxruntime {
-namespace common {
-Status::Status(StatusCategory category, int code, const std::string& msg) {
+નામાકાશ onnxruntime {
+નામાકાશ common {
+Status::Status(StatusCategory category, પૂર્ણાંક code, અચલ std::string& સંદેશ) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<પૂર્ણાંક>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, સંદેશ);
 }
 
-Status::Status(StatusCategory category, int code, const char* msg) {
+Status::Status(StatusCategory category, પૂર્ણાંક code, અચલ અક્ષર* સંદેશ) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<પૂર્ણાંક>(common::OK));
 
-  state_ = std::make_unique<State>(category, code, msg);
+  state_ = std::make_unique<State>(category, code, સંદેશ);
 }
 
-Status::Status(StatusCategory category, int code)
+Status::Status(StatusCategory category, પૂર્ણાંક code)
     : Status(category, code, "") {
 }
 
-StatusCategory Status::Category() const noexcept {
-  return IsOK() ? common::NONE : state_->category;
+StatusCategory Status::Category() અચલ noexcept {
+  પાછા IsOK() ? common::NONE : state_->category;
 }
 
-int Status::Code() const noexcept {
-  return IsOK() ? static_cast<int>(common::OK) : state_->code;
+પૂર્ણાંક Status::Code() અચલ noexcept {
+  પાછા IsOK() ? static_cast<પૂર્ણાંક>(common::OK) : state_->code;
 }
 
-const std::string& Status::ErrorMessage() const noexcept {
-  return IsOK() ? EmptyString() : state_->msg;
+અચલ std::string& Status::ErrorMessage() અચલ noexcept {
+  પાછા IsOK() ? EmptyString() : state_->સંદેશ;
 }
 
-std::string Status::ToString() const {
-  if (state_ == nullptr) {
-    return std::string("OK");
+std::string Status::ToString() અચલ {
+  જો (state_ == nullptr) {
+    પાછા std::string("OK");
   }
 
   std::string result;
 
-  if (common::SYSTEM == state_->category) {
+  જો (common::SYSTEM == state_->category) {
     result += "SystemError";
     result += " : ";
     result += std::to_string(errno);
-  } else if (common::ONNXRUNTIME == state_->category) {
+  } નહીંતર જો (common::ONNXRUNTIME == state_->category) {
     result += "[ONNXRuntimeError]";
     result += " : ";
     result += std::to_string(Code());
     result += " : ";
     result += StatusCodeToString(static_cast<StatusCode>(Code()));
     result += " : ";
-    result += state_->msg;
+    result += state_->સંદેશ;
   }
 
-  return result;
+  પાછા result;
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
@@ -78,9 +78,9 @@ std::string Status::ToString() const {
 #pragma warning(disable : 26426)
 #endif
 
-const std::string& Status::EmptyString() noexcept {
-  static std::string s_empty;
-  return s_empty;
+અચલ std::string& Status::EmptyString() noexcept {
+  સ્થિર std::string s_empty;
+  પાછા s_empty;
 }
 
 #ifdef _MSC_VER
