@@ -11,53 +11,53 @@ limitations under the License.
 ==============================================================================*/
 // Modifications Copyright (c) Microsoft.
 
-#include "core/common/status.h"
-#include "core/common/common.h"
+#ضمن "core/common/status.h"
+#ضمن "core/common/common.h"
 
-namespace onnxruntime {
-namespace common {
-Status::Status(StatusCategory category, int code, const std::string& msg) {
+نطاق onnxruntime {
+نطاق common {
+Status::Status(StatusCategory category, صحيح code, ثابت std::string& msg) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<صحيح>(common::OK));
 
   state_ = std::make_unique<State>(category, code, msg);
 }
 
-Status::Status(StatusCategory category, int code, const char* msg) {
+Status::Status(StatusCategory category, صحيح code, ثابت حرف* msg) {
   // state_ will be allocated here causing the status to be treated as a failure
-  ORT_ENFORCE(code != static_cast<int>(common::OK));
+  ORT_ENFORCE(code != static_cast<صحيح>(common::OK));
 
   state_ = std::make_unique<State>(category, code, msg);
 }
 
-Status::Status(StatusCategory category, int code)
+Status::Status(StatusCategory category, صحيح code)
     : Status(category, code, "") {
 }
 
-StatusCategory Status::Category() const noexcept {
-  return IsOK() ? common::NONE : state_->category;
+StatusCategory Status::Category() ثابت noexcept {
+  ܦܢܐ IsOK() ? common::NONE : state_->category;
 }
 
-int Status::Code() const noexcept {
-  return IsOK() ? static_cast<int>(common::OK) : state_->code;
+صحيح Status::Code() ثابت noexcept {
+  ܦܢܐ IsOK() ? static_cast<صحيح>(common::OK) : state_->code;
 }
 
-const std::string& Status::ErrorMessage() const noexcept {
-  return IsOK() ? EmptyString() : state_->msg;
+ثابت std::string& Status::ErrorMessage() ثابت noexcept {
+  ܦܢܐ IsOK() ? EmptyString() : state_->msg;
 }
 
-std::string Status::ToString() const {
-  if (state_ == nullptr) {
-    return std::string("OK");
+std::string Status::ToString() ثابت {
+  ܐܢ (state_ == nullptr) {
+    ܦܢܐ std::string("OK");
   }
 
   std::string result;
 
-  if (common::SYSTEM == state_->category) {
+  ܐܢ (common::SYSTEM == state_->category) {
     result += "SystemError";
     result += " : ";
     result += std::to_string(errno);
-  } else if (common::ONNXRUNTIME == state_->category) {
+  } ܐܚܪܢܐ ܐܢ (common::ONNXRUNTIME == state_->category) {
     result += "[ONNXRuntimeError]";
     result += " : ";
     result += std::to_string(Code());
@@ -67,7 +67,7 @@ std::string Status::ToString() const {
     result += state_->msg;
   }
 
-  return result;
+  ܦܢܐ result;
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
@@ -78,9 +78,9 @@ std::string Status::ToString() const {
 #pragma warning(disable : 26426)
 #endif
 
-const std::string& Status::EmptyString() noexcept {
-  static std::string s_empty;
-  return s_empty;
+ثابت std::string& Status::EmptyString() noexcept {
+  ساكن std::string s_empty;
+  ܦܢܐ s_empty;
 }
 
 #ifdef _MSC_VER
