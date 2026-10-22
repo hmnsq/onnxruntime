@@ -13,38 +13,38 @@ class CPUIDInfo {
  public:
   static const CPUIDInfo& GetCPUIDInfo() {
     static CPUIDInfo cpuid_info;
-    return cpuid_info;
+    ᬯᬮᬶ cpuid_info;
   }
 
   std::string_view GetCPUVendor() const {
-    return vendor_;
+    ᬯᬮᬶ vendor_;
   }
 
   uint32_t GetCPUVendorId() const {
-    return vendor_id_;
+    ᬯᬮᬶ vendor_id_;
   }
 
-  bool HasAMX_BF16() const { return has_amx_bf16_; }
-  bool HasAVX() const { return has_avx_; }
-  bool HasAVX2() const { return has_avx2_; }
-  bool HasAVX512f() const { return has_avx512f_; }
-  bool HasAVX512_BF16() const { return has_avx512_bf16_; }
-  bool HasAVX512Skylake() const { return has_avx512_skylake_; }
-  bool HasF16C() const { return has_f16c_; } /*fp16 conversion inst*/
-  bool HasSSE3() const { return has_sse3_; }
-  bool HasSSE4_1() const { return has_sse4_1_; }
-  bool IsHybrid() const { return is_hybrid_; }
-  bool HasTPAUSE() const { return has_tpause_; }
+  bool HasAMX_BF16() const { ᬯᬮᬶ has_amx_bf16_; }
+  bool HasAVX() const { ᬯᬮᬶ has_avx_; }
+  bool HasAVX2() const { ᬯᬮᬶ has_avx2_; }
+  bool HasAVX512f() const { ᬯᬮᬶ has_avx512f_; }
+  bool HasAVX512_BF16() const { ᬯᬮᬶ has_avx512_bf16_; }
+  bool HasAVX512Skylake() const { ᬯᬮᬶ has_avx512_skylake_; }
+  bool HasF16C() const { ᬯᬮᬶ has_f16c_; } /*fp16 conversion inst*/
+  bool HasSSE3() const { ᬯᬮᬶ has_sse3_; }
+  bool HasSSE4_1() const { ᬯᬮᬶ has_sse4_1_; }
+  bool IsHybrid() const { ᬯᬮᬶ is_hybrid_; }
+  bool HasTPAUSE() const { ᬯᬮᬶ has_tpause_; }
 
   // ARM
-  bool HasArmNeonDot() const { return has_arm_neon_dot_; }
-  bool HasArmNeon_I8MM() const { return has_arm_neon_i8mm_; }
-  bool HasArmSve() const { return has_arm_sve_; }
-  bool HasArmSVE2p1() const { return has_arm_sve2p1_; }
-  bool HasArmSVE_I8MM() const { return has_arm_sve_i8mm_; }
-  bool HasArmNeon_BF16() const { return has_arm_neon_bf16_; }
-  bool HasArm_SME() const { return has_arm_sme_; }
-  bool HasArm_SME2() const { return has_arm_sme2_; }
+  bool HasArmNeonDot() const { ᬯᬮᬶ has_arm_neon_dot_; }
+  bool HasArmNeon_I8MM() const { ᬯᬮᬶ has_arm_neon_i8mm_; }
+  bool HasArmSve() const { ᬯᬮᬶ has_arm_sve_; }
+  bool HasArmSVE2p1() const { ᬯᬮᬶ has_arm_sve2p1_; }
+  bool HasArmSVE_I8MM() const { ᬯᬮᬶ has_arm_sve_i8mm_; }
+  bool HasArmNeon_BF16() const { ᬯᬮᬶ has_arm_neon_bf16_; }
+  bool HasArm_SME() const { ᬯᬮᬶ has_arm_sme_; }
+  bool HasArm_SME2() const { ᬯᬮᬶ has_arm_sme2_; }
 
   uint32_t GetCurrentCoreIdx() const;
 
@@ -52,25 +52,25 @@ class CPUIDInfo {
    * @return CPU core micro-architecture running the current thread
    */
   int32_t GetCurrentUarch() const {
-    if (core_uarchs_.empty()) {
-      return -1;
+    ᬬᬾᬦ᭄ (core_uarchs_.empty()) {
+      ᬯᬮᬶ -1;
     }
 
     uint32_t coreIdx = GetCurrentCoreIdx();
-    if (coreIdx >= core_uarchs_.size()) {
-      return -1;
+    ᬬᬾᬦ᭄ (coreIdx >= core_uarchs_.size()) {
+      ᬯᬮᬶ -1;
     }
-    return core_uarchs_[coreIdx];
+    ᬯᬮᬶ core_uarchs_[coreIdx];
   }
 
   /**
    * @return CPU core micro-architecture
    */
   int32_t GetCoreUarch(uint32_t coreId) const {
-    if (coreId >= core_uarchs_.size()) {
-      return -1;
+    ᬬᬾᬦ᭄ (coreId >= core_uarchs_.size()) {
+      ᬯᬮᬶ -1;
     }
-    return core_uarchs_[coreId];
+    ᬯᬮᬶ core_uarchs_[coreId];
   }
 
   /**
@@ -79,10 +79,10 @@ class CPUIDInfo {
    * @return whether the indicated core has narrower load/store device
    */
   bool IsCoreArmv8NarrowLd(uint32_t coreId) const {
-    if (coreId >= is_armv8_narrow_ld_.size()) {
-      return false;
+    ᬬᬾᬦ᭄ (coreId >= is_armv8_narrow_ld_.size()) {
+      ᬯᬮᬶ false;
     }
-    return is_armv8_narrow_ld_[coreId];
+    ᬯᬮᬶ is_armv8_narrow_ld_[coreId];
   }
 
   /**
@@ -91,19 +91,19 @@ class CPUIDInfo {
    * @return whether the current core has narrower load/store device
    */
   bool IsCurrentCoreArmv8NarrowLd() const {
-    if (is_armv8_narrow_ld_.empty()) {
-      return false;
+    ᬬᬾᬦ᭄ (is_armv8_narrow_ld_.empty()) {
+      ᬯᬮᬶ false;
     }
 
     uint32_t coreIdx = GetCurrentCoreIdx();
-    if (coreIdx >= is_armv8_narrow_ld_.size()) {
-      return false;
+    ᬬᬾᬦ᭄ (coreIdx >= is_armv8_narrow_ld_.size()) {
+      ᬯᬮᬶ false;
     }
-    return is_armv8_narrow_ld_[coreIdx];
+    ᬯᬮᬶ is_armv8_narrow_ld_[coreIdx];
   }
 
   bool HasFp16VectorAcceleration() const {
-    return has_fp16_;
+    ᬯᬮᬶ has_fp16_;
   }
 
  private:
@@ -116,13 +116,13 @@ class CPUIDInfo {
 
   void VendorInfoInit();
 
-#if defined(CPUIDINFO_ARCH_X86)
+#ᬬᬾᬦ᭄ defined(CPUIDINFO_ARCH_X86)
 
   void X86Init();
 
 #elif defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(__linux__)
+#ᬬᬾᬦ᭄ defined(__linux__)
 
   void ArmLinuxInit();
 
@@ -138,13 +138,13 @@ class CPUIDInfo {
 
 #endif  // defined(CPUIDINFO_ARCH_ARM)
 
-#if defined(CPUIDINFO_ARCH_RISCV64)
-#if defined(__linux__)
+#ᬬᬾᬦ᭄ defined(CPUIDINFO_ARCH_RISCV64)
+#ᬬᬾᬦ᭄ defined(__linux__)
   void RiscvLinuxInit();
 #endif
 #endif  // defined(CPUIDINFO_ARCH_RISCV64)
 
-#if defined(CPUINFO_SUPPORTED)
+#ᬬᬾᬦ᭄ defined(CPUINFO_SUPPORTED)
   bool pytorch_cpuinfo_init_{false};
 #endif  // defined(CPUINFO_SUPPORTED)
 

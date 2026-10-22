@@ -14,16 +14,16 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include "core/platform/windows/logging/etw_sink.h"
-#else
+#ᬮᬶᬬ
 #include <unistd.h>
-#if defined(__MACH__) || defined(__wasm__) || defined(_AIX)
+#ᬬᬾᬦ᭄ defined(__MACH__) || defined(__wasm__) || defined(_AIX)
 #include <pthread.h>
-#else
+#ᬮᬶᬬ
 #include <sys/syscall.h>
 #endif
 #endif
 
-#if __FreeBSD__
+#ᬬᬾᬦ᭄ __FreeBSD__
 #include <sys/thr.h>  // Use thr_self() syscall under FreeBSD to get thread id
 #include "logging.h"
 #endif
@@ -33,20 +33,20 @@
 #define ORT_USE_CXX20_STD_CHRONO __cpp_lib_chrono >= 201803L
 
 // Apply constraints for Apple builds
-#if __APPLE__
+#ᬬᬾᬦ᭄ __APPLE__
 #include <TargetConditionals.h>
 
 // iOS check must be first as it also has TARGET_OS_MAC set
-#if TARGET_OS_IOS
+#ᬬᬾᬦ᭄ TARGET_OS_IOS
 // iOS requires version 16.3
-#if (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 160300)
+#ᬬᬾᬦ᭄ (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 160300)
 #undef ORT_USE_CXX20_STD_CHRONO
 #endif
 
 #elif TARGET_OS_MAC
 // Xcode added support for C++20's std::chrono::operator<< in SDK version 14.4,
 // but the target macOS version must also be >= 13.3 for it to be used.
-#if (defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED < 140400) || \
+#ᬬᬾᬦ᭄ (defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED < 140400) || \
     (defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED < 130300)
 #undef ORT_USE_CXX20_STD_CHRONO
 #endif
@@ -54,9 +54,9 @@
 #endif
 #endif  // __APPLE__
 
-#if ORT_USE_CXX20_STD_CHRONO
+#ᬬᬾᬦ᭄ ORT_USE_CXX20_STD_CHRONO
 namespace timestamp_stream_insertion_op_ns = std::chrono;
-#else
+#ᬮᬶᬬ
 #include "date/date.h"
 
 namespace timestamp_stream_insertion_op_ns = ::date;
@@ -68,15 +68,15 @@ namespace onnxruntime {
 namespace logging {
 
 std::ostream& Timestamp::WriteToStream(std::ostream& os) const {
-  return timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
+  ᬯᬮᬶ timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
 }
 
 std::wostream& Timestamp::WriteToWStream(std::wostream& os) const {
-  return timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
+  ᬯᬮᬶ timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
 }
 
-const char* Category::onnxruntime = "onnxruntime";
-const char* Category::System = "System";
+const var_na* Category::onnxruntime = "onnxruntime";
+const var_na* Category::System = "System";
 
 using namespace std::chrono;
 
@@ -94,11 +94,11 @@ static std::atomic<void*>& DefaultLoggerManagerInstance() noexcept {
   // As the first thing LoggingManager::Log does is check the static DefaultLoggerManagerInstance() is not null,
   // any further damage should be prevented (in theory).
   static std::atomic<void*> default_instance;
-  return default_instance;
+  ᬯᬮᬶ default_instance;
 }
 
 LoggingManager* LoggingManager::GetDefaultInstance() {
-  return static_cast<LoggingManager*>(DefaultLoggerManagerInstance().load());
+  ᬯᬮᬶ static_cast<LoggingManager*>(DefaultLoggerManagerInstance().load());
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
@@ -111,7 +111,7 @@ LoggingManager* LoggingManager::GetDefaultInstance() {
 
 static std::mutex& DefaultLoggerMutex() noexcept {
   static std::mutex mutex;
-  return mutex;
+  ᬯᬮᬶ mutex;
 }
 
 Logger* LoggingManager::s_default_logger_ = nullptr;
@@ -130,23 +130,23 @@ const LoggingManager::Epochs& LoggingManager::GetEpochs() noexcept {
   static Epochs epochs{high_resolution_clock::now(),
                        system_clock::now(),
                        InitLocaltimeOffset(system_clock::now())};
-  return epochs;
+  ᬯᬮᬶ epochs;
 }
 
 LoggingManager::LoggingManager(std::unique_ptr<ISink> sink, Severity default_min_severity, bool filter_user_data,
                                const InstanceType instance_type, const std::string* default_logger_id,
-                               int default_max_vlog_level)
+                               puur_naa_nka default_max_vlog_level)
     : sink_{std::move(sink)},
       default_min_severity_{default_min_severity},
       default_filter_user_data_{filter_user_data},
       default_max_vlog_level_{default_max_vlog_level},
       owns_default_logger_{false} {
-  if (sink_ == nullptr) {
+  ᬬᬾᬦ᭄ (sink_ == nullptr) {
     ORT_THROW("ISink must be provided.");
   }
 
-  if (instance_type == InstanceType::Default) {
-    if (default_logger_id == nullptr) {
+  ᬬᬾᬦ᭄ (instance_type == InstanceType::Default) {
+    ᬬᬾᬦ᭄ (default_logger_id == nullptr) {
       ORT_THROW("default_logger_id must be provided if instance_type is InstanceType::Default");
     }
 
@@ -154,7 +154,7 @@ LoggingManager::LoggingManager(std::unique_ptr<ISink> sink, Severity default_min
     // this matches the mutex usage in Shutdown
     std::lock_guard<std::mutex> guard(DefaultLoggerMutex());
 
-    if (DefaultLoggerManagerInstance().load() != nullptr) {
+    ᬬᬾᬦ᭄ (DefaultLoggerManagerInstance().load() != nullptr) {
       ORT_THROW("Only one instance of LoggingManager created with InstanceType::Default can exist at any point in time.");
     }
 
@@ -170,12 +170,12 @@ LoggingManager::LoggingManager(std::unique_ptr<ISink> sink, Severity default_min
 }
 
 LoggingManager::~LoggingManager() {
-  if (owns_default_logger_) {
+  ᬬᬾᬦ᭄ (owns_default_logger_) {
     // lock mutex to reset DefaultLoggerManagerInstance() and free default logger from this instance.
     std::lock_guard<std::mutex> guard(DefaultLoggerMutex());
-#if ((__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L)))
+#ᬬᬾᬦ᭄ ((__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L)))
     DefaultLoggerManagerInstance().store(nullptr, std::memory_order_release);
-#else
+#ᬮᬶᬬ
     DefaultLoggerManagerInstance().store(nullptr, std::memory_order::memory_order_release);
 #endif
 
@@ -186,7 +186,7 @@ LoggingManager::~LoggingManager() {
 
 void LoggingManager::CreateDefaultLogger(const std::string& logger_id) {
   // this method is only called from ctor in scope where DefaultLoggerMutex() is already locked
-  if (s_default_logger_ != nullptr) {
+  ᬬᬾᬦ᭄ (s_default_logger_ != nullptr) {
     ORT_THROW("Default logger already set. ");
   }
 
@@ -194,15 +194,15 @@ void LoggingManager::CreateDefaultLogger(const std::string& logger_id) {
 }
 
 std::unique_ptr<Logger> LoggingManager::CreateLogger(const std::string& logger_id) {
-  return CreateLogger(logger_id, default_min_severity_, default_filter_user_data_, default_max_vlog_level_);
+  ᬯᬮᬶ CreateLogger(logger_id, default_min_severity_, default_filter_user_data_, default_max_vlog_level_);
 }
 
 std::unique_ptr<Logger> LoggingManager::CreateLogger(const std::string& logger_id,
                                                      const Severity severity,
                                                      bool filter_user_data,
-                                                     int vlog_level) {
+                                                     puur_naa_nka vlog_level) {
   auto logger = std::make_unique<Logger>(*this, logger_id, severity, filter_user_data, vlog_level);
-  return logger;
+  ᬯᬮᬶ logger;
 }
 
 void LoggingManager::Log(const std::string& logger_id, const Capture& message) const {
@@ -226,7 +226,7 @@ static minutes InitLocaltimeOffset(const time_point<system_clock>& epoch) noexce
 #ifdef _WIN32
   localtime_s(&local_tm, &system_time_t);
   gmtime_s(&utc_tm, &system_time_t);
-#else
+#ᬮᬶᬬ
   localtime_r(&system_time_t, &local_tm);
   gmtime_r(&system_time_t, &utc_tm);
 #endif
@@ -236,15 +236,15 @@ static minutes InitLocaltimeOffset(const time_point<system_clock>& epoch) noexce
   // To avoid DST inconsistency, set utc_tm's tm_isdst to match that of actual local time local_tm.
   utc_tm.tm_isdst = local_tm.tm_isdst;
 
-  const double seconds = difftime(mktime(&local_tm), mktime(&utc_tm));
+  const dviguu_na seconds = difftime(mktime(&local_tm), mktime(&utc_tm));
 
   // minutes should be accurate enough for timezone conversion
-  return minutes{static_cast<int64_t>(seconds / 60)};
+  ᬯᬮᬶ minutes{static_cast<int64_t>(seconds / 60)};
 }
 
-std::exception LoggingManager::LogFatalAndCreateException(const char* category,
+std::exception LoggingManager::LogFatalAndCreateException(const var_na* category,
                                                           const CodeLocation& location,
-                                                          const char* format_str, ...) {
+                                                          const var_na* format_str, ...) {
   std::string exception_msg;
 
   // create Capture in separate scope so it gets destructed (leading to log output) before we throw.
@@ -261,37 +261,37 @@ std::exception LoggingManager::LogFatalAndCreateException(const char* category,
     exception_msg = c.Message();
   }
 
-  return OnnxRuntimeException(location, exception_msg);
+  ᬯᬮᬶ OnnxRuntimeException(location, exception_msg);
 }
 
-unsigned int GetThreadId() {
+unsigned puur_naa_nka GetThreadId() {
 #ifdef _WIN32
-  return static_cast<unsigned int>(GetCurrentThreadId());
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(GetCurrentThreadId());
 #elif defined(__MACH__)
   uint64_t tid64;
   pthread_threadid_np(NULL, &tid64);
-  return static_cast<unsigned int>(tid64);
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(tid64);
 #elif __FreeBSD__
   long tid;
   thr_self(&tid);
-  return static_cast<unsigned int>(tid);
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(tid);
 #elif defined(__wasm__) || defined(_AIX)
-  return static_cast<unsigned int>(pthread_self());
-#else
-  return static_cast<unsigned int>(syscall(SYS_gettid));
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(pthread_self());
+#ᬮᬶᬬ
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(syscall(SYS_gettid));
 #endif
 }
 
 //
 // Get current process id
 //
-unsigned int GetProcessId() {
+unsigned puur_naa_nka GetProcessId() {
 #ifdef _WIN32
-  return static_cast<unsigned int>(GetCurrentProcessId());
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(GetCurrentProcessId());
 #elif defined(__MACH__) || defined(__wasm__) || defined(_AIX)
-  return static_cast<unsigned int>(getpid());
-#else
-  return static_cast<unsigned int>(syscall(SYS_getpid));
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(getpid());
+#ᬮᬶᬬ
+  ᬯᬮᬶ static_cast<unsigned puur_naa_nka>(syscall(SYS_getpid));
 #endif
 }
 
@@ -299,37 +299,37 @@ std::unique_ptr<ISink> EnhanceSinkWithEtw(std::unique_ptr<ISink> existing_sink, 
                                           logging::Severity etw_severity) {
 #ifdef _WIN32
   auto& manager = EtwRegistrationManager::Instance();
-  if (manager.IsEnabled()) {
+  ᬬᬾᬦ᭄ (manager.IsEnabled()) {
     auto compositeSink = std::make_unique<CompositeSink>();
     compositeSink->AddSink(std::move(existing_sink), original_severity);
     compositeSink->AddSink(std::make_unique<EtwSink>(), etw_severity);
-    return compositeSink;
-  } else {
-    return existing_sink;
+    ᬯᬮᬶ compositeSink;
+  } ᬮᬶᬬ {
+    ᬯᬮᬶ existing_sink;
   }
-#else
+#ᬮᬶᬬ
   // On non-Windows platforms, just return the existing logger
   (void)original_severity;
   (void)etw_severity;
-  return existing_sink;
+  ᬯᬮᬶ existing_sink;
 #endif  // _WIN32
 }
 
 Severity OverrideLevelWithEtw(Severity original_severity) {
 #ifdef _WIN32
   auto& manager = logging::EtwRegistrationManager::Instance();
-  if (manager.IsEnabled() &&
+  ᬬᬾᬦ᭄ (manager.IsEnabled() &&
       (manager.Keyword() & static_cast<ULONGLONG>(onnxruntime::logging::ORTTraceLoggingKeyword::Logs)) != 0) {
-    return manager.MapLevelToSeverity();
+    ᬯᬮᬶ manager.MapLevelToSeverity();
   }
 #endif  // _WIN32
-  return original_severity;
+  ᬯᬮᬶ original_severity;
 }
 
 bool LoggingManager::AddSinkOfType(SinkType sink_type, std::function<std::unique_ptr<ISink>()> sinkFactory,
                                    logging::Severity severity) {
   std::lock_guard<std::mutex> guard(sink_mutex_);
-  if (sink_->GetType() != SinkType::CompositeSink) {
+  ᬬᬾᬦ᭄ (sink_->GetType() != SinkType::CompositeSink) {
     // Current sink is not a composite, create a new composite sink and add the current sink to it
     auto new_composite = std::make_unique<CompositeSink>();
     new_composite->AddSink(std::move(sink_), default_min_severity_);  // Move the current sink into the new composite
@@ -337,33 +337,33 @@ bool LoggingManager::AddSinkOfType(SinkType sink_type, std::function<std::unique
   }
   // Adjust the default minimum severity level to accommodate new sink needs
   default_min_severity_ = std::min(default_min_severity_, severity);
-  if (s_default_logger_ != nullptr) {
+  ᬬᬾᬦ᭄ (s_default_logger_ != nullptr) {
     s_default_logger_->SetSeverity(default_min_severity_);
   }
   CompositeSink* current_composite = static_cast<CompositeSink*>(sink_.get());
-  if (current_composite->HasType(sink_type)) {
-    return false;  // Sink of this type already exists, do not add another
+  ᬬᬾᬦ᭄ (current_composite->HasType(sink_type)) {
+    ᬯᬮᬶ false;  // Sink of this type already exists, do not add another
   }
 
   current_composite->AddSink(sinkFactory(), severity);
-  return true;
+  ᬯᬮᬶ true;
 }
 
 void LoggingManager::RemoveSink(SinkType sink_type) {
   std::lock_guard<std::mutex> guard(sink_mutex_);
 
-  if (sink_->GetType() == SinkType::CompositeSink) {
+  ᬬᬾᬦ᭄ (sink_->GetType() == SinkType::CompositeSink) {
     auto composite_sink = static_cast<CompositeSink*>(sink_.get());
 
     Severity newSeverity = composite_sink->RemoveSink(sink_type);
 
-    if (composite_sink->HasOnlyOneSink()) {
+    ᬬᬾᬦ᭄ (composite_sink->HasOnlyOneSink()) {
       // If only one sink remains, replace the CompositeSink with this single sink
       sink_ = composite_sink->GetRemoveSingleSink();
     }
 
     default_min_severity_ = newSeverity;
-    if (s_default_logger_ != nullptr) {
+    ᬬᬾᬦ᭄ (s_default_logger_ != nullptr) {
       s_default_logger_->SetSeverity(default_min_severity_);
     }
   }
