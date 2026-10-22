@@ -1,31 +1,31 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include <ctime>
-#include <exception>
-#include <type_traits>
-#include <utility>
+#ضمن <ctime>
+#ضمن <exception>
+#ضمن <type_traits>
+#ضمن <utility>
 
-#include "core/common/exceptions.h"
-#include "core/common/logging/isink.h"
-#include "core/common/logging/logging.h"
-#include "core/common/logging/sinks/composite_sink.h"
+#ضمن "core/common/exceptions.h"
+#ضمن "core/common/logging/isink.h"
+#ضمن "core/common/logging/logging.h"
+#ضمن "core/common/logging/sinks/composite_sink.h"
 
 #ifdef _WIN32
-#include <Windows.h>
-#include "core/platform/windows/logging/etw_sink.h"
-#else
-#include <unistd.h>
-#if defined(__MACH__) || defined(__wasm__) || defined(_AIX)
-#include <pthread.h>
-#else
-#include <sys/syscall.h>
+#ضمن <Windows.h>
+#ضمن "core/platform/windows/logging/etw_sink.h"
+#אחרת
+#ضمن <unistd.h>
+#אם defined(__MACH__) || defined(__wasm__) || defined(_AIX)
+#ضمن <pthread.h>
+#אחרת
+#ضمن <sys/syscall.h>
 #endif
 #endif
 
-#if __FreeBSD__
-#include <sys/thr.h>  // Use thr_self() syscall under FreeBSD to get thread id
-#include "logging.h"
+#אם __FreeBSD__
+#ضمن <sys/thr.h>  // Use thr_self() syscall under FreeBSD to get thread id
+#ضمن "logging.h"
 #endif
 
 // C++20 has std::chrono::operator<< for std::chrono::system_clock::time_point but we need to check if usage is valid.
@@ -33,20 +33,20 @@
 #define ORT_USE_CXX20_STD_CHRONO __cpp_lib_chrono >= 201803L
 
 // Apply constraints for Apple builds
-#if __APPLE__
-#include <TargetConditionals.h>
+#אם __APPLE__
+#ضمن <TargetConditionals.h>
 
 // iOS check must be first as it also has TARGET_OS_MAC set
-#if TARGET_OS_IOS
+#אם TARGET_OS_IOS
 // iOS requires version 16.3
-#if (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 160300)
+#אם (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 160300)
 #undef ORT_USE_CXX20_STD_CHRONO
 #endif
 
-#elif TARGET_OS_MAC
+#وإلاإذا TARGET_OS_MAC
 // Xcode added support for C++20's std::chrono::operator<< in SDK version 14.4,
 // but the target macOS version must also be >= 13.3 for it to be used.
-#if (defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED < 140400) || \
+#אם (defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED < 140400) || \
     (defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED < 130300)
 #undef ORT_USE_CXX20_STD_CHRONO
 #endif
@@ -54,31 +54,31 @@
 #endif
 #endif  // __APPLE__
 
-#if ORT_USE_CXX20_STD_CHRONO
-namespace timestamp_stream_insertion_op_ns = std::chrono;
-#else
-#include "date/date.h"
+#אם ORT_USE_CXX20_STD_CHRONO
+نطاق timestamp_stream_insertion_op_ns = std::chrono;
+#אחרת
+#ضمن "date/date.h"
 
-namespace timestamp_stream_insertion_op_ns = ::date;
+نطاق timestamp_stream_insertion_op_ns = ::date;
 #endif
 
 #undef ORT_USE_CXX20_STD_CHRONO
 
-namespace onnxruntime {
-namespace logging {
+نطاق onnxruntime {
+نطاق logging {
 
-std::ostream& Timestamp::WriteToStream(std::ostream& os) const {
-  return timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
+std::ostream& Timestamp::WriteToStream(std::ostream& os) ثابت {
+  החזר timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
 }
 
-std::wostream& Timestamp::WriteToWStream(std::wostream& os) const {
-  return timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
+std::wostream& Timestamp::WriteToWStream(std::wostream& os) ثابت {
+  החזר timestamp_stream_insertion_op_ns::operator<<(os, time_point_);
 }
 
-const char* Category::onnxruntime = "onnxruntime";
-const char* Category::System = "System";
+ثابت حرف* Category::onnxruntime = "onnxruntime";
+ثابت حرف* Category::System = "System";
 
-using namespace std::chrono;
+using نطاق std::chrono;
 
 /*
 As LoggingManager can be a static, we need to wrap the default instance and mutex in functions
@@ -87,18 +87,18 @@ a static LoggingManager is created at startup, the file scope statics here may n
 initialized.
 */
 
-static std::atomic<void*>& DefaultLoggerManagerInstance() noexcept {
+ساكن std::atomic<فراغ*>& DefaultLoggerManagerInstance() noexcept {
   // this atomic is to protect against attempts to log being made after the default LoggingManager is destroyed.
   // Theoretically this can happen if a Logger instance is still alive and calls Log via its internal
   // pointer to the LoggingManager.
   // As the first thing LoggingManager::Log does is check the static DefaultLoggerManagerInstance() is not null,
   // any further damage should be prevented (in theory).
-  static std::atomic<void*> default_instance;
-  return default_instance;
+  ساكن std::atomic<فراغ*> default_instance;
+  החזר default_instance;
 }
 
 LoggingManager* LoggingManager::GetDefaultInstance() {
-  return static_cast<LoggingManager*>(DefaultLoggerManagerInstance().load());
+  החזר static_cast<LoggingManager*>(DefaultLoggerManagerInstance().load());
 }
 
 // GSL_SUPPRESS(i.22) is broken. Ignore the warnings for the static local variables that are trivial
@@ -109,9 +109,9 @@ LoggingManager* LoggingManager::GetDefaultInstance() {
 #pragma warning(disable : 26426)
 #endif
 
-static std::mutex& DefaultLoggerMutex() noexcept {
-  static std::mutex mutex;
-  return mutex;
+ساكن std::mutex& DefaultLoggerMutex() noexcept {
+  ساكن std::mutex mutex;
+  החזר mutex;
 }
 
 Logger* LoggingManager::s_default_logger_ = nullptr;
@@ -121,32 +121,32 @@ std::mutex sink_mutex_;
 #pragma warning(pop)
 #endif
 
-static minutes InitLocaltimeOffset(const time_point<system_clock>& epoch) noexcept;
+ساكن minutes InitLocaltimeOffset(ثابت time_point<system_clock>& epoch) noexcept;
 
-const LoggingManager::Epochs& LoggingManager::GetEpochs() noexcept {
+ثابت LoggingManager::Epochs& LoggingManager::GetEpochs() noexcept {
   // we save the value from system clock (which we can convert to a timestamp) as well as the high_resolution_clock.
   // from then on, we use the delta from the high_resolution_clock and apply that to the
   // system clock value.
-  static Epochs epochs{high_resolution_clock::now(),
+  ساكن Epochs epochs{high_resolution_clock::now(),
                        system_clock::now(),
                        InitLocaltimeOffset(system_clock::now())};
-  return epochs;
+  החזר epochs;
 }
 
-LoggingManager::LoggingManager(std::unique_ptr<ISink> sink, Severity default_min_severity, bool filter_user_data,
-                               const InstanceType instance_type, const std::string* default_logger_id,
-                               int default_max_vlog_level)
+LoggingManager::LoggingManager(std::unique_ptr<ISink> sink, Severity default_min_severity, منطقي filter_user_data,
+                               ثابت InstanceType instance_type, ثابت std::string* default_logger_id,
+                               صحيح default_max_vlog_level)
     : sink_{std::move(sink)},
       default_min_severity_{default_min_severity},
       default_filter_user_data_{filter_user_data},
       default_max_vlog_level_{default_max_vlog_level},
-      owns_default_logger_{false} {
-  if (sink_ == nullptr) {
+      owns_default_logger_{שקר} {
+  אם (sink_ == nullptr) {
     ORT_THROW("ISink must be provided.");
   }
 
-  if (instance_type == InstanceType::Default) {
-    if (default_logger_id == nullptr) {
+  אם (instance_type == InstanceType::Default) {
+    אם (default_logger_id == nullptr) {
       ORT_THROW("default_logger_id must be provided if instance_type is InstanceType::Default");
     }
 
@@ -154,28 +154,28 @@ LoggingManager::LoggingManager(std::unique_ptr<ISink> sink, Severity default_min
     // this matches the mutex usage in Shutdown
     std::lock_guard<std::mutex> guard(DefaultLoggerMutex());
 
-    if (DefaultLoggerManagerInstance().load() != nullptr) {
+    אם (DefaultLoggerManagerInstance().load() != nullptr) {
       ORT_THROW("Only one instance of LoggingManager created with InstanceType::Default can exist at any point in time.");
     }
 
     // If the following assertion passes, using the atomic to validate calls to Log should
     // be reasonably economical.
     static_assert(std::remove_reference_t<decltype(DefaultLoggerManagerInstance())>::is_always_lock_free);
-    DefaultLoggerManagerInstance().store(this);
+    DefaultLoggerManagerInstance().store(هذا);
 
     CreateDefaultLogger(*default_logger_id);
 
-    owns_default_logger_ = true;
+    owns_default_logger_ = אמת;
   }
 }
 
 LoggingManager::~LoggingManager() {
-  if (owns_default_logger_) {
+  אם (owns_default_logger_) {
     // lock mutex to reset DefaultLoggerManagerInstance() and free default logger from this instance.
     std::lock_guard<std::mutex> guard(DefaultLoggerMutex());
-#if ((__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L)))
+#אם ((__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L)))
     DefaultLoggerManagerInstance().store(nullptr, std::memory_order_release);
-#else
+#אחרת
     DefaultLoggerManagerInstance().store(nullptr, std::memory_order::memory_order_release);
 #endif
 
@@ -184,49 +184,49 @@ LoggingManager::~LoggingManager() {
   }
 }
 
-void LoggingManager::CreateDefaultLogger(const std::string& logger_id) {
+فراغ LoggingManager::CreateDefaultLogger(ثابت std::string& logger_id) {
   // this method is only called from ctor in scope where DefaultLoggerMutex() is already locked
-  if (s_default_logger_ != nullptr) {
+  אם (s_default_logger_ != nullptr) {
     ORT_THROW("Default logger already set. ");
   }
 
   s_default_logger_ = CreateLogger(logger_id).release();
 }
 
-std::unique_ptr<Logger> LoggingManager::CreateLogger(const std::string& logger_id) {
-  return CreateLogger(logger_id, default_min_severity_, default_filter_user_data_, default_max_vlog_level_);
+std::unique_ptr<Logger> LoggingManager::CreateLogger(ثابت std::string& logger_id) {
+  החזר CreateLogger(logger_id, default_min_severity_, default_filter_user_data_, default_max_vlog_level_);
 }
 
-std::unique_ptr<Logger> LoggingManager::CreateLogger(const std::string& logger_id,
-                                                     const Severity severity,
-                                                     bool filter_user_data,
-                                                     int vlog_level) {
-  auto logger = std::make_unique<Logger>(*this, logger_id, severity, filter_user_data, vlog_level);
-  return logger;
+std::unique_ptr<Logger> LoggingManager::CreateLogger(ثابت std::string& logger_id,
+                                                     ثابت Severity severity,
+                                                     منطقي filter_user_data,
+                                                     صحيح vlog_level) {
+  auto logger = std::make_unique<Logger>(*هذا, logger_id, severity, filter_user_data, vlog_level);
+  החזר logger;
 }
 
-void LoggingManager::Log(const std::string& logger_id, const Capture& message) const {
+فراغ LoggingManager::Log(ثابت std::string& logger_id, ثابت Capture& message) ثابت {
   sink_->Send(GetTimestamp(), logger_id, message);
 }
 
-void LoggingManager::SendProfileEvent(profiling::EventRecord& eventRecord) const {
+فراغ LoggingManager::SendProfileEvent(profiling::EventRecord& eventRecord) ثابت {
   sink_->SendProfileEvent(eventRecord);
 }
 
-static minutes InitLocaltimeOffset(const time_point<system_clock>& epoch) noexcept {
+ساكن minutes InitLocaltimeOffset(ثابت time_point<system_clock>& epoch) noexcept {
   // convert the system_clock time_point (UTC) to localtime and gmtime to calculate the difference.
   // we do this once, and apply that difference in GetTimestamp().
   // NOTE: If we happened to be running over a period where the time changed (e.g. daylight saving started)
   // we won't pickup the change. Not worth the extra cost to be 100% accurate 100% of the time.
 
-  const time_t system_time_t = system_clock::to_time_t(epoch);
+  ثابت time_t system_time_t = system_clock::to_time_t(epoch);
   tm local_tm;
   tm utc_tm;
 
 #ifdef _WIN32
   localtime_s(&local_tm, &system_time_t);
   gmtime_s(&utc_tm, &system_time_t);
-#else
+#אחרת
   localtime_r(&system_time_t, &local_tm);
   gmtime_r(&system_time_t, &utc_tm);
 #endif
@@ -236,15 +236,15 @@ static minutes InitLocaltimeOffset(const time_point<system_clock>& epoch) noexce
   // To avoid DST inconsistency, set utc_tm's tm_isdst to match that of actual local time local_tm.
   utc_tm.tm_isdst = local_tm.tm_isdst;
 
-  const double seconds = difftime(mktime(&local_tm), mktime(&utc_tm));
+  ثابت مزدوج seconds = difftime(mktime(&local_tm), mktime(&utc_tm));
 
   // minutes should be accurate enough for timezone conversion
-  return minutes{static_cast<int64_t>(seconds / 60)};
+  החזר minutes{static_cast<int64_t>(seconds / 60)};
 }
 
-std::exception LoggingManager::LogFatalAndCreateException(const char* category,
-                                                          const CodeLocation& location,
-                                                          const char* format_str, ...) {
+std::exception LoggingManager::LogFatalAndCreateException(ثابت حرف* category,
+                                                          ثابت CodeLocation& location,
+                                                          ثابت حرف* format_str, ...) {
   std::string exception_msg;
 
   // create Capture in separate scope so it gets destructed (leading to log output) before we throw.
@@ -261,37 +261,37 @@ std::exception LoggingManager::LogFatalAndCreateException(const char* category,
     exception_msg = c.Message();
   }
 
-  return OnnxRuntimeException(location, exception_msg);
+  החזר OnnxRuntimeException(location, exception_msg);
 }
 
-unsigned int GetThreadId() {
+unsigned صحيح GetThreadId() {
 #ifdef _WIN32
-  return static_cast<unsigned int>(GetCurrentThreadId());
-#elif defined(__MACH__)
+  החזר static_cast<unsigned صحيح>(GetCurrentThreadId());
+#وإلاإذا defined(__MACH__)
   uint64_t tid64;
-  pthread_threadid_np(NULL, &tid64);
-  return static_cast<unsigned int>(tid64);
-#elif __FreeBSD__
+  pthread_threadid_np(عدم, &tid64);
+  החזר static_cast<unsigned صحيح>(tid64);
+#وإلاإذا __FreeBSD__
   long tid;
   thr_self(&tid);
-  return static_cast<unsigned int>(tid);
-#elif defined(__wasm__) || defined(_AIX)
-  return static_cast<unsigned int>(pthread_self());
-#else
-  return static_cast<unsigned int>(syscall(SYS_gettid));
+  החזר static_cast<unsigned صحيح>(tid);
+#وإلاإذا defined(__wasm__) || defined(_AIX)
+  החזר static_cast<unsigned صحيح>(pthread_self());
+#אחרת
+  החזר static_cast<unsigned صحيح>(syscall(SYS_gettid));
 #endif
 }
 
 //
 // Get current process id
 //
-unsigned int GetProcessId() {
+unsigned صحيح GetProcessId() {
 #ifdef _WIN32
-  return static_cast<unsigned int>(GetCurrentProcessId());
-#elif defined(__MACH__) || defined(__wasm__) || defined(_AIX)
-  return static_cast<unsigned int>(getpid());
-#else
-  return static_cast<unsigned int>(syscall(SYS_getpid));
+  החזר static_cast<unsigned صحيح>(GetCurrentProcessId());
+#وإلاإذا defined(__MACH__) || defined(__wasm__) || defined(_AIX)
+  החזר static_cast<unsigned صحيح>(getpid());
+#אחרת
+  החזר static_cast<unsigned صحيح>(syscall(SYS_getpid));
 #endif
 }
 
@@ -299,37 +299,37 @@ std::unique_ptr<ISink> EnhanceSinkWithEtw(std::unique_ptr<ISink> existing_sink, 
                                           logging::Severity etw_severity) {
 #ifdef _WIN32
   auto& manager = EtwRegistrationManager::Instance();
-  if (manager.IsEnabled()) {
+  אם (manager.IsEnabled()) {
     auto compositeSink = std::make_unique<CompositeSink>();
     compositeSink->AddSink(std::move(existing_sink), original_severity);
     compositeSink->AddSink(std::make_unique<EtwSink>(), etw_severity);
-    return compositeSink;
-  } else {
-    return existing_sink;
+    החזר compositeSink;
+  } אחרת {
+    החזר existing_sink;
   }
-#else
+#אחרת
   // On non-Windows platforms, just return the existing logger
-  (void)original_severity;
-  (void)etw_severity;
-  return existing_sink;
+  (فراغ)original_severity;
+  (فراغ)etw_severity;
+  החזר existing_sink;
 #endif  // _WIN32
 }
 
 Severity OverrideLevelWithEtw(Severity original_severity) {
 #ifdef _WIN32
   auto& manager = logging::EtwRegistrationManager::Instance();
-  if (manager.IsEnabled() &&
+  אם (manager.IsEnabled() &&
       (manager.Keyword() & static_cast<ULONGLONG>(onnxruntime::logging::ORTTraceLoggingKeyword::Logs)) != 0) {
-    return manager.MapLevelToSeverity();
+    החזר manager.MapLevelToSeverity();
   }
 #endif  // _WIN32
-  return original_severity;
+  החזר original_severity;
 }
 
-bool LoggingManager::AddSinkOfType(SinkType sink_type, std::function<std::unique_ptr<ISink>()> sinkFactory,
+منطقي LoggingManager::AddSinkOfType(SinkType sink_type, std::function<std::unique_ptr<ISink>()> sinkFactory,
                                    logging::Severity severity) {
   std::lock_guard<std::mutex> guard(sink_mutex_);
-  if (sink_->GetType() != SinkType::CompositeSink) {
+  אם (sink_->GetType() != SinkType::CompositeSink) {
     // Current sink is not a composite, create a new composite sink and add the current sink to it
     auto new_composite = std::make_unique<CompositeSink>();
     new_composite->AddSink(std::move(sink_), default_min_severity_);  // Move the current sink into the new composite
@@ -337,33 +337,33 @@ bool LoggingManager::AddSinkOfType(SinkType sink_type, std::function<std::unique
   }
   // Adjust the default minimum severity level to accommodate new sink needs
   default_min_severity_ = std::min(default_min_severity_, severity);
-  if (s_default_logger_ != nullptr) {
+  אם (s_default_logger_ != nullptr) {
     s_default_logger_->SetSeverity(default_min_severity_);
   }
   CompositeSink* current_composite = static_cast<CompositeSink*>(sink_.get());
-  if (current_composite->HasType(sink_type)) {
-    return false;  // Sink of this type already exists, do not add another
+  אם (current_composite->HasType(sink_type)) {
+    החזר שקר;  // Sink of this type already exists, do not add another
   }
 
   current_composite->AddSink(sinkFactory(), severity);
-  return true;
+  החזר אמת;
 }
 
-void LoggingManager::RemoveSink(SinkType sink_type) {
+فراغ LoggingManager::RemoveSink(SinkType sink_type) {
   std::lock_guard<std::mutex> guard(sink_mutex_);
 
-  if (sink_->GetType() == SinkType::CompositeSink) {
+  אם (sink_->GetType() == SinkType::CompositeSink) {
     auto composite_sink = static_cast<CompositeSink*>(sink_.get());
 
     Severity newSeverity = composite_sink->RemoveSink(sink_type);
 
-    if (composite_sink->HasOnlyOneSink()) {
+    אם (composite_sink->HasOnlyOneSink()) {
       // If only one sink remains, replace the CompositeSink with this single sink
       sink_ = composite_sink->GetRemoveSingleSink();
     }
 
     default_min_severity_ = newSeverity;
-    if (s_default_logger_ != nullptr) {
+    אם (s_default_logger_ != nullptr) {
       s_default_logger_->SetSeverity(default_min_severity_);
     }
   }
