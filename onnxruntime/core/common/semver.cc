@@ -1,20 +1,20 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/semver.h"
+#شامل "core/common/semver.h"
 
-#include <regex>
+#شامل <regex>
 
-#include "core/common/common.h"
-#include "core/common/narrow.h"
-#include "core/common/parse_string.h"
+#شامل "core/common/common.h"
+#شامل "core/common/narrow.h"
+#شامل "core/common/parse_string.h"
 
-namespace onnxruntime {
+فضاینام onnxruntime {
 
 Status ParseSemVerVersion(std::string_view version_string, SemVerVersion* semver_version_out) {
   // Semantic Versioning version regex was copied from here:
   // https://github.com/semver/semver/blob/d58db1686379c8c6d52e32d42d3a530a964264e5/semver.md?plain=1#L357
-  static const std::regex semver_pattern{
+  ایستا ثابت std::regex semver_pattern{
       R"(^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$)"};
 
   std::cmatch match_result{};
@@ -22,18 +22,18 @@ Status ParseSemVerVersion(std::string_view version_string, SemVerVersion* semver
                                      match_result, semver_pattern),
                     "Version string is not in semantic versioning format: '", version_string, "'");
 
-  auto sub_match_to_string_view = [](const std::csub_match& sub_match) -> std::optional<std::string_view> {
-    if (!sub_match.matched) {
-      return std::nullopt;
+  auto sub_match_to_string_view = [](ثابت std::csub_match& sub_match) -> std::optional<std::string_view> {
+    اگر (!sub_match.matched) {
+      بازگشت std::nullopt;
     }
-    return std::string_view{sub_match.first, narrow<size_t>(sub_match.length())};
+    بازگشت std::string_view{sub_match.first, narrow<size_t>(sub_match.length())};
   };
 
   auto parse_version_component =
-      [&sub_match_to_string_view](const std::csub_match& sub_match, uint32_t& component) -> Status {
-    const auto component_str = sub_match_to_string_view(sub_match);
+      [&sub_match_to_string_view](ثابت std::csub_match& sub_match, uint32_t& component) -> Status {
+    ثابت auto component_str = sub_match_to_string_view(sub_match);
     ORT_RETURN_IF_NOT(component_str.has_value(), "sub_match does not match anything.");
-    return ParseStringWithClassicLocale(*component_str, component);
+    بازگشت ParseStringWithClassicLocale(*component_str, component);
   };
 
   SemVerVersion semver_version{};
@@ -45,16 +45,16 @@ Status ParseSemVerVersion(std::string_view version_string, SemVerVersion* semver
   semver_version.prerelease = sub_match_to_string_view(match_result[4]);
   semver_version.build_metadata = sub_match_to_string_view(match_result[5]);
 
-  if (semver_version_out) {
+  اگر (semver_version_out) {
     *semver_version_out = std::move(semver_version);
   }
-  return Status::OK();
+  بازگشت Status::OK();
 }
 
 SemVerVersion ParseSemVerVersion(std::string_view version_string) {
   SemVerVersion result{};
   ORT_THROW_IF_ERROR(ParseSemVerVersion(version_string, &result));
-  return result;
+  بازگشت result;
 }
 
 }  // namespace onnxruntime

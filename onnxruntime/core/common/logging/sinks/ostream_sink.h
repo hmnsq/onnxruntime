@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <ostream>
-#include <sstream>
-#include <string>
+#شامل <ostream>
+#شامل <sstream>
+#شامل <string>
 
-#include "core/common/logging/capture.h"
-#include "core/common/logging/isink.h"
+#شامل "core/common/logging/capture.h"
+#شامل "core/common/logging/isink.h"
 
 namespace onnxruntime {
 namespace logging {
@@ -17,36 +17,36 @@ namespace logging {
 /// A std::ostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class OStreamSink : public ISink {
- protected:
+class OStreamSink : عمومی ISink {
+ محافظتشده:
   OStreamSink(std::ostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ عمومی:
+  تهی SendImpl(ثابت Timestamp& timestamp, ثابت std::string& logger_id, ثابت Capture& message) override;
 
- private:
+ خصوصی:
   std::ostream* stream_;
-  const bool flush_;
+  ثابت bool flush_;
 };
-#else
+#وگرنه
 /// <summary>
 /// A std::wostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
-class WOStreamSink : public ISink {
- protected:
+class WOStreamSink : عمومی ISink {
+ محافظتشده:
   WOStreamSink(std::wostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
 
- public:
-  void SendImpl(const Timestamp& timestamp, const std::string& logger_id, const Capture& message) override;
+ عمومی:
+  تهی SendImpl(ثابت Timestamp& timestamp, ثابت std::string& logger_id, ثابت Capture& message) override;
 
- private:
+ خصوصی:
   std::wostream* stream_;
-  const bool flush_;
+  ثابت bool flush_;
 };
 #endif
 }  // namespace logging

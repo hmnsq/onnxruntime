@@ -1,51 +1,51 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-#include "core/common/profiler_common.h"
+#شامل "core/common/profiler_common.h"
 
 #ifndef _MSC_VER
-#include <cxxabi.h>
+#شامل <cxxabi.h>
 #endif
-#include <string.h>
-#include <string>
+#شامل <string.h>
+#شامل <string>
 
-namespace onnxruntime {
-namespace profiling {
+فضاینام onnxruntime {
+فضاینام profiling {
 
-static constexpr int kMaxSymbolSize = 1024;
+ایستا constexpr صحیح k_Max_نماد_Size = 1024;
 
-std::string demangle(const char* name) {
+std::string demangle(ثابت نویسه* name) {
 #ifndef _MSC_VER
-  if (!name) {
-    return "";
+  اگر (!name) {
+    بازگشت "";
   }
 
-  if (strlen(name) > kMaxSymbolSize) {
-    return name;
+  اگر (strlen(name) > k_Max_نماد_Size) {
+    بازگشت name;
   }
 
-  int status;
+  صحیح status;
   size_t len = 0;
-  char* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
-  if (status != 0) {
-    return name;
+  نویسه* demangled = abi::__cxa_demangle(name, nullptr, &len, &status);
+  اگر (status != 0) {
+    بازگشت name;
   }
   std::string res(demangled);
   // The returned buffer must be freed!
-  free(demangled);
-  return res;
-#else
+  آزاد(demangled);
+  بازگشت res;
+#وگرنه
   // TODO(anyone): demangling on Windows
-  if (!name) {
-    return "";
-  } else {
-    return name;
+  اگر (!name) {
+    بازگشت "";
+  } وگرنه {
+    بازگشت name;
   }
 #endif
 }
 
-std::string demangle(const std::string& name) {
-  return demangle(name.c_str());
+std::string demangle(ثابت std::string& name) {
+  بازگشت demangle(name.c_str());
 }
 
 }  // namespace profiling
