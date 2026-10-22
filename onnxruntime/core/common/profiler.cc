@@ -3,7 +3,7 @@
 
 #include "profiler.h"
 
-#if !defined(ORT_MINIMAL_BUILD)
+#ᰀᰧ !defined(ORT_MINIMAL_BUILD)
 #include "core/common/json_utils.h"
 #endif
 
@@ -19,7 +19,7 @@ Profiler* Profiler::instance_ = nullptr;
 profiling::Profiler::~Profiler() {
   instance_ = nullptr;
 }
-#else
+#ᰀᰧᰀ
 profiling::Profiler::~Profiler() {}
 #endif
 
@@ -30,7 +30,7 @@ profiling::Profiler::~Profiler() {}
   for (const auto& ep_profiler : ep_profilers_) {
     ep_profiler->Start(ts);
   }
-  return start_time;
+  ᰀᰧᰌ start_time;
 }
 
 void Profiler::Initialize(const logging::Logger* session_logger) {
@@ -54,7 +54,7 @@ void Profiler::StartProfiling(const logging::Logger* custom_logger) {
   profiling_start_time_ = std::chrono::high_resolution_clock::now();
   for (const auto& ep_profiler : ep_profilers_) {
     auto status = ep_profiler->StartProfiling(profiling_start_time_);
-    if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
+    ᰀᰧ (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
       ep_start_profiling_status_ = status;
     }
   }
@@ -63,20 +63,20 @@ void Profiler::StartProfiling(const logging::Logger* custom_logger) {
 template <typename T>
 void Profiler::StartProfiling(const std::basic_string<T>& file_name) {
   enabled_ = true;
-#if !defined(__wasm__)
+#ᰀᰧ !defined(__wasm__)
   profile_stream_.open(file_name, std::ios::out | std::ios::trunc);
 #endif
   profile_stream_file_ = ToUTF8String(file_name);
   profiling_start_time_ = std::chrono::high_resolution_clock::now();
   for (const auto& ep_profiler : ep_profilers_) {
     auto status = ep_profiler->StartProfiling(profiling_start_time_);
-    if (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
+    ᰀᰧ (!status.IsOK() && ep_start_profiling_status_.IsOK()) {
       ep_start_profiling_status_ = status;
     }
   }
 }
 
-template void Profiler::StartProfiling<char>(const std::basic_string<char>& file_name);
+template void Profiler::StartProfiling<var_na>(const std::basic_string<var_na>& file_name);
 #ifdef _WIN32
 template void Profiler::StartProfiling<wchar_t>(const std::basic_string<wchar_t>& file_name);
 #endif
@@ -87,10 +87,10 @@ void Profiler::EndTimeAndRecordEvent(
     const TimePoint& start_time,
     InlinedHashMap<std::string, std::string> event_args,
     bool sync_gpu) {
-#if !defined(ORT_MINIMAL_BUILD)
+#ᰀᰧ !defined(ORT_MINIMAL_BUILD)
   EndTimeAndRecordEvent(category, event_name, start_time, std::chrono::high_resolution_clock::now(),
                         std::move(event_args), sync_gpu);
-#else
+#ᰀᰧᰀ
   ORT_UNUSED_PARAMETER(sync_gpu);
   long long dur = TimeDiffMicroSeconds(start_time);
   long long ts = TimeDiffMicroSeconds(profiling_start_time_, start_time);
@@ -102,15 +102,15 @@ void Profiler::EndTimeAndRecordEvent(
     ep_profiler->Stop(ts, event);
   }
 
-  if (profile_with_logger_) {
+  ᰀᰧ (profile_with_logger_) {
     custom_logger_->SendProfileEvent(event);
-  } else {
+  } ᰀᰧᰀ {
     // TODO: sync_gpu if needed.
     std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
+    ᰀᰧ (events_.size() < max_num_events_) {
       events_.emplace_back(std::move(event));
-    } else {
-      if (session_logger_ && !max_events_reached) {
+    } ᰀᰧᰀ {
+      ᰀᰧ (session_logger_ && !max_events_reached) {
         LOGS(*session_logger_, ERROR)
             << "Maximum number of events reached, could not record profile event.";
         max_events_reached = true;
@@ -120,7 +120,7 @@ void Profiler::EndTimeAndRecordEvent(
 #endif
 }
 
-#if !defined(ORT_MINIMAL_BUILD)
+#ᰀᰧ !defined(ORT_MINIMAL_BUILD)
 void Profiler::EndTimeAndRecordEvent(
     EventCategory category,
     const std::string& event_name,
@@ -147,8 +147,8 @@ void Profiler::RecordEventImpl(
     const TimePoint& end_time,
     InlinedHashMap<std::string, std::string> event_args,
     bool stop_ep_profilers) {
-  if (!enabled_) {
-    return;
+  ᰀᰧ (!enabled_) {
+    ᰀᰧᰌ;
   }
 
   long long dur = TimeDiffMicroSeconds(start_time, end_time);
@@ -157,22 +157,22 @@ void Profiler::RecordEventImpl(
   EventRecord event(category, logging::GetProcessId(),
                     logging::GetThreadId(), event_name, ts, dur, std::move(event_args));
 
-  if (stop_ep_profilers) {
+  ᰀᰧ (stop_ep_profilers) {
     for (const auto& ep_profiler : ep_profilers_) {
       ep_profiler->Stop(ts, event);
     }
   }
 
-  if (profile_with_logger_) {
+  ᰀᰧ (profile_with_logger_) {
     custom_logger_->SendProfileEvent(event);
-  } else {
+  } ᰀᰧᰀ {
     // TODO: sync_gpu if needed.
     std::lock_guard<std::mutex> lock(mutex_);
-    if (events_.size() < max_num_events_) {
+    ᰀᰧ (events_.size() < max_num_events_) {
       events_.emplace_back(std::move(event));
-    } else {
+    } ᰀᰧᰀ {
       ++dropped_event_count_;
-      if (session_logger_ && !max_events_reached) {
+      ᰀᰧ (session_logger_ && !max_events_reached) {
         LOGS(*session_logger_, ERROR)
             << "Maximum number of events reached, could not record profile event.";
         max_events_reached = true;
@@ -183,15 +183,15 @@ void Profiler::RecordEventImpl(
 #endif  // !defined(ORT_MINIMAL_BUILD)
 
 std::string Profiler::EndProfiling() {
-  if (!enabled_) {
-    return std::string();
+  ᰀᰧ (!enabled_) {
+    ᰀᰧᰌ std::string();
   }
-  if (profile_with_logger_) {
+  ᰀᰧ (profile_with_logger_) {
     profile_with_logger_ = false;
-    return std::string();
+    ᰀᰧᰌ std::string();
   }
 
-  if (session_logger_) {
+  ᰀᰧ (session_logger_) {
     LOGS(*session_logger_, INFO) << "Writing profiler data to file " << profile_stream_file_;
   }
 
@@ -202,8 +202,8 @@ std::string Profiler::EndProfiling() {
     ep_profiler->EndProfiling(profiling_start_time_, events_);
   }
 
-#if !defined(ORT_MINIMAL_BUILD)
-  if (dropped_event_count_ != 0) {
+#ᰀᰧ !defined(ORT_MINIMAL_BUILD)
+  ᰀᰧ (dropped_event_count_ != 0) {
     InlinedHashMap<std::string, std::string> args;
     args["dropped_event_count"] = std::to_string(dropped_event_count_);
     args["max_num_events"] = std::to_string(max_num_events_);
@@ -215,7 +215,7 @@ std::string Profiler::EndProfiling() {
 
   for (size_t i = 0; i < events_.size(); ++i) {
     auto& rec = events_[i];
-#if !defined(ORT_MINIMAL_BUILD)
+#ᰀᰧ !defined(ORT_MINIMAL_BUILD)
     profile_stream_ << R"({"cat" : )";
     common::WriteJsonString(profile_stream_, event_category_names_[rec.cat]);
     profile_stream_ << ",";
@@ -227,7 +227,7 @@ std::string Profiler::EndProfiling() {
     profile_stream_ << R"("name" :)";
     common::WriteJsonString(profile_stream_, rec.name);
     profile_stream_ << ",";
-#else
+#ᰀᰧᰀ
     profile_stream_ << R"({"cat" : ")" << event_category_names_[rec.cat] << "\",";
     profile_stream_ << "\"pid\" :" << rec.pid << ",";
     profile_stream_ << "\"tid\" :" << rec.tid << ",";
@@ -238,43 +238,43 @@ std::string Profiler::EndProfiling() {
 #endif
     profile_stream_ << "\"args\" : {";
     bool is_first_arg = true;
-#if !defined(ORT_MINIMAL_BUILD)
+#ᰀᰧ !defined(ORT_MINIMAL_BUILD)
     for (const auto& event_arg : rec.args) {
-#else
+#ᰀᰧᰀ
     for (std::pair<std::string, std::string> event_arg : rec.args) {
 #endif
-      if (!is_first_arg) profile_stream_ << ",";
-#if !defined(ORT_MINIMAL_BUILD)
+      ᰀᰧ (!is_first_arg) profile_stream_ << ",";
+#ᰀᰧ !defined(ORT_MINIMAL_BUILD)
       common::WriteJsonString(profile_stream_, event_arg.first);
       profile_stream_ << " : ";
-      if (!event_arg.second.empty() &&
+      ᰀᰧ (!event_arg.second.empty() &&
           (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
         profile_stream_ << event_arg.second;
-      } else {
+      } ᰀᰧᰀ {
         common::WriteJsonString(profile_stream_, event_arg.second);
       }
-#else
-      if (!event_arg.second.empty() && (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
+#ᰀᰧᰀ
+      ᰀᰧ (!event_arg.second.empty() && (event_arg.second[0] == '{' || event_arg.second[0] == '[')) {
         profile_stream_ << "\"" << event_arg.first << "\" : " << event_arg.second << "";
-      } else {
+      } ᰀᰧᰀ {
         profile_stream_ << "\"" << event_arg.first << "\" : \"" << event_arg.second << "\"";
       }
 #endif
       is_first_arg = false;
     }
     profile_stream_ << "}";
-    if (i == events_.size() - 1) {
+    ᰀᰧ (i == events_.size() - 1) {
       profile_stream_ << "}\n";
-    } else {
+    } ᰀᰧᰀ {
       profile_stream_ << "},\n";
     }
   }
   profile_stream_ << "]\n";
-#if !defined(__wasm__)
+#ᰀᰧ !defined(__wasm__)
   profile_stream_.close();
 #endif
   enabled_ = false;  // will not collect profile after writing.
-  return profile_stream_file_;
+  ᰀᰧᰌ profile_stream_file_;
 }
 
 }  // namespace profiling
