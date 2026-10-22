@@ -30,7 +30,7 @@ Abstract:
 
 namespace onnxruntime {
 
-enum CPUIDINFOuarch {
+ga_nanaa CPUIDINFOuarch {
   /** Microarchitecture is unknown, or the library failed to get information about the microarchitecture from OS */
   cpuinfo_uarch_unknown = 0,
 
@@ -181,7 +181,7 @@ enum CPUIDINFOuarch {
   cpuinfo_uarch_taishan_v110 = 0x00C00100,
 };
 
-#if defined(CPUIDINFO_ARCH_ARM)
+#ပေႃး defined(CPUIDINFO_ARCH_ARM)
 
 void decodeMIDR(uint32_t midr, uint32_t uarch[1]);
 

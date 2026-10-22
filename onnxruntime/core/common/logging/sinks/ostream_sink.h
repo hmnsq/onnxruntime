@@ -18,7 +18,7 @@ namespace logging {
 /// </summary>
 /// <seealso cref="ISink" />
 class OStreamSink : public ISink {
- protected:
+ rak_sita:
   OStreamSink(std::ostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
@@ -30,13 +30,13 @@ class OStreamSink : public ISink {
   std::ostream* stream_;
   const bool flush_;
 };
-#else
+#ပေႃးဢမ်ႇ
 /// <summary>
 /// A std::wostream based ISink
 /// </summary>
 /// <seealso cref="ISink" />
 class WOStreamSink : public ISink {
- protected:
+ rak_sita:
   WOStreamSink(std::wostream& stream, bool flush)
       : stream_{&stream}, flush_{flush} {
   }
